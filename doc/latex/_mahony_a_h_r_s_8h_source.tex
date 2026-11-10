@@ -1,0 +1,32 @@
+\doxysection{Mahony\+AHRS.\+h}
+\hypertarget{_mahony_a_h_r_s_8h_source}{}\label{_mahony_a_h_r_s_8h_source}\index{source/module/IMU/Mahony/MahonyAHRS.h@{source/module/IMU/Mahony/MahonyAHRS.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//=============================================================================================}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ MahonyAHRS.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//=============================================================================================}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ Madgwick's\ implementation\ of\ Mayhony's\ AHRS\ algorithm.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ See:\ http://www.x-\/io.co.uk/open-\/source-\/imu-\/and-\/ahrs-\/algorithms/}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ Date\ \ \ \ \ \ \ \ \ Author\ \ \ \ \ \ \ \ \ \ Notes}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ 29/09/2011\ \ \ SOH\ Madgwick\ \ \ \ Initial\ release}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ 02/10/2011\ \ \ SOH\ Madgwick\ \ \ \ Optimised\ for\ reduced\ CPU\ load}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//=============================================================================================}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#ifndef\ MahonyAHRS\_h}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ MahonyAHRS\_h}}
+\DoxyCodeLine{00015\ \textcolor{keywordtype}{void}\ Mahony\_update(\textcolor{keywordtype}{float}\ gx,\ \textcolor{keywordtype}{float}\ gy,\ \textcolor{keywordtype}{float}\ gz,\ \textcolor{keywordtype}{float}\ ax,\ \textcolor{keywordtype}{float}\ ay,\ \textcolor{keywordtype}{float}\ az,\ \textcolor{keywordtype}{float}\ mx,\ \textcolor{keywordtype}{float}\ my,\ \textcolor{keywordtype}{float}\ mz);}
+\DoxyCodeLine{00016\ \textcolor{keywordtype}{void}\ Mahony\_Init(\textcolor{keywordtype}{float}\ sampleFrequency);}
+\DoxyCodeLine{00017\ \textcolor{keywordtype}{void}\ MahonyAHRSupdateIMU(\textcolor{keywordtype}{float}\ gx,\ \textcolor{keywordtype}{float}\ gy,\ \textcolor{keywordtype}{float}\ gz,\ \textcolor{keywordtype}{float}\ ax,\ \textcolor{keywordtype}{float}\ ay,\ \textcolor{keywordtype}{float}\ az);}
+\DoxyCodeLine{00018\ \textcolor{keywordtype}{void}\ Mahony\_computeAngles(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00019\ \textcolor{keywordtype}{void}\ MahonyAHRSinit(\textcolor{keywordtype}{float}\ ax,\ \textcolor{keywordtype}{float}\ ay,\ \textcolor{keywordtype}{float}\ az,\ \textcolor{keywordtype}{float}\ mx,\ \textcolor{keywordtype}{float}\ my,\ \textcolor{keywordtype}{float}\ mz);}
+\DoxyCodeLine{00020\ \textcolor{keywordtype}{float}\ getRoll(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00021\ \textcolor{keywordtype}{float}\ getPitch(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00022\ \textcolor{keywordtype}{float}\ getYaw(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00023\ \textcolor{keywordtype}{float}\ getRollRadians(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00024\ \textcolor{keywordtype}{float}\ getPitchRadians(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00025\ \textcolor{keywordtype}{float}\ getYawRadians(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

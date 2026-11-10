@@ -1,0 +1,112 @@
+\doxysection{computer\+\_\+pack.\+h}
+\hypertarget{computer__pack_8h_source}{}\label{computer__pack_8h_source}\index{source/module/computer/computer\_pack.h@{source/module/computer/computer\_pack.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ COMPUTER\_PACK\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ COMPUTER\_PACK\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ pack(1)}}
+\DoxyCodeLine{00008\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00009\ \{}
+\DoxyCodeLine{00010\ \ \ uint8\_t\ header;\textcolor{comment}{//\ =\ 0x5A;}}
+\DoxyCodeLine{00011\ \ \ uint8\_t\ detect\_color\ :\ 1;\ \ \textcolor{comment}{//\ 0-\/red\ 1-\/blue}}
+\DoxyCodeLine{00012\ \ \ \textcolor{keywordtype}{bool}\ reset\_tracker\ :\ 1;}
+\DoxyCodeLine{00013\ \ \ uint8\_t\ reserved\ :\ 6;}
+\DoxyCodeLine{00014\ \ \ \textcolor{keywordtype}{float}\ roll;}
+\DoxyCodeLine{00015\ \ \ \textcolor{keywordtype}{float}\ pitch;}
+\DoxyCodeLine{00016\ \ \ \textcolor{keywordtype}{float}\ yaw;}
+\DoxyCodeLine{00017\ \ \ \textcolor{keywordtype}{float}\ aim\_x;}
+\DoxyCodeLine{00018\ \ \ \textcolor{keywordtype}{float}\ aim\_y;}
+\DoxyCodeLine{00019\ \ \ \textcolor{keywordtype}{float}\ aim\_z;}
+\DoxyCodeLine{00020\ \ \ uint16\_t\ checksum;}
+\DoxyCodeLine{00021\ \}\mbox{\hyperlink{struct_send_packet_vision__t}{SendPacketVision\_t}};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00024\ \{}
+\DoxyCodeLine{00025\ \ \ uint8\_t\ header;\textcolor{comment}{//\ =\ 0xA5;}}
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{bool}\ tracking\ :\ 1;}
+\DoxyCodeLine{00027\ \ \ uint8\_t\ id\ :\ 3;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0-\/outpost\ 6-\/guard\ 7-\/base}}
+\DoxyCodeLine{00028\ \ \ uint8\_t\ armors\_num\ :\ 3;\ \ \textcolor{comment}{//\ 2-\/balance\ 3-\/outpost\ 4-\/normal}}
+\DoxyCodeLine{00029\ \ \ uint8\_t\ reserved\ :\ 1;}
+\DoxyCodeLine{00030\ \ \ \textcolor{keywordtype}{float}\ x;}
+\DoxyCodeLine{00031\ \ \ \textcolor{keywordtype}{float}\ y;}
+\DoxyCodeLine{00032\ \ \ \textcolor{keywordtype}{float}\ z;}
+\DoxyCodeLine{00033\ \ \ \textcolor{keywordtype}{float}\ yaw;}
+\DoxyCodeLine{00034\ \ \ \textcolor{keywordtype}{float}\ vx;}
+\DoxyCodeLine{00035\ \ \ \textcolor{keywordtype}{float}\ vy;}
+\DoxyCodeLine{00036\ \ \ \textcolor{keywordtype}{float}\ vz;}
+\DoxyCodeLine{00037\ \ \ \textcolor{keywordtype}{float}\ v\_yaw;}
+\DoxyCodeLine{00038\ \ \ \textcolor{keywordtype}{float}\ r1;}
+\DoxyCodeLine{00039\ \ \ \textcolor{keywordtype}{float}\ r2;}
+\DoxyCodeLine{00040\ \ \ \textcolor{keywordtype}{float}\ dz;}
+\DoxyCodeLine{00041\ \ \ uint16\_t\ checksum;}
+\DoxyCodeLine{00042\ \}\mbox{\hyperlink{struct_received_packet_vision__t}{ReceivedPacketVision\_t}};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00045\ \{}
+\DoxyCodeLine{00046\ \ \ uint8\_t\ header;\textcolor{comment}{//\ =\ 0xA4;}}
+\DoxyCodeLine{00047\ \ \ \textcolor{keywordtype}{float}\ linear\_x;}
+\DoxyCodeLine{00048\ \ \ \textcolor{keywordtype}{float}\ linear\_y;}
+\DoxyCodeLine{00049\ \ \ \textcolor{keywordtype}{float}\ linear\_z;}
+\DoxyCodeLine{00050\ \ \ \textcolor{keywordtype}{float}\ angular\_x;}
+\DoxyCodeLine{00051\ \ \ \textcolor{keywordtype}{float}\ angular\_y;}
+\DoxyCodeLine{00052\ \ \ \textcolor{keywordtype}{float}\ angular\_z;}
+\DoxyCodeLine{00053\ \ \ uint16\_t\ checksum;}
+\DoxyCodeLine{00054\ \}\mbox{\hyperlink{struct_received_packet_twist__t}{ReceivedPacketTwist\_t}};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00057\ \{}
+\DoxyCodeLine{00058\ \ \ uint8\_t\ header;\textcolor{comment}{//\ =\ 0xA3;}}
+\DoxyCodeLine{00059\ \ \ \textcolor{keywordtype}{bool}\ stop\_gimbal\_scan;}
+\DoxyCodeLine{00060\ \ \ \textcolor{keywordtype}{float}\ chassis\_spin\_vel;}
+\DoxyCodeLine{00061\ \ \ uint16\_t\ checksum;}
+\DoxyCodeLine{00062\ \}\mbox{\hyperlink{struct_received_packet_robot_control__t}{ReceivedPacketRobotControl\_t}};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00065\ \{}
+\DoxyCodeLine{00066\ \ \ uint8\_t\ header;\textcolor{comment}{//\ =\ 0x5B;}}
+\DoxyCodeLine{00067\ \ \ uint16\_t\ red\_1\_robot\_hp;}
+\DoxyCodeLine{00068\ \ \ uint16\_t\ red\_2\_robot\_hp;}
+\DoxyCodeLine{00069\ \ \ uint16\_t\ red\_3\_robot\_hp;}
+\DoxyCodeLine{00070\ \ \ uint16\_t\ red\_4\_robot\_hp;}
+\DoxyCodeLine{00071\ \ \ uint16\_t\ red\_5\_robot\_hp;}
+\DoxyCodeLine{00072\ \ \ uint16\_t\ red\_7\_robot\_hp;}
+\DoxyCodeLine{00073\ \ \ uint16\_t\ red\_outpost\_hp;}
+\DoxyCodeLine{00074\ \ \ uint16\_t\ red\_base\_hp;}
+\DoxyCodeLine{00075\ \ \ uint16\_t\ blue\_1\_robot\_hp;}
+\DoxyCodeLine{00076\ \ \ uint16\_t\ blue\_2\_robot\_hp;}
+\DoxyCodeLine{00077\ \ \ uint16\_t\ blue\_3\_robot\_hp;}
+\DoxyCodeLine{00078\ \ \ uint16\_t\ blue\_4\_robot\_hp;}
+\DoxyCodeLine{00079\ \ \ uint16\_t\ blue\_5\_robot\_hp;}
+\DoxyCodeLine{00080\ \ \ uint16\_t\ blue\_7\_robot\_hp;}
+\DoxyCodeLine{00081\ \ \ uint16\_t\ blue\_outpost\_hp;}
+\DoxyCodeLine{00082\ \ \ uint16\_t\ blue\_base\_hp;}
+\DoxyCodeLine{00083\ \ \ uint16\_t\ checksum;}
+\DoxyCodeLine{00084\ \}\mbox{\hyperlink{struct_send_packet_all_robot_h_p__t}{SendPacketAllRobotHP\_t}};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00087\ \{}
+\DoxyCodeLine{00088\ \ \ uint8\_t\ header;\textcolor{comment}{//\ =\ 0x5C;}}
+\DoxyCodeLine{00089\ \ \ uint8\_t\ game\_progress;}
+\DoxyCodeLine{00090\ \ \ uint16\_t\ stage\_remain\_time;}
+\DoxyCodeLine{00091\ \ \ uint16\_t\ checksum;}
+\DoxyCodeLine{00092\ \}\mbox{\hyperlink{struct_send_packet_game_status__t}{SendPacketGameStatus\_t}};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00095\ \{}
+\DoxyCodeLine{00096\ \ \ uint8\_t\ header;\textcolor{comment}{//\ =\ 0x5D;}}
+\DoxyCodeLine{00097\ \ \ uint8\_t\ robot\_id;}
+\DoxyCodeLine{00098\ \ \ uint16\_t\ current\_hp;}
+\DoxyCodeLine{00099\ \ \ uint16\_t\ shooter\_heat;}
+\DoxyCodeLine{00100\ \ \ \textcolor{keywordtype}{bool}\ team\_color;}
+\DoxyCodeLine{00101\ \ \ \textcolor{keywordtype}{bool}\ is\_attacked;}
+\DoxyCodeLine{00102\ \ \ uint16\_t\ checksum;}
+\DoxyCodeLine{00103\ \}\mbox{\hyperlink{struct_send_packet_robot_status__t}{SendPacketRobotStatus\_t}};}
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#pragma\ pack()}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ !}}
+
+\end{DoxyCode}

@@ -1,0 +1,23 @@
+\doxysection{can\+\_\+bsp.\+h}
+\hypertarget{can__bsp_8h_source}{}\label{can__bsp_8h_source}\index{source/bsp/can/can\_bsp.h@{source/bsp/can/can\_bsp.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ CANTOOL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ CANTOOL\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}fdcan.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keywordtype}{void}\ can\_bsp\_init(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00008\ \textcolor{keywordtype}{void}\ can\_filter\_init(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00009\ uint8\_t\ fdcanx\_send\_data(FDCAN\_HandleTypeDef\ *hfdcan,\ uint16\_t\ \textcolor{keywordtype}{id},\ uint8\_t\ *data,\ uint32\_t\ len);}
+\DoxyCodeLine{00010\ uint8\_t\ fdcanx\_send\_data\_ext(FDCAN\_HandleTypeDef\ *hfdcan,\ uint16\_t\ \textcolor{keywordtype}{id},\ uint8\_t\ *data,\ uint32\_t\ len);}
+\DoxyCodeLine{00011\ uint8\_t\ fdcanx\_send\_data\_fd(FDCAN\_HandleTypeDef\ *hfdcan,\ uint16\_t\ \textcolor{keywordtype}{id},\ uint8\_t\ *data,\ uint32\_t\ len);}
+\DoxyCodeLine{00012\ FDCAN\_RxHeaderTypeDef*\ fdcanx\_receive(FDCAN\_HandleTypeDef\ *hfdcan,\ uint8\_t\ *buf);}
+\DoxyCodeLine{00013\ \textcolor{keywordtype}{void}\ fdcan1\_rx\_callback(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00014\ \textcolor{keywordtype}{void}\ fdcan2\_rx\_callback(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00015\ \textcolor{keywordtype}{void}\ fdcan3\_rx\_callback(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ !CANTOOL\_H}}
+
+\end{DoxyCode}

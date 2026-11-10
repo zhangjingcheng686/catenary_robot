@@ -1,0 +1,243 @@
+\doxysection{Arm\+Control\+\_\+\+Task.\+h}
+\hypertarget{_arm_control___task_8h_source}{}\label{_arm_control___task_8h_source}\index{source/task/ArmControl\_Task.h@{source/task/ArmControl\_Task.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ARMCONTROL\_TASK\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ARMCONTROL\_TASK\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}motor\_DM.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}cmsis\_os2.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Switch\_Task.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ RAD\_TO\_DEG\ (180.0f\ /\ 3.1415926f)}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ DEG\_TO\_RAD\ (3.1415926f\ /\ 180.0f)}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ KP\_GRIP\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 80.0f}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ KD\_GRIP\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2.5f}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ TFF\_GRIP\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 8.0f\ \ }}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ CH5\_LOW\_THRESHOLD\ \ \ \ \ \ \ \ \ \ \ \ \ 980}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ CH5\_HIGH\_THRESHOLD\ \ \ \ \ \ \ \ \ \ \ \ 1020}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ CLAW\_CLOSE\_WAIT\_MS\ \ \ \ \ \ \ \ \ \ \ \ 1000}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ CRAB\_REACH\_TIMEOUT\_MS\ \ \ \ \ \ \ \ \ 2500}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ ACT4\_REACH\_TIMEOUT\_MS\ \ \ \ \ \ \ \ \ 4000}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ LEFT\_CLAW\_OPEN\_WIRE\ \ \ \ \ \ \ \ \ \ \ 0.0f}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ LEFT\_CLAW\_CLOSED\_WIRE\ \ \ \ \ \ \ -\/79.11f}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ LEFT\_CLAW\_HALF\_WIRE\ \ \ \ \ \ \ \ \ -\/69.19f}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ RIGHT\_CLAW\_OPEN\_WIRE\ \ \ \ \ \ \ \ \ \ 0.0f}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ RIGHT\_CLAW\_CLOSED\_WIRE\ \ \ \ \ \ -\/79.11f}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ RIGHT\_CLAW\_HALF\_WIRE\ \ \ \ \ \ \ \ -\/69.19f}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ MID\_CLAW\_OPEN\_WIRE\ \ \ \ \ \ \ \ \ \ \ \ 0.0f}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ MID\_CLAW\_CLOSED\_WIRE\ \ \ \ \ \ \ \ -\/73.38f}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ LEFT\_CLAW\_OPEN\_POLE\ \ \ \ \ \ \ \ \ \ \ 0.0f}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ LEFT\_CLAW\_CLOSED\_POLE\ \ \ \ \ \ \ -\/79.11f}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ LEFT\_CLAW\_HALF\_POLE\ \ \ \ \ \ \ \ \ -\/50.19f}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ RIGHT\_CLAW\_OPEN\_POLE\ \ \ \ \ \ \ \ \ \ 0.0f}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ RIGHT\_CLAW\_CLOSED\_POLE\ \ \ \ \ \ -\/79.11f}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ RIGHT\_CLAW\_HALF\_POLE\ \ \ \ \ \ \ \ -\/50.19f}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ MID\_CLAW\_OPEN\_POLE\ \ \ \ \ \ \ \ \ \ \ \ 0.0f}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ MID\_CLAW\_CLOSED\_POLE\ \ \ \ \ \ \ \ -\/73.38f\ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ CRAB\_MODE\_WIRE\ =\ 0,\ \ }
+\DoxyCodeLine{00042\ \ \ \ \ CRAB\_MODE\_POLE\ =\ 1\ \ \ }
+\DoxyCodeLine{00043\ \}\ CrabWalk\_Mode\_t;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ MODE\_IDLE\ =\ 0,}
+\DoxyCodeLine{00047\ \ \ \ \ MODE\_ACTION1,}
+\DoxyCodeLine{00048\ \ \ \ \ MODE\_ACTION2,}
+\DoxyCodeLine{00049\ \ \ \ \ MODE\_ROLL\_WALK,}
+\DoxyCodeLine{00050\ \ \ \ \ MODE\_ACTION3,}
+\DoxyCodeLine{00051\ \ \ \ \ MODE\_CRAB\_WALK\_HORIZONTAL,\ \ }
+\DoxyCodeLine{00052\ \ \ \ \ MODE\_CRAB\_WALK\_VERTICAL,\ \ \ \ }
+\DoxyCodeLine{00053\ \ \ \ \ MODE\_ACTION4}
+\DoxyCodeLine{00054\ \}\ ArmControl\_Mode\_t;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}*\ m;}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{float}\ start\_deg;}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{float}\ target\_deg;}
+\DoxyCodeLine{00060\ \ \ \ \ uint32\_t\ t0\_ms;\ \ \ \ \ }
+\DoxyCodeLine{00061\ \}\ \mbox{\hyperlink{struct_step_joint__t}{StepJoint\_t}};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00064\ \ \ \ \ ACT1\_IDLE\ =\ 0,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00065\ \ \ \ \ ACT1\_STEP1,\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00066\ \ \ \ \ ACT1\_WAIT\_FOR\_CLAW,\ \ \ }
+\DoxyCodeLine{00067\ \ \ \ \ ACT1\_STEP2,\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00068\ \ \ \ \ ACT1\_STEP4,\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00069\ \ \ \ \ ACT1\_STEP5,\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00070\ \ \ \ \ ACT1\_STEP6,\ }
+\DoxyCodeLine{00071\ \ \ \ \ ACT1\_STEP7,\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00072\ \ \ \ \ ACT1\_STEP8,}
+\DoxyCodeLine{00073\ \ \ \ \ ACT1\_STEP9,\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00074\ \ \ \ \ ACT1\_COMPLETE\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00075\ \}\ Action1State\_t;}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00078\ \ \ \ \ Action1State\_t\ state;\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00079\ \ \ \ \ uint32\_t\ state\_start\_time;\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{float}\ start\_angles[6];\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00081\ \}\ \mbox{\hyperlink{struct_action1_control__t}{Action1Control\_t}};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ ACT2\_IDLE\ =\ 0,}
+\DoxyCodeLine{00085\ \ \ \ \ ACT2\_STEP1,}
+\DoxyCodeLine{00086\ \ \ \ \ ACT2\_WAIT\_FOR\_CLAW,}
+\DoxyCodeLine{00087\ \ \ \ \ ACT2\_STEP3,}
+\DoxyCodeLine{00088\ \ \ \ \ ACT2\_STEP4,}
+\DoxyCodeLine{00089\ \ \ \ \ ACT2\_COMPLETE}
+\DoxyCodeLine{00090\ \}\ Action2State\_t;}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00093\ \ \ \ \ Action2State\_t\ state;}
+\DoxyCodeLine{00094\ \ \ \ \ uint32\_t\ state\_start\_time;}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{float}\ start\_angles[6];}
+\DoxyCodeLine{00096\ \ \ \ \ uint8\_t\ swing\_count;}
+\DoxyCodeLine{00097\ \}\ \mbox{\hyperlink{struct_action2_control__t}{Action2Control\_t}};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ ACT3\_IDLE\ =\ 0,}
+\DoxyCodeLine{00101\ \ \ \ \ ACT3\_STEP1,}
+\DoxyCodeLine{00102\ \ \ \ \ ACT3\_WAIT\_FOR\_CLAW,}
+\DoxyCodeLine{00103\ \ \ \ \ ACT3\_STEP2A,\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00104\ \ \ \ \ ACT3\_STEP2B,\ \ }
+\DoxyCodeLine{00105\ \ \ \ \ ACT3\_STEP2B\_TO\_2C,\ }
+\DoxyCodeLine{00106\ \ \ \ \ ACT3\_STEP2B\_TO\_2C\_CLAW\_CLOSE,}
+\DoxyCodeLine{00107\ \ \ \ \ ACT3\_STEP2C,\ \ \ \ \ }
+\DoxyCodeLine{00108\ \ \ \ \ ACT3\_WAIT\_FOR\_MID\_CLAW,}
+\DoxyCodeLine{00109\ \ \ \ \ ACT3\_COMPLETE}
+\DoxyCodeLine{00110\ \}\ Action3State\_t;}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00113\ \ \ \ \ Action3State\_t\ state;}
+\DoxyCodeLine{00114\ \ \ \ \ uint32\_t\ state\_start\_time;}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{float}\ start\_angles[6];}
+\DoxyCodeLine{00116\ \}\ \mbox{\hyperlink{struct_action3_control__t}{Action3Control\_t}};}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ CRABH\_IDLE\ =\ 0,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00120\ \ \ \ \ CRABH\_STEP1\_CLAWS\_CHECK,\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00121\ \ \ \ \ CRABH\_STEP2\_LEFT\_ARM\_MOVE\_A,\ \ }
+\DoxyCodeLine{00122\ \ \ \ \ CRABH\_STEP2\_LEFT\_ARM\_MOVE\_B,\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00123\ \ \ \ \ CRABH\_STEP3\_LEFT\_CLAW\_CLOSE\_A,\ \ \ }
+\DoxyCodeLine{00124\ \ \ \ \ CRABH\_STEP3\_LEFT\_CLAW\_CLOSE\_B,\ \ \ \ \ }
+\DoxyCodeLine{00125\ \ \ \ \ CRABH\_STEP4\_M2\_ROTATE,\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00126\ \ \ \ \ CRABH\_STEP5\_CLAWS\_RECHECK\_A,\ \ \ \ }
+\DoxyCodeLine{00127\ \ \ \ \ CRABH\_STEP5\_CLAWS\_RECHECK\_B,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00128\ \ \ \ \ CRABH\_STEP6\_RIGHT\_ARM\_MOVE\_A,\ \ }
+\DoxyCodeLine{00129\ \ \ \ \ CRABH\_STEP6\_RIGHT\_ARM\_MOVE\_B,\ \ \ \ \ }
+\DoxyCodeLine{00130\ \ \ \ \ CRABH\_STEP7\_ALL\_CLAWS\_CLOSED,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00131\ \ \ \ \ CRABH\_COMPLETE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00132\ \}\ CrabWalkH\_State\_t;}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00135\ \ \ \ \ CrabWalkH\_State\_t\ state;}
+\DoxyCodeLine{00136\ \ \ \ \ uint32\_t\ state\_start\_time;}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{bool}\ step\_inited;}
+\DoxyCodeLine{00138\ \ \ \ \ uint32\_t\ claw\_wait\_start;}
+\DoxyCodeLine{00139\ \ \ \ \ uint32\_t\ move\_start\_time;}
+\DoxyCodeLine{00140\ \}\ \mbox{\hyperlink{struct_crab_walk_h_control__t}{CrabWalkHControl\_t}};}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00143\ \ \ \ \ CRABV\_IDLE\ =\ 0,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00144\ \ \ \ \ CRABV\_STEP1\_CLAWS\_CHECK,\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00145\ \ \ \ \ CRABV\_STEP2\_LEFT\_ARM\_MOVE\_A,\ \ }
+\DoxyCodeLine{00146\ \ \ \ \ CRABV\_STEP2\_LEFT\_ARM\_MOVE\_B,\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00147\ \ \ \ \ CRABV\_STEP3\_LEFT\_CLAW\_CLOSE\_A,\ \ \ }
+\DoxyCodeLine{00148\ \ \ \ \ CRABV\_STEP3\_LEFT\_CLAW\_CLOSE\_B,\ \ \ \ \ }
+\DoxyCodeLine{00149\ \ \ \ \ CRABV\_STEP4\_M2\_ROTATE,\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00150\ \ \ \ \ CRABV\_STEP5\_CLAWS\_RECHECK\_A,\ \ \ \ }
+\DoxyCodeLine{00151\ \ \ \ \ CRABV\_STEP5\_CLAWS\_RECHECK\_B,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00152\ \ \ \ \ CRABV\_STEP6\_RIGHT\_ARM\_MOVE\_A,\ \ }
+\DoxyCodeLine{00153\ \ \ \ \ CRABV\_STEP6\_RIGHT\_ARM\_MOVE\_B,\ \ \ \ \ }
+\DoxyCodeLine{00154\ \ \ \ \ CRABV\_STEP7\_ALL\_CLAWS\_CLOSED,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00155\ \ \ \ \ CRABV\_COMPLETE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00156\ \}\ CrabWalkV\_State\_t;}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00159\ \ \ \ \ CrabWalkV\_State\_t\ state;}
+\DoxyCodeLine{00160\ \ \ \ \ uint32\_t\ state\_start\_time;}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{bool}\ step\_inited;}
+\DoxyCodeLine{00162\ \ \ \ \ uint32\_t\ claw\_wait\_start;}
+\DoxyCodeLine{00163\ \ \ \ \ uint32\_t\ move\_start\_time;}
+\DoxyCodeLine{00164\ \}\ \mbox{\hyperlink{struct_crab_walk_v_control__t}{CrabWalkVControl\_t}};}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ ROLL\_IDLE\ =\ 0,}
+\DoxyCodeLine{00168\ \ \ \ \ ROLL\_STEP1,\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00169\ \ \ \ \ ROLL\_STEP2,}
+\DoxyCodeLine{00170\ \ \ \ \ ROLL\_STEP3,}
+\DoxyCodeLine{00171\ \ \ \ \ ROLL\_STEP4,}
+\DoxyCodeLine{00172\ \ \ \ \ ROLL\_COMPLETE}
+\DoxyCodeLine{00173\ \}\ RollWalkState\_t;}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00176\ \ \ \ \ RollWalkState\_t\ state;}
+\DoxyCodeLine{00177\ \ \ \ \ uint32\_t\ state\_start\_time;}
+\DoxyCodeLine{00178\ \ \ \ \ uint32\_t\ step2\_start\_time;\ }
+\DoxyCodeLine{00179\ \}\ \mbox{\hyperlink{struct_roll_walk_control__t}{RollWalkControl\_t}};}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ ACT4\_IDLE\ =\ 0,}
+\DoxyCodeLine{00183\ \ \ \ \ ACT4\_STEP1\_RIGHT\_CLAW\_OPEN,\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00184\ \ \ \ \ ACT4\_STEP2\_R2R5\_TO\_70,\ \ }
+\DoxyCodeLine{00185\ \ \ \ \ ACT4\_STEP2B\_L1\_180\_R2\_90,\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00186\ \ \ \ \ ACT4\_STEP3A\_RIGHT\_CLAW\_CLOSE,\ \ \ }
+\DoxyCodeLine{00187\ \ \ \ \ ACT4\_STEP3B\_MID\_CLAW\_OPEN,}
+\DoxyCodeLine{00188\ \ \ \ \ ACT4\_STEP3B\_MID\_M1\_30\_M2\_5,\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00189\ \ \ \ \ ACT4\_STEP3C\_MID\_M1\_140\_M2\_175,\ \ \ \ \ }
+\DoxyCodeLine{00190\ \ \ \ \ ACT4\_STEP4\_RESERVED,\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00191\ \ \ \ \ ACT4\_STEP5A\_MID\_M1\_30\_M2\_50,\ \ \ \ \ \ \ }
+\DoxyCodeLine{00192\ \ \ \ \ ACT4\_STEP5B\_MID\_M1\_5\_M2\_80,\ \ \ \ \ \ }
+\DoxyCodeLine{00193\ \ \ \ \ ACT4\_STEP5C\_MID\_CLAW\_CLOSE,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00194\ \ \ \ \ ACT4\_STEP6\_RESERVED,\ \ \ \ }
+\DoxyCodeLine{00195\ \ \ \ \ ACT4\_STEP7\_RIGHT\_CLAW\_OPEN,\ \ \ \ \ \ \ }
+\DoxyCodeLine{00196\ \ \ \ \ ACT4\_STEP8A\_R4\_R3\_R2\_ROTATE,\ \ }
+\DoxyCodeLine{00197\ \ \ \ \ ACT4\_STEP8B\_FINAL\_ROTATE,\ \ }
+\DoxyCodeLine{00198\ \ \ \ \ ACT4\_STEP9\_RIGHT\_CLAW\_CLOSE,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00199\ \ \ \ \ ACT4\_COMPLETE}
+\DoxyCodeLine{00200\ \}\ Action4State\_t;}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00203\ \ \ \ \ Action4State\_t\ state;}
+\DoxyCodeLine{00204\ \ \ \ \ uint32\_t\ state\_start\_time;}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordtype}{bool}\ step\_inited;}
+\DoxyCodeLine{00206\ \ \ \ \ uint32\_t\ step\_wait\_t0;}
+\DoxyCodeLine{00207\ \}\ \mbox{\hyperlink{struct_action4_control__t}{Action4Control\_t}};}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_action1_control__t}{Action1Control\_t}}\ action1\_ctrl;}
+\DoxyCodeLine{00210\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_action2_control__t}{Action2Control\_t}}\ action2\_ctrl;}
+\DoxyCodeLine{00211\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_action3_control__t}{Action3Control\_t}}\ action3\_ctrl;}
+\DoxyCodeLine{00212\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_crab_walk_h_control__t}{CrabWalkHControl\_t}}\ crab\_walkH\_ctrl;}
+\DoxyCodeLine{00213\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_crab_walk_v_control__t}{CrabWalkVControl\_t}}\ crab\_walkV\_ctrl;}
+\DoxyCodeLine{00214\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_roll_walk_control__t}{RollWalkControl\_t}}\ roll\_walk\_ctrl;}
+\DoxyCodeLine{00215\ \textcolor{keyword}{extern}\ CrabWalk\_Mode\_t\ crab\_walk\_mode;}
+\DoxyCodeLine{00216\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_action4_control__t}{Action4Control\_t}}\ action4\_ctrl;}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \textcolor{keywordtype}{void}\ CheckCrabWalkModeSwitch(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00219\ \textcolor{keywordtype}{float}\ GetClawAngle(\textcolor{keywordtype}{int}\ claw\_type,\ \textcolor{keywordtype}{int}\ position);}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \textcolor{keywordtype}{void}\ Action1\_Control(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00222\ \textcolor{keywordtype}{void}\ Action2\_Control(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00223\ \textcolor{keywordtype}{void}\ Action3\_Control(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00224\ \textcolor{keywordtype}{void}\ CrabWalkHorizontalControl(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00225\ \textcolor{keywordtype}{void}\ CrabWalkVerticalControl(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00226\ \textcolor{keywordtype}{void}\ RollWalkControl(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00227\ \textcolor{keywordtype}{void}\ Action4\_Control(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \textcolor{keywordtype}{void}\ ResetAction1State(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00230\ \textcolor{keywordtype}{void}\ ResetAction2State(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00231\ \textcolor{keywordtype}{void}\ ResetAction3State(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00232\ \textcolor{keywordtype}{void}\ ResetCrabWalkHState(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00233\ \textcolor{keywordtype}{void}\ ResetCrabWalkVState(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00234\ \textcolor{keywordtype}{void}\ ResetRollWalkState(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00235\ \textcolor{keywordtype}{void}\ ResetAction4State(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ ARMCONTROL\_TASK\_H}}
+
+\end{DoxyCode}

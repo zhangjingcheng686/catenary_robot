@@ -1,0 +1,57 @@
+\chapter{键盘模块说明 }
+\hypertarget{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e}{}\label{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e}\index{键盘模块说明@{键盘模块说明}}
+\label{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md60}%
+\Hypertarget{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md60}%
+\hypertarget{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md61}{}\doxysection{\texorpdfstring{功能概述}{功能概述}}\label{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md61}
+本模块定义了键盘和鼠标输入的数据结构，用于处理来自\+PC的输入控制信号。\hypertarget{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md62}{}\doxysection{\texorpdfstring{数据结构}{数据结构}}\label{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md62}
+在{\ttfamily \doxylink{key_board_8h_source}{key\+Board.\+h}}中定义了{\ttfamily \doxylink{structkeyboard__t}{keyboard\+\_\+t}}结构体：
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\ \ \ \ int16\_t\ mouse\_x;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 鼠标X坐标}}
+\DoxyCodeLine{\ \ \ \ int16\_t\ mouse\_y;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 鼠标Y坐标\ }}
+\DoxyCodeLine{\ \ \ \ int16\_t\ mouse\_z;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 鼠标Z坐标(滚轮)}}
+\DoxyCodeLine{\ \ \ \ int8\_t\ left\_button\_down;\ \ \textcolor{comment}{//\ 左键按下状态}}
+\DoxyCodeLine{\ \ \ \ int8\_t\ right\_button\_down;\ \textcolor{comment}{//\ 右键按下状态}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{union\ }\{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ uint16\_t\ key\_code;\ \ \ \textcolor{comment}{//\ 按键状态组合值}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ W\ :\ 1;\ \ \ \ \textcolor{comment}{//\ W键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ S\ :\ 1;\ \ \ \ \textcolor{comment}{//\ S键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ A\ :\ 1;\ \ \ \ \textcolor{comment}{//\ A键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ D\ :\ 1;\ \ \ \ \textcolor{comment}{//\ D键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ SHIFT\ :\ 1;\ \textcolor{comment}{//\ SHIFT键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ CTRL\ :\ 1;\ \ \textcolor{comment}{//\ CTRL键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ Q\ :\ 1;\ \ \ \ \ \textcolor{comment}{//\ Q键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ E\ :\ 1;\ \ \ \ \ \textcolor{comment}{//\ E键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ R\ :\ 1;\ \ \ \ \ \textcolor{comment}{//\ R键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ F\ :\ 1;\ \ \ \ \ \textcolor{comment}{//\ F键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ G\ :\ 1;\ \ \ \ \ \textcolor{comment}{//\ G键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ Z\ :\ 1;\ \ \ \ \ \textcolor{comment}{//\ Z键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ X\ :\ 1;\ \ \ \ \ \textcolor{comment}{//\ X键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ C\ :\ 1;\ \ \ \ \ \textcolor{comment}{//\ C键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ V\ :\ 1;\ \ \ \ \ \textcolor{comment}{//\ V键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ uint16\_t\ B\ :\ 1;\ \ \ \ \ \textcolor{comment}{//\ B键}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}\ bit;}
+\DoxyCodeLine{\ \ \ \ \}\ key\_code;}
+\DoxyCodeLine{\ \ \ \ uint16\_t\ reserved;\ \ \ \ \ \ \textcolor{comment}{//\ 保留位}}
+\DoxyCodeLine{\}\ \mbox{\hyperlink{structkeyboard__t}{keyboard\_t}};}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md63}{}\doxysection{\texorpdfstring{按键位域说明}{按键位域说明}}\label{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md63}
+
+\begin{DoxyItemize}
+\item 每个按键使用1位表示状态(0\+:未按下, 1\+:按下)
+\item 支持的按键：
+\begin{DoxyItemize}
+\item 方向控制：W(前), S(后), A(左), D(右)
+\item 功能键：\+SHIFT, CTRL
+\item 其他按键：Q, E, R, F, G, Z, X, C, V, B
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md64}{}\doxysection{\texorpdfstring{使用示例}{使用示例}}\label{md_source_2bsp_2keyboard_2_x_e9_x94_x_a_e_x_e7_x9_b_x98_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md64}
+\`{}\`{}\`{}c \doxylink{structkeyboard__t}{keyboard\+\_\+t} kb\+\_\+input;
+
+// 检查\+W键是否按下 if(kb\+\_\+input.\+key\+\_\+code.\+bit.\+W) \{ // 处理前进逻辑 \}
+
+// 检查鼠标左键 if(kb\+\_\+input.\+left\+\_\+button\+\_\+down) \{ // 处理鼠标左键点击 \} 

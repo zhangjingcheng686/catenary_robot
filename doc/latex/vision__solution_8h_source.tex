@@ -1,0 +1,72 @@
+\doxysection{vision\+\_\+solution.\+h}
+\hypertarget{vision__solution_8h_source}{}\label{vision__solution_8h_source}\index{source/module/computer/vision/vision\_solution.h@{source/module/computer/vision/vision\_solution.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ VISION\_SOLUTION\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ VISION\_SOLUTION\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}computer\_pack.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{enum}\ ARMOR\_ID}
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ \ \ ARMOR\_OUTPOST\ =\ 0,}
+\DoxyCodeLine{00010\ \ \ ARMOR\_HERO\ =\ 1,}
+\DoxyCodeLine{00011\ \ \ ARMOR\_ENGINEER\ =\ 2,}
+\DoxyCodeLine{00012\ \ \ ARMOR\_INFANTRY3\ =\ 3,}
+\DoxyCodeLine{00013\ \ \ ARMOR\_INFANTRY4\ =\ 4,}
+\DoxyCodeLine{00014\ \ \ ARMOR\_INFANTRY5\ =\ 5,}
+\DoxyCodeLine{00015\ \ \ ARMOR\_GUARD\ =\ 6,}
+\DoxyCodeLine{00016\ \ \ ARMOR\_BASE\ =\ 7}
+\DoxyCodeLine{00017\ \};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{enum}\ ARMOR\_NUM}
+\DoxyCodeLine{00020\ \{}
+\DoxyCodeLine{00021\ \ \ ARMOR\_NUM\_BALANCE\ =\ 2,}
+\DoxyCodeLine{00022\ \ \ ARMOR\_NUM\_OUTPOST\ =\ 3,}
+\DoxyCodeLine{00023\ \ \ ARMOR\_NUM\_NORMAL\ =\ 4}
+\DoxyCodeLine{00024\ \};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00027\ \{}
+\DoxyCodeLine{00028\ \ \ \textcolor{keywordtype}{float}\ k;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//弹道系数}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \textcolor{comment}{//自身参数}}
+\DoxyCodeLine{00031\ \ \ uint8\_t\ bullet\_type;\ \ \textcolor{comment}{//自身机器人类型\ 0-\/步兵\ 1-\/英雄}}
+\DoxyCodeLine{00032\ \ \ \textcolor{keywordtype}{float}\ current\_v;\ \ \ \ \ \ \textcolor{comment}{//当前弹速}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \textcolor{comment}{//目标参数}}
+\DoxyCodeLine{00035\ \ \ \textcolor{keywordtype}{float}\ xw;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//ROS坐标系下的x}}
+\DoxyCodeLine{00036\ \ \ \textcolor{keywordtype}{float}\ yw;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//ROS坐标系下的y}}
+\DoxyCodeLine{00037\ \ \ \textcolor{keywordtype}{float}\ zw;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//ROS坐标系下的z}}
+\DoxyCodeLine{00038\ \ \ \textcolor{keywordtype}{float}\ vxw;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//ROS坐标系下的vx}}
+\DoxyCodeLine{00039\ \ \ \textcolor{keywordtype}{float}\ vyw;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//ROS坐标系下的vy}}
+\DoxyCodeLine{00040\ \ \ \textcolor{keywordtype}{float}\ vzw;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//ROS坐标系下的vz}}
+\DoxyCodeLine{00041\ \ \ \textcolor{keywordtype}{float}\ tar\_yaw;\ \ \ \ \ \ \ \ \textcolor{comment}{//目标yaw}}
+\DoxyCodeLine{00042\ \ \ \textcolor{keywordtype}{float}\ v\_yaw;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//目标yaw速度}}
+\DoxyCodeLine{00043\ \ \ \textcolor{keywordtype}{float}\ r1;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//目标中心到前后装甲板的距离}}
+\DoxyCodeLine{00044\ \ \ \textcolor{keywordtype}{float}\ r2;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//目标中心到左右装甲板的距离}}
+\DoxyCodeLine{00045\ \ \ \textcolor{keywordtype}{float}\ dz;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//装甲板的高度差}}
+\DoxyCodeLine{00046\ \ \ \textcolor{keywordtype}{int}\ bias\_time;\ \ \ \ \ \ \ \ \textcolor{comment}{//偏置时间}}
+\DoxyCodeLine{00047\ \ \ \textcolor{keywordtype}{float}\ s\_bias;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//枪口前推的时间}}
+\DoxyCodeLine{00048\ \ \ \textcolor{keywordtype}{float}\ z\_bias;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//yaw电机到枪口水平面的垂直距离}}
+\DoxyCodeLine{00049\ \ \ \textcolor{keyword}{enum}\ ARMOR\_ID\ armor\_id;\ \ \ \ \ \textcolor{comment}{//装甲板类型\ \ 0-\/outpost\ 6-\/guard\ 7-\/base}}
+\DoxyCodeLine{00050\ \ \ \textcolor{comment}{//1-\/英雄\ 2-\/工程\ 3-\/4-\/5-\/步兵\ }}
+\DoxyCodeLine{00051\ \ \ \textcolor{keyword}{enum}\ ARMOR\_NUM\ armor\_num;\ \ \ \textcolor{comment}{//装甲板数字\ \ 2-\/balance\ 3-\/outpost\ 4-\/normal}}
+\DoxyCodeLine{00052\ \}\mbox{\hyperlink{struct_solve_trajectory_params__t}{SolveTrajectoryParams\_t}};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00055\ \{}
+\DoxyCodeLine{00056\ \ \ \textcolor{keywordtype}{float}\ x;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//装甲板在世界坐标系下的x}}
+\DoxyCodeLine{00057\ \ \ \textcolor{keywordtype}{float}\ y;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//装甲板在世界坐标系下的y}}
+\DoxyCodeLine{00058\ \ \ \textcolor{keywordtype}{float}\ z;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//装甲板在世界坐标系下的z}}
+\DoxyCodeLine{00059\ \ \ \textcolor{keywordtype}{float}\ yaw;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//装甲板在世界坐标系下的yaw角度}}
+\DoxyCodeLine{00060\ \}\mbox{\hyperlink{structtar__pos}{tar\_pos}};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{float}\ aim\_x\_n,\ aim\_y\_n,\ aim\_z\_n;\textcolor{comment}{//机器人目标点}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{keywordtype}{void}\ vision\_solution(\textcolor{keywordtype}{float}\ *target\_yaw,\ \textcolor{keywordtype}{float}\ *target\_pitch);}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ !}}
+
+\end{DoxyCode}

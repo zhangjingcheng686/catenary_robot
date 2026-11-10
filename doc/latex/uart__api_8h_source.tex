@@ -1,0 +1,51 @@
+\doxysection{uart\+\_\+api.\+h}
+\hypertarget{uart__api_8h_source}{}\label{uart__api_8h_source}\index{source/bsp/uart/uart\_api.h@{source/bsp/uart/uart\_api.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_\_UART\_API\_H\_\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_\_UART\_API\_H\_\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00007\ \{}
+\DoxyCodeLine{00008\ \ \ \ \ UART\_HandleTypeDef\ *huart;}
+\DoxyCodeLine{00009\ \ \ \ \ uint8\_t\ *pBuffer;}
+\DoxyCodeLine{00010\ \ \ \ \ uint16\_t\ Len;}
+\DoxyCodeLine{00011\ \}\mbox{\hyperlink{structuart__msg__t}{uart\_msg\_t}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{structuart__msg__t}{uart\_msg\_t}}\ *rx\_msg;}
+\DoxyCodeLine{00016\ \ \ \ \ uint32\_t\ count;\ \textcolor{comment}{//接收计数}}
+\DoxyCodeLine{00017\ \ \ \ \ uint16\_t\ time;\ \textcolor{comment}{//超时时间}}
+\DoxyCodeLine{00018\ \}\mbox{\hyperlink{structuart__rx__t}{uart\_rx\_t}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00021\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ UART\_OK\ =\ 0,}
+\DoxyCodeLine{00023\ \ \ \ \ UART\_ERROR,}
+\DoxyCodeLine{00024\ \ \ \ \ UART\_TIMEOUT}
+\DoxyCodeLine{00025\ \}uart\_status\_t;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{structuart__rx__t}{uart\_rx\_t}}*\ uart5\_msg;}
+\DoxyCodeLine{00028\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{structuart__rx__t}{uart\_rx\_t}}*\ uart7\_msg;}
+\DoxyCodeLine{00029\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{structuart__rx__t}{uart\_rx\_t}}*\ uart1\_msg;}
+\DoxyCodeLine{00030\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{structuart__rx__t}{uart\_rx\_t}}*\ uart2\_msg;}
+\DoxyCodeLine{00031\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{structuart__rx__t}{uart\_rx\_t}}*\ uart3\_msg;}
+\DoxyCodeLine{00032\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{structuart__rx__t}{uart\_rx\_t}}*\ uart10\_msg;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{extern}\ void\ (*uart5\_rx\_hook)(uint8\_t\ *pData,\ uint32\_t\ size);}
+\DoxyCodeLine{00035\ \textcolor{keyword}{extern}\ void\ (*uart7\_rx\_hook)(uint8\_t\ *pData,\ uint32\_t\ size);}
+\DoxyCodeLine{00036\ \textcolor{keyword}{extern}\ void\ (*uart1\_rx\_hook)(uint8\_t\ *pData,\ uint32\_t\ size);}
+\DoxyCodeLine{00037\ \textcolor{keyword}{extern}\ void\ (*uart2\_rx\_hook)(uint8\_t\ *pData,\ uint32\_t\ size);}
+\DoxyCodeLine{00038\ \textcolor{keyword}{extern}\ void\ (*uart3\_rx\_hook)(uint8\_t\ *pData,\ uint32\_t\ size);}
+\DoxyCodeLine{00039\ \textcolor{keyword}{extern}\ void\ (*uart10\_rx\_hook)(uint8\_t\ *pData,\ uint32\_t\ size);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ uart\_status\_t\ uart\_rx\_cheak(\mbox{\hyperlink{structuart__rx__t}{uart\_rx\_t}}\ *uart\_rx\_msg);}
+\DoxyCodeLine{00042\ uart\_status\_t\ uart\_msg\_cheak(\mbox{\hyperlink{structuart__msg__t}{uart\_msg\_t}}\ *rx\_msg);}
+\DoxyCodeLine{00043\ uart\_status\_t\ uart\_rx\_init(\mbox{\hyperlink{structuart__rx__t}{uart\_rx\_t}}*\ uart\_rx\_msg);}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_UART\_API\_H\_\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

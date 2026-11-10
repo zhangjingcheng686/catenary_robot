@@ -1,0 +1,32 @@
+\doxysection{dwt\+\_\+bsp.\+h}
+\hypertarget{dwt__bsp_8h_source}{}\label{dwt__bsp_8h_source}\index{source/bsp/dwt/dwt\_bsp.h@{source/bsp/dwt/dwt\_bsp.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#ifndef\ \_BSP\_DWT\_H}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ \_BSP\_DWT\_H}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}stdint.h"{}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00020\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ uint32\_t\ s;}
+\DoxyCodeLine{00022\ \ \ \ \ uint16\_t\ ms;}
+\DoxyCodeLine{00023\ \ \ \ \ uint16\_t\ us;}
+\DoxyCodeLine{00024\ \}\ \mbox{\hyperlink{struct_d_w_t___time__t}{DWT\_Time\_t}};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keywordtype}{void}\ DWT\_Init(uint32\_t\ CPU\_Freq\_mHz);}
+\DoxyCodeLine{00027\ \textcolor{keywordtype}{float}\ DWT\_GetDeltaT(uint32\_t\ *cnt\_last);}
+\DoxyCodeLine{00028\ \textcolor{keywordtype}{double}\ DWT\_GetDeltaT64(uint32\_t\ *cnt\_last);}
+\DoxyCodeLine{00029\ \textcolor{keywordtype}{float}\ DWT\_GetTimeline\_s(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00030\ \textcolor{keywordtype}{float}\ DWT\_GetTimeline\_ms(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00031\ uint64\_t\ DWT\_GetTimeline\_us(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00032\ \textcolor{keywordtype}{void}\ DWT\_Delay(\textcolor{keywordtype}{float}\ Delay);}
+\DoxyCodeLine{00033\ \textcolor{keywordtype}{void}\ DWT\_SysTimeUpdate(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_d_w_t___time__t}{DWT\_Time\_t}}\ SysTime;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ BSP\_DWT\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

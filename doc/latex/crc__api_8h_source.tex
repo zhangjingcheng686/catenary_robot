@@ -1,0 +1,23 @@
+\doxysection{crc\+\_\+api.\+h}
+\hypertarget{crc__api_8h_source}{}\label{crc__api_8h_source}\index{source/bsp/crc/crc\_api.h@{source/bsp/crc/crc\_api.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ CRC\_API\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ CRC\_API\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ CRC\_Check\_False\ \ \ 0}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#define\ CRC\_Check\_True\ \ \ \ 1}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ Get\_CRC8\_Check\_Sum(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *pchMessage,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ dwLength,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ ucCRC8);}
+\DoxyCodeLine{00010\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ Verify\_CRC8\_Check\_Sum(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *pchMessage,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ dwLength);}
+\DoxyCodeLine{00011\ \textcolor{keywordtype}{void}\ Append\_CRC8\_Check\_Sum(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *pchMessage,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ dwLength);}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ uint16\_t\ Get\_CRC16\_Check\_Sum(uint8\_t\ *pchMessage,\ uint32\_t\ dwLength,\ uint16\_t\ wCRC);}
+\DoxyCodeLine{00014\ uint32\_t\ Verify\_CRC16\_Check\_Sum(uint8\_t\ *pchMessage,\ uint32\_t\ dwLength);}
+\DoxyCodeLine{00015\ \textcolor{keywordtype}{void}\ Append\_CRC16\_Check\_Sum(uint8\_t\ *pchMessage,\ uint32\_t\ dwLength);}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ CRC\_API\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

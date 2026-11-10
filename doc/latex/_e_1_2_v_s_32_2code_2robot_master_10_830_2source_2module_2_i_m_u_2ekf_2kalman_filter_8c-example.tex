@@ -1,0 +1,440 @@
+\doxysection{E\+:/\+VS\+\_\+32/code/robot\+\_\+master\+\_\+10.\+30/source/module/\+IMU/ekf/kalman\+\_\+filter.\+c}
+\hypertarget{_e_1_2_v_s_32_2code_2robot_master_10_830_2source_2module_2_i_m_u_2ekf_2kalman_filter_8c-example}{}\label{_e_1_2_v_s_32_2code_2robot_master_10_830_2source_2module_2_i_m_u_2ekf_2kalman_filter_8c-example}x = \texorpdfstring{$\vert$}{|} height \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} velocity \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|}acceleration\texorpdfstring{$\vert$}{|}
+
+Kalman\+Filter\+\_\+t Height\+\_\+\+KF;
+
+void INS\+\_\+\+Task\+\_\+\+Init(void) \{ static float P\+\_\+\+Init\mbox{[}9\mbox{]} = \{ 10, 0, 0, 0, 30, 0, 0, 0, 10, \}; static float F\+\_\+\+Init\mbox{[}9\mbox{]} = \{ 1, dt, 0.\+5\texorpdfstring{$\ast$}{*}dt\texorpdfstring{$\ast$}{*}dt, 0, 1, dt, 0, 0, 1, \}; static float Q\+\_\+\+Init\mbox{[}9\mbox{]} = \{ 0.\+25\texorpdfstring{$\ast$}{*}dt\texorpdfstring{$\ast$}{*}dt\texorpdfstring{$\ast$}{*}dt\texorpdfstring{$\ast$}{*}dt, 0.\+5\texorpdfstring{$\ast$}{*}dt\texorpdfstring{$\ast$}{*}dt\texorpdfstring{$\ast$}{*}dt, 0.\+5\texorpdfstring{$\ast$}{*}dt\texorpdfstring{$\ast$}{*}dt, 0.\+5\texorpdfstring{$\ast$}{*}dt\texorpdfstring{$\ast$}{*}dt\texorpdfstring{$\ast$}{*}dt, dt\texorpdfstring{$\ast$}{*}dt, dt, 0.\+5\texorpdfstring{$\ast$}{*}dt\texorpdfstring{$\ast$}{*}dt, dt, 1, \};
+
+// 设置最小方差 static float state\+\_\+min\+\_\+variance\mbox{[}3\mbox{]} = \{0.\+03, 0.\+005, 0.\+1\};
+
+// 开启自动调整 Height\+\_\+\+KF.\+Use\+Auto\+Adjustment = 1;
+
+// 气压测得高度 GPS测得高度 加速度计测得z轴运动加速度 static uint8\+\_\+t measurement\+\_\+reference\mbox{[}3\mbox{]} = \{1, 1, 3\}
+
+static float measurement\+\_\+degree\mbox{[}3\mbox{]} = \{1, 1, 1\} // 根据measurement\+\_\+reference与measurement\+\_\+degree生成\+H矩阵如下（在当前周期全部测量数据有效情况下） \texorpdfstring{$\vert$}{|}1 0 0\texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|}1 0 0\texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|}0 0 1\texorpdfstring{$\vert$}{|}
+
+static float mat\+\_\+\+R\+\_\+diagonal\+\_\+elements = \{30, 25, 35\} //根据mat\+\_\+\+R\+\_\+diagonal\+\_\+elements生成\+R矩阵如下（在当前周期全部测量数据有效情况下） \texorpdfstring{$\vert$}{|}30 0 0\texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} 0 25 0\texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} 0 0 35\texorpdfstring{$\vert$}{|}
+
+Kalman\+\_\+\+Filter\+\_\+\+Init(\&\+Height\+\_\+\+KF, 3, 0, 3);
+
+// 设置矩阵值 memcpy(Height\+\_\+\+KF.\+P\+\_\+data, P\+\_\+\+Init, sizeof(\+P\+\_\+\+Init)); memcpy(Height\+\_\+\+KF.\+F\+\_\+data, F\+\_\+\+Init, sizeof(\+F\+\_\+\+Init)); memcpy(Height\+\_\+\+KF.\+Q\+\_\+data, Q\+\_\+\+Init, sizeof(\+Q\+\_\+\+Init)); memcpy(Height\+\_\+\+KF.\+Measurement\+Map, measurement\+\_\+reference, sizeof(measurement\+\_\+reference)); memcpy(Height\+\_\+\+KF.\+Measurement\+Degree, measurement\+\_\+degree, sizeof(measurement\+\_\+degree)); memcpy(Height\+\_\+\+KF.\+Mat\+R\+\_\+\+Diagonal\+Elements, mat\+\_\+\+R\+\_\+diagonal\+\_\+elements, sizeof(mat\+\_\+\+R\+\_\+diagonal\+\_\+elements)); memcpy(Height\+\_\+\+KF.\+State\+Min\+Variance, state\+\_\+min\+\_\+variance, sizeof(state\+\_\+min\+\_\+variance)); \}
+
+void INS\+\_\+\+Task(void const \texorpdfstring{$\ast$}{*}pv\+Parameters) \{ // 循环更新 Kalman\+\_\+\+Filter\+\_\+\+Update(\&\+Height\+\_\+\+KF); v\+Task\+Delay(ts); \}
+
+// 测量数据更新应按照以下形式 即向\+Measured\+Vector赋值 void Barometer\+\_\+\+Read\+\_\+\+Over(void) \{ ...... INS\+\_\+\+KF.\+Measured\+Vector\mbox{[}0\mbox{]} = baro\+\_\+height; \} void GPS\+\_\+\+Read\+\_\+\+Over(void) \{ ...... INS\+\_\+\+KF.\+Measured\+Vector\mbox{[}1\mbox{]} = GPS\+\_\+height; \} void Acc\+\_\+\+Data\+\_\+\+Process(void) \{ ...... INS\+\_\+\+KF.\+Measured\+Vector\mbox{[}2\mbox{]} = acc.\+z; \}
+
+
+\begin{DoxyCodeInclude}{0}
+\DoxyCodeLine{}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}kalman\_filter.h"{}}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}FreeRTOS.h"{}}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}task.h"{}}}
+\DoxyCodeLine{}
+\DoxyCodeLine{uint16\_t\ sizeof\_float,\ sizeof\_double;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ H\_K\_R\_Adjustment(KalmanFilter\_t\ *kf);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{void}*\ user\_malloc(\textcolor{keywordtype}{size\_t}\ size)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{void}*\ tmp\ =\ 0;}
+\DoxyCodeLine{\ \ \ \ tmp\ =\ pvPortMalloc(size);}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ tmp;}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{\textcolor{comment}{//\#define\ user\_malloc(n)\ pvPortMalloc}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ Kalman\_Filter\_Init(KalmanFilter\_t\ *kf,\ uint8\_t\ xhatSize,\ uint8\_t\ uSize,\ uint8\_t\ zSize)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ sizeof\_float\ =\ \textcolor{keyword}{sizeof}(float);}
+\DoxyCodeLine{\ \ \ \ sizeof\_double\ =\ \textcolor{keyword}{sizeof}(double);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ kf-\/>xhatSize\ =\ xhatSize;}
+\DoxyCodeLine{\ \ \ \ kf-\/>uSize\ =\ uSize;}
+\DoxyCodeLine{\ \ \ \ kf-\/>zSize\ =\ zSize;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ kf-\/>MeasurementValidNum\ =\ 0;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ measurement\ flags}}
+\DoxyCodeLine{\ \ \ \ kf-\/>MeasurementMap\ =\ (uint8\_t\ *)user\_malloc(\textcolor{keyword}{sizeof}(uint8\_t)\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>MeasurementMap,\ 0,\ \textcolor{keyword}{sizeof}(uint8\_t)\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>MeasurementDegree\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>MeasurementDegree,\ 0,\ sizeof\_float\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>MatR\_DiagonalElements\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>MatR\_DiagonalElements,\ 0,\ sizeof\_float\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>StateMinVariance\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>StateMinVariance,\ 0,\ sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>temp\ =\ (uint8\_t\ *)user\_malloc(\textcolor{keyword}{sizeof}(uint8\_t)\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>temp,\ 0,\ \textcolor{keyword}{sizeof}(uint8\_t)\ *\ zSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ filter\ data}}
+\DoxyCodeLine{\ \ \ \ kf-\/>FilteredValue\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>FilteredValue,\ 0,\ sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>MeasuredVector\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>MeasuredVector,\ 0,\ sizeof\_float\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>ControlVector\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ uSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>ControlVector,\ 0,\ sizeof\_float\ *\ uSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ xhat\ x(k|k)}}
+\DoxyCodeLine{\ \ \ \ kf-\/>xhat\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>xhat\_data,\ 0,\ sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>xhat,\ kf-\/>xhatSize,\ 1,\ (\textcolor{keywordtype}{float}\ *)kf-\/>xhat\_data);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ xhatminus\ x(k|k-\/1)}}
+\DoxyCodeLine{\ \ \ \ kf-\/>xhatminus\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>xhatminus\_data,\ 0,\ sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>xhatminus,\ kf-\/>xhatSize,\ 1,\ (\textcolor{keywordtype}{float}\ *)kf-\/>xhatminus\_data);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (uSize\ !=\ 0)}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ control\ vector\ u}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>u\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ uSize);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ memset(kf-\/>u\_data,\ 0,\ sizeof\_float\ *\ uSize);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ Matrix\_Init(\&kf-\/>u,\ kf-\/>uSize,\ 1,\ (\textcolor{keywordtype}{float}\ *)kf-\/>u\_data);}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ measurement\ vector\ z}}
+\DoxyCodeLine{\ \ \ \ kf-\/>z\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>z\_data,\ 0,\ sizeof\_float\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>z,\ kf-\/>zSize,\ 1,\ (\textcolor{keywordtype}{float}\ *)kf-\/>z\_data);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ covariance\ matrix\ P(k|k)}}
+\DoxyCodeLine{\ \ \ \ kf-\/>P\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>P\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>P,\ kf-\/>xhatSize,\ kf-\/>xhatSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>P\_data);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ create\ covariance\ matrix\ P(k|k-\/1)}}
+\DoxyCodeLine{\ \ \ \ kf-\/>Pminus\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>Pminus\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>Pminus,\ kf-\/>xhatSize,\ kf-\/>xhatSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>Pminus\_data);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ state\ transition\ matrix\ F\ FT}}
+\DoxyCodeLine{\ \ \ \ kf-\/>F\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>FT\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>F\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>FT\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>F,\ kf-\/>xhatSize,\ kf-\/>xhatSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>F\_data);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>FT,\ kf-\/>xhatSize,\ kf-\/>xhatSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>FT\_data);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (uSize\ !=\ 0)}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ control\ matrix\ B}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>B\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize\ *\ uSize);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ memset(kf-\/>B\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ uSize);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ Matrix\_Init(\&kf-\/>B,\ kf-\/>xhatSize,\ kf-\/>uSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>B\_data);}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ measurement\ matrix\ H}}
+\DoxyCodeLine{\ \ \ \ kf-\/>H\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ zSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>HT\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>H\_data,\ 0,\ sizeof\_float\ *\ zSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>HT\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>H,\ kf-\/>zSize,\ kf-\/>xhatSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>H\_data);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>HT,\ kf-\/>xhatSize,\ kf-\/>zSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>HT\_data);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ process\ noise\ covariance\ matrix\ Q}}
+\DoxyCodeLine{\ \ \ \ kf-\/>Q\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>Q\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>Q,\ kf-\/>xhatSize,\ kf-\/>xhatSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>Q\_data);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ measurement\ noise\ covariance\ matrix\ R}}
+\DoxyCodeLine{\ \ \ \ kf-\/>R\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ zSize\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>R\_data,\ 0,\ sizeof\_float\ *\ zSize\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>R,\ kf-\/>zSize,\ kf-\/>zSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>R\_data);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ kalman\ gain\ K}}
+\DoxyCodeLine{\ \ \ \ kf-\/>K\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ xhatSize\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>K\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>K,\ kf-\/>xhatSize,\ kf-\/>zSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>K\_data);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ kf-\/>S\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ kf-\/>xhatSize\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>S\_data,\ 0,\ sizeof\_float\ *\ kf-\/>xhatSize\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>temp\_matrix\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ kf-\/>xhatSize\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>temp\_matrix\_data,\ 0,\ sizeof\_float\ *\ kf-\/>xhatSize\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>temp\_matrix\_data1\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ kf-\/>xhatSize\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>temp\_matrix\_data1,\ 0,\ sizeof\_float\ *\ kf-\/>xhatSize\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>temp\_vector\_data\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>temp\_vector\_data,\ 0,\ sizeof\_float\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ kf-\/>temp\_vector\_data1\ =\ (\textcolor{keywordtype}{float}\ *)user\_malloc(sizeof\_float\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>temp\_vector\_data,\ 0,\ sizeof\_float\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>S,\ kf-\/>xhatSize,\ kf-\/>xhatSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>S\_data);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>temp\_matrix,\ kf-\/>xhatSize,\ kf-\/>xhatSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>temp\_matrix\_data);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>temp\_matrix1,\ kf-\/>xhatSize,\ kf-\/>xhatSize,\ (\textcolor{keywordtype}{float}\ *)kf-\/>temp\_matrix\_data1);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>temp\_vector,\ kf-\/>xhatSize,\ 1,\ (\textcolor{keywordtype}{float}\ *)kf-\/>temp\_vector\_data);}
+\DoxyCodeLine{\ \ \ \ Matrix\_Init(\&kf-\/>temp\_vector1,\ kf-\/>xhatSize,\ 1,\ (\textcolor{keywordtype}{float}\ *)kf-\/>temp\_vector\_data1);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ kf-\/>SkipEq1\ =\ 0;}
+\DoxyCodeLine{\ \ \ \ kf-\/>SkipEq2\ =\ 0;}
+\DoxyCodeLine{\ \ \ \ kf-\/>SkipEq3\ =\ 0;}
+\DoxyCodeLine{\ \ \ \ kf-\/>SkipEq4\ =\ 0;}
+\DoxyCodeLine{\ \ \ \ kf-\/>SkipEq5\ =\ 0;}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ Kalman\_Filter\_Reset(KalmanFilter\_t\ *kf,\ uint8\_t\ xhatSize,\ uint8\_t\ uSize,\ uint8\_t\ zSize)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>MeasurementMap,\ 0,\ \textcolor{keyword}{sizeof}(uint8\_t)\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>MeasurementDegree,\ 0,\ sizeof\_float\ *\ zSize);\ }
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>MatR\_DiagonalElements,\ 0,\ sizeof\_float\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>StateMinVariance,\ 0,\ sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>temp,\ 0,\ \textcolor{keyword}{sizeof}(uint8\_t)\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>FilteredValue,\ 0,\ sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>MeasuredVector,\ 0,\ sizeof\_float\ *\ zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>ControlVector,\ 0,\ sizeof\_float\ *\ uSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>xhat\_data,\ 0,\ sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>xhatminus\_data,\ 0,\ sizeof\_float\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}(uSize\ !=\ 0)}
+\DoxyCodeLine{\ \ \ \ \{memset(kf-\/>u\_data,\ 0,\ sizeof\_float\ *\ uSize);\}\ \ }
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>z\_data,\ 0,\ sizeof\_float\ *\ zSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>P\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>Pminus\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>F\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>FT\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ xhatSize);\ }
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}(uSize\ !=\ 0)}
+\DoxyCodeLine{\ \ \ \ \{memset(kf-\/>B\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ uSize);\}}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>H\_data,\ 0,\ sizeof\_float\ *\ zSize\ *\ xhatSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>HT\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ zSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>Q\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ xhatSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>R\_data,\ 0,\ sizeof\_float\ *\ zSize\ *\ zSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>K\_data,\ 0,\ sizeof\_float\ *\ xhatSize\ *\ zSize);\ }
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ kf-\/>SkipEq1\ =\ 0;}
+\DoxyCodeLine{\ \ \ \ kf-\/>SkipEq2\ =\ 0;}
+\DoxyCodeLine{\ \ \ \ kf-\/>SkipEq3\ =\ 0;}
+\DoxyCodeLine{\ \ \ \ kf-\/>SkipEq4\ =\ 0;}
+\DoxyCodeLine{\ \ \ \ kf-\/>SkipEq5\ =\ 0;}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ Kalman\_Filter\_Measure(KalmanFilter\_t\ *kf)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 矩阵H\ K\ R根据量测情况自动调整}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>UseAutoAdjustment\ !=\ 0)}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ H\_K\_R\_Adjustment(kf);\ \textcolor{comment}{//\ 调整矩阵H、K、R}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ memcpy(kf-\/>z\_data,\ kf-\/>MeasuredVector,\ sizeof\_float\ *\ kf-\/>zSize);\ \textcolor{comment}{//\ 直接将MeasuredVector赋值给z\_data}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ memset(kf-\/>MeasuredVector,\ 0,\ sizeof\_float\ *\ kf-\/>zSize);\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 清零MeasuredVector}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ memcpy(kf-\/>u\_data,\ kf-\/>ControlVector,\ sizeof\_float\ *\ kf-\/>uSize);\ \textcolor{comment}{//\ 将ControlVector赋值给u\_data}}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ Kalman\_Filter\_xhatMinusUpdate(KalmanFilter\_t\ *kf)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (!kf-\/>SkipEq1)\ \textcolor{comment}{//\ 如果未跳过此步骤}}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>uSize\ >\ 0)\ \textcolor{comment}{//\ 如果存在控制输入}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>temp\_vector.numRows\ =\ kf-\/>xhatSize;\ \textcolor{comment}{//\ 设置临时矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>temp\_vector.numCols\ =\ 1;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 设置临时矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>F,\ \&kf-\/>xhat,\ \&kf-\/>temp\_vector);\ \textcolor{comment}{//\ 计算F·xhat(k-\/1)}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>temp\_vector1.numRows\ =\ kf-\/>xhatSize;\ \textcolor{comment}{//\ 设置另一个临时矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>temp\_vector1.numCols\ =\ 1;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 设置另一个临时矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>B,\ \&kf-\/>u,\ \&kf-\/>temp\_vector1);\ \textcolor{comment}{//\ 计算B·u}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Add(\&kf-\/>temp\_vector,\ \&kf-\/>temp\_vector1,\ \&kf-\/>xhatminus);\ \textcolor{comment}{//\ 计算F·xhat(k-\/1)\ +\ B·u}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>F,\ \&kf-\/>xhat,\ \&kf-\/>xhatminus);\ \textcolor{comment}{//\ 仅计算F·xhat(k-\/1)}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ Kalman\_Filter\_PminusUpdate(KalmanFilter\_t\ *kf)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (!kf-\/>SkipEq2)\ \textcolor{comment}{//\ 如果未跳过此步骤}}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Transpose(\&kf-\/>F,\ \&kf-\/>FT);\ \textcolor{comment}{//\ 计算F的转置矩阵FT}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>F,\ \&kf-\/>P,\ \&kf-\/>Pminus);\ \textcolor{comment}{//\ 计算F·P(k-\/1)}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix.numRows\ =\ kf-\/>Pminus.numRows;\ \textcolor{comment}{//\ 设置临时矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix.numCols\ =\ kf-\/>FT.numCols;\ \ \ \ \ \textcolor{comment}{//\ 设置临时矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>Pminus,\ \&kf-\/>FT,\ \&kf-\/>temp\_matrix);\ \textcolor{comment}{//\ 计算F·P(k-\/1)·FT}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Add(\&kf-\/>temp\_matrix,\ \&kf-\/>Q,\ \&kf-\/>Pminus);\ \ \ \ \ \ \ \textcolor{comment}{//\ 计算F·P(k-\/1)·FT\ +\ Q}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ Kalman\_Filter\_SetK(KalmanFilter\_t\ *kf)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (!kf-\/>SkipEq3)\ \textcolor{comment}{//\ 如果未跳过此步骤}}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Transpose(\&kf-\/>H,\ \&kf-\/>HT);\ \textcolor{comment}{//\ 计算H的转置矩阵HT}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix.numRows\ =\ kf-\/>H.numRows;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 设置临时矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix.numCols\ =\ kf-\/>Pminus.numCols;\ \ \ \ \ \ \textcolor{comment}{//\ 设置临时矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>H,\ \&kf-\/>Pminus,\ \&kf-\/>temp\_matrix);\ \textcolor{comment}{//\ 计算H·P'(k)}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix1.numRows\ =\ kf-\/>temp\_matrix.numRows;\ \textcolor{comment}{//\ 设置另一个临时矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix1.numCols\ =\ kf-\/>HT.numCols;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 设置另一个临时矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>temp\_matrix,\ \&kf-\/>HT,\ \&kf-\/>temp\_matrix1);\ \textcolor{comment}{//\ 计算H·P'(k)·HT}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>S.numRows\ =\ kf-\/>R.numRows;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 设置S矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>S.numCols\ =\ kf-\/>R.numCols;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 设置S矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Add(\&kf-\/>temp\_matrix1,\ \&kf-\/>R,\ \&kf-\/>S);\ \textcolor{comment}{//\ 计算H·P'(k)·HT\ +\ R}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Inverse(\&kf-\/>S,\ \&kf-\/>temp\_matrix1);\ \ \ \ \ \textcolor{comment}{//\ 计算inv(H·P'(k)·HT\ +\ R)}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix.numRows\ =\ kf-\/>Pminus.numRows;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 设置临时矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix.numCols\ =\ kf-\/>HT.numCols;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 设置临时矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>Pminus,\ \&kf-\/>HT,\ \&kf-\/>temp\_matrix);\ \textcolor{comment}{//\ 计算P'(k)·HT}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>temp\_matrix,\ \&kf-\/>temp\_matrix1,\ \&kf-\/>K);\ \textcolor{comment}{//\ 计算K(k)}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ Kalman\_Filter\_xhatUpdate(KalmanFilter\_t\ *kf)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (!kf-\/>SkipEq4)\ \textcolor{comment}{//\ 如果未跳过此步骤}}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_vector.numRows\ =\ kf-\/>H.numRows;\ \textcolor{comment}{//\ 设置临时矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_vector.numCols\ =\ 1;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 设置临时矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>H,\ \&kf-\/>xhatminus,\ \&kf-\/>temp\_vector);\ \textcolor{comment}{//\ 计算H·xhat'(k)}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_vector1.numRows\ =\ kf-\/>z.numRows;\ \textcolor{comment}{//\ 设置另一个临时矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_vector1.numCols\ =\ 1;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 设置另一个临时矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Subtract(\&kf-\/>z,\ \&kf-\/>temp\_vector,\ \&kf-\/>temp\_vector1);\ \textcolor{comment}{//\ 计算z(k)\ -\/\ H·xhat'(k)}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_vector.numRows\ =\ kf-\/>K.numRows;\ \textcolor{comment}{//\ 设置临时矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_vector.numCols\ =\ 1;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 设置临时矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>K,\ \&kf-\/>temp\_vector1,\ \&kf-\/>temp\_vector);\ \textcolor{comment}{//\ 计算K(k)·(z(k)\ -\/\ H·xhat'(k))}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Add(\&kf-\/>xhatminus,\ \&kf-\/>temp\_vector,\ \&kf-\/>xhat);\ \ \ \ \ \ \textcolor{comment}{//\ 计算xhat(k)}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ Kalman\_Filter\_P\_Update(KalmanFilter\_t\ *kf)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (!kf-\/>SkipEq5)\ \textcolor{comment}{//\ 如果未跳过此步骤}}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix.numRows\ =\ kf-\/>K.numRows;\ \textcolor{comment}{//\ 设置临时矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix.numCols\ =\ kf-\/>H.numCols;\ \textcolor{comment}{//\ 设置临时矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>K,\ \&kf-\/>H,\ \&kf-\/>temp\_matrix);\ \textcolor{comment}{//\ 计算K(k)·H}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix1.numRows\ =\ kf-\/>temp\_matrix.numRows;\ \textcolor{comment}{//\ 设置另一个临时矩阵的行数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>temp\_matrix1.numCols\ =\ kf-\/>Pminus.numCols;\ \ \ \ \ \ \textcolor{comment}{//\ 设置另一个临时矩阵的列数}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Multiply(\&kf-\/>temp\_matrix,\ \&kf-\/>Pminus,\ \&kf-\/>temp\_matrix1);\ \textcolor{comment}{//\ 计算K(k)·H·P'(k)}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>MatStatus\ =\ Matrix\_Subtract(\&kf-\/>Pminus,\ \&kf-\/>temp\_matrix1,\ \&kf-\/>P);\ \textcolor{comment}{//\ 计算P(k)}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ *Kalman\_Filter\_Update(KalmanFilter\_t\ *kf)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 0.\ 获取量测信息}}
+\DoxyCodeLine{\ \ \ \ Kalman\_Filter\_Measure(kf);}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>User\_Func0\_f\ !=\ NULL)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>User\_Func0\_f(kf);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 先验估计}}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 1.\ xhat'(k)=\ A·xhat(k-\/1)\ +\ B·u}}
+\DoxyCodeLine{\ \ \ \ Kalman\_Filter\_xhatMinusUpdate(kf);}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>User\_Func1\_f\ !=\ NULL)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>User\_Func1\_f(kf);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 预测更新}}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 2.\ P'(k)\ =\ A·P(k-\/1)·AT\ +\ Q}}
+\DoxyCodeLine{\ \ \ \ Kalman\_Filter\_PminusUpdate(kf);}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>User\_Func2\_f\ !=\ NULL)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>User\_Func2\_f(kf);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>MeasurementValidNum\ !=\ 0\ ||\ kf-\/>UseAutoAdjustment\ ==\ 0)}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 量测更新}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 3.\ K(k)\ =\ P'(k)·HT\ /\ (H·P'(k)·HT\ +\ R)}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ Kalman\_Filter\_SetK(kf);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>User\_Func3\_f\ !=\ NULL)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>User\_Func3\_f(kf);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 融合}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 4.\ xhat(k)\ =\ xhat'(k)\ +\ K(k)·(z(k)\ -\/\ H·xhat'(k))}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ Kalman\_Filter\_xhatUpdate(kf);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>User\_Func4\_f\ !=\ NULL)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>User\_Func4\_f(kf);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 修正方差}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 5.\ P(k)\ =\ (1-\/K(k)·H)·P'(k)\ ==>\ P(k)\ =\ P'(k)-\/K(k)·H·P'(k)}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ Kalman\_Filter\_P\_Update(kf);}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 无有效量测,仅预测}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ xhat(k)\ =\ xhat'(k)}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ P(k)\ =\ P'(k)}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ memcpy(kf-\/>xhat\_data,\ kf-\/>xhatminus\_data,\ sizeof\_float\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ memcpy(kf-\/>P\_data,\ kf-\/>Pminus\_data,\ sizeof\_float\ *\ kf-\/>xhatSize\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 自定义函数,可以提供后处理等}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>User\_Func5\_f\ !=\ NULL)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>User\_Func5\_f(kf);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 避免滤波器过度收敛}}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ suppress\ filter\ excessive\ convergence}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ kf-\/>xhatSize;\ i++)}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>P\_data[i\ *\ kf-\/>xhatSize\ +\ i]\ <\ kf-\/>StateMinVariance[i])}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>P\_data[i\ *\ kf-\/>xhatSize\ +\ i]\ =\ kf-\/>StateMinVariance[i];}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ memcpy(kf-\/>FilteredValue,\ kf-\/>xhat\_data,\ sizeof\_float\ *\ kf-\/>xhatSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>User\_Func6\_f\ !=\ NULL)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>User\_Func6\_f(kf);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ kf-\/>FilteredValue;}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ H\_K\_R\_Adjustment(KalmanFilter\_t\ *kf)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ kf-\/>MeasurementValidNum\ =\ 0;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ memcpy(kf-\/>z\_data,\ kf-\/>MeasuredVector,\ sizeof\_float\ *\ kf-\/>zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>MeasuredVector,\ 0,\ sizeof\_float\ *\ kf-\/>zSize);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 识别量测数据有效性并调整矩阵H\ R\ K}}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ recognize\ measurement\ validity\ and\ adjust\ matrices\ H\ R\ K}}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>R\_data,\ 0,\ sizeof\_float\ *\ kf-\/>zSize\ *\ kf-\/>zSize);}
+\DoxyCodeLine{\ \ \ \ memset(kf-\/>H\_data,\ 0,\ sizeof\_float\ *\ kf-\/>xhatSize\ *\ kf-\/>zSize);}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ kf-\/>zSize;\ i++)}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (kf-\/>z\_data[i]\ !=\ 0)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 重构向量z}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ rebuild\ vector\ z}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>z\_data[kf-\/>MeasurementValidNum]\ =\ kf-\/>z\_data[i];}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>temp[kf-\/>MeasurementValidNum]\ =\ i;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 重构矩阵H}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ rebuild\ matrix\ H}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>H\_data[kf-\/>xhatSize\ *\ kf-\/>MeasurementValidNum\ +\ kf-\/>MeasurementMap[i]\ -\/\ 1]\ =\ kf-\/>MeasurementDegree[i];}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ kf-\/>MeasurementValidNum++;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ kf-\/>MeasurementValidNum;\ i++)}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 重构矩阵R}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ rebuild\ matrix\ R}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ kf-\/>R\_data[i\ *\ kf-\/>MeasurementValidNum\ +\ i]\ =\ kf-\/>MatR\_DiagonalElements[kf-\/>temp[i]];}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 调整矩阵维数}}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ adjust\ the\ dimensions\ of\ system\ matrices}}
+\DoxyCodeLine{\ \ \ \ kf-\/>H.numRows\ =\ kf-\/>MeasurementValidNum;}
+\DoxyCodeLine{\ \ \ \ kf-\/>H.numCols\ =\ kf-\/>xhatSize;}
+\DoxyCodeLine{\ \ \ \ kf-\/>HT.numRows\ =\ kf-\/>xhatSize;}
+\DoxyCodeLine{\ \ \ \ kf-\/>HT.numCols\ =\ kf-\/>MeasurementValidNum;}
+\DoxyCodeLine{\ \ \ \ kf-\/>R.numRows\ =\ kf-\/>MeasurementValidNum;}
+\DoxyCodeLine{\ \ \ \ kf-\/>R.numCols\ =\ kf-\/>MeasurementValidNum;}
+\DoxyCodeLine{\ \ \ \ kf-\/>K.numRows\ =\ kf-\/>xhatSize;}
+\DoxyCodeLine{\ \ \ \ kf-\/>K.numCols\ =\ kf-\/>MeasurementValidNum;}
+\DoxyCodeLine{\ \ \ \ kf-\/>z.numRows\ =\ kf-\/>MeasurementValidNum;}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+
+\end{DoxyCodeInclude}
+ 

@@ -1,0 +1,406 @@
+\doxysection{referee\+\_\+protocol.\+h}
+\hypertarget{referee__protocol_8h_source}{}\label{referee__protocol_8h_source}\index{source/module/refereeSys/referee\_protocol.h@{source/module/refereeSys/referee\_protocol.h}}
+\mbox{\hyperlink{referee__protocol_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#ifndef\ referee\_protocol\_H}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ referee\_protocol\_H}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}stdint.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}keyboard.h"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/****************************宏定义部分****************************/}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ REFEREE\_SOF\ 0xA5\ }\textcolor{comment}{//\ 起始字节,协议固定为0xA5}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ Robot\_Red\ 0}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ Robot\_Blue\ 1}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ Communicate\_Data\_LEN\ 5\ }\textcolor{comment}{//\ 自定义交互数据长度，该长度决定了我方发送和他方接收，自定义交互数据协议更改时只需要更改此宏定义即可}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#pragma\ pack(1)}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{/****************************通信协议格式****************************/}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{comment}{/*\ 通信协议格式偏移，枚举类型,代替\#define声明\ */}}
+\DoxyCodeLine{00029\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00030\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ FRAME\_HEADER\_Offset\ =\ 0,}
+\DoxyCodeLine{00032\ \ \ \ \ CMD\_ID\_Offset\ =\ 5,}
+\DoxyCodeLine{00033\ \ \ \ \ DATA\_Offset\ =\ 7,}
+\DoxyCodeLine{00034\ \}\ JudgeFrameOffset\_e;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{/*\ 通信协议长度\ */}}
+\DoxyCodeLine{00037\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00038\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ LEN\_HEADER\ =\ 5,\ \textcolor{comment}{//\ 帧头长}}
+\DoxyCodeLine{00040\ \ \ \ \ LEN\_CMDID\ =\ 2,\ \ \textcolor{comment}{//\ 命令码长度}}
+\DoxyCodeLine{00041\ \ \ \ \ LEN\_TAIL\ =\ 2,\ \ \ \textcolor{comment}{//\ 帧尾CRC16}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ LEN\_CRC8\ =\ 4,\ \textcolor{comment}{//\ 帧头CRC8校验长度=帧头+数据长+包序号}}
+\DoxyCodeLine{00044\ \}\ JudgeFrameLength\_e;}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{comment}{/****************************帧头****************************/}}
+\DoxyCodeLine{00047\ \textcolor{comment}{/****************************帧头****************************/}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{comment}{/*\ 帧头偏移\ */}}
+\DoxyCodeLine{00050\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00051\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ SOF\ =\ 0,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 起始位}}
+\DoxyCodeLine{00053\ \ \ \ \ DATA\_LENGTH\ =\ 1,\ \textcolor{comment}{//\ 帧内数据长度,根据这个来获取数据长度}}
+\DoxyCodeLine{00054\ \ \ \ \ SEQ\ =\ 3,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 包序号}}
+\DoxyCodeLine{00055\ \ \ \ \ CRC8\ =\ 4\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CRC8}}
+\DoxyCodeLine{00056\ \}\ FrameHeaderOffset\_e;}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{comment}{/*\ 帧头定义\ */}}
+\DoxyCodeLine{00059\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00060\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ uint8\_t\ SOF;}
+\DoxyCodeLine{00062\ \ \ \ \ uint16\_t\ DataLength;}
+\DoxyCodeLine{00063\ \ \ \ \ uint8\_t\ Seq;}
+\DoxyCodeLine{00064\ \ \ \ \ uint8\_t\ CRC8;}
+\DoxyCodeLine{00065\ \}\ \mbox{\hyperlink{structx_frame_header}{xFrameHeader}};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{comment}{/****************************cmd\_id命令码说明****************************/}}
+\DoxyCodeLine{00068\ \textcolor{comment}{/****************************cmd\_id命令码说明****************************/}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{comment}{/*\ 命令码ID,用来判断接收的是什么数据\ */}}
+\DoxyCodeLine{00071\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00072\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ ID\_game\_state\ =\ 0x0001,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 比赛状态数据}}
+\DoxyCodeLine{00074\ \ \ \ \ ID\_game\_result\ =\ 0x0002,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 比赛结果数据}}
+\DoxyCodeLine{00075\ \ \ \ \ ID\_game\_robot\_survivors\ =\ 0x0003,\ \ \ \ \ \ \textcolor{comment}{//\ 比赛机器人血量数据}}
+\DoxyCodeLine{00076\ \ \ \ \ ID\_event\_data\ =\ 0x0101,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 场地事件数据}}
+\DoxyCodeLine{00077\ \ \ \ \ ID\_supply\_projectile\_action\ =\ 0x0102,\ \ \textcolor{comment}{//\ 场地补给站动作标识数据}}
+\DoxyCodeLine{00078\ \ \ \ \ ID\_supply\_projectile\_booking\ =\ 0x0103,\ \textcolor{comment}{//\ 场地补给站预约子弹数据}}
+\DoxyCodeLine{00079\ \ \ \ \ ID\_game\_robot\_state\ =\ 0x0201,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 机器人状态数据}}
+\DoxyCodeLine{00080\ \ \ \ \ ID\_power\_heat\_data\ =\ 0x0202,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 实时功率热量数据}}
+\DoxyCodeLine{00081\ \ \ \ \ ID\_game\_robot\_pos\ =\ 0x0203,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 机器人位置数据}}
+\DoxyCodeLine{00082\ \ \ \ \ ID\_buff\_musk\ =\ 0x0204,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 机器人增益数据}}
+\DoxyCodeLine{00083\ \ \ \ \ ID\_aerial\_robot\_energy\ =\ 0x0205,\ \ \ \ \ \ \ \textcolor{comment}{//\ 空中机器人能量状态数据}}
+\DoxyCodeLine{00084\ \ \ \ \ ID\_robot\_hurt\ =\ 0x0206,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 伤害状态数据}}
+\DoxyCodeLine{00085\ \ \ \ \ ID\_shoot\_data\ =\ 0x0207,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 实时射击数据}}
+\DoxyCodeLine{00086\ \ \ \ \ ID\_student\_interactive\ =\ 0x0301,\ \ \ \ \ \ \ \textcolor{comment}{//\ 机器人间交互数据}}
+\DoxyCodeLine{00087\ \ \ \ \ ID\_custom\_controller\ =\ 0x0302,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 自定义控制器数据}}
+\DoxyCodeLine{00088\ \}\ CmdID\_e;}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{comment}{/*\ 命令码数据段长,根据官方协议来定义长度，还有自定义数据长度\ */}}
+\DoxyCodeLine{00091\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00092\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ LEN\_game\_state\ =\ 11,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0001}}
+\DoxyCodeLine{00094\ \ \ \ \ LEN\_game\_result\ =\ 1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0002}}
+\DoxyCodeLine{00095\ \ \ \ \ LEN\_game\_robot\_HP\ =\ 32,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0003}}
+\DoxyCodeLine{00096\ \ \ \ \ LEN\_event\_data\ =\ 4,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0101}}
+\DoxyCodeLine{00097\ \ \ \ \ LEN\_supply\_projectile\_action\ =\ 4,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0102}}
+\DoxyCodeLine{00098\ \ \ \ \ LEN\_game\_robot\_state\ =\ 13,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0201}}
+\DoxyCodeLine{00099\ \ \ \ \ LEN\_power\_heat\_data\ =\ 16,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0202}}
+\DoxyCodeLine{00100\ \ \ \ \ LEN\_game\_robot\_pos\ =\ 16,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0203}}
+\DoxyCodeLine{00101\ \ \ \ \ LEN\_buff\_musk\ =\ 6,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0204}}
+\DoxyCodeLine{00102\ \ \ \ \ LEN\_aerial\_robot\_energy\ =\ 2,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0205}}
+\DoxyCodeLine{00103\ \ \ \ \ LEN\_robot\_hurt\ =\ 1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0206}}
+\DoxyCodeLine{00104\ \ \ \ \ LEN\_shoot\_data\ =\ 7,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0207}}
+\DoxyCodeLine{00105\ \ \ \ \ LEN\_receive\_data\ =\ 6\ +\ Communicate\_Data\_LEN,\ \textcolor{comment}{//\ 0x0301}}
+\DoxyCodeLine{00106\ \ \ \ \ LEN\_custom\_controller\ =\ 20,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0302}}
+\DoxyCodeLine{00107\ \ \ \ \ LEN\_keyboard\ =\ 12,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0304}}
+\DoxyCodeLine{00108\ \}\ JudgeDataLength\_e;}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{comment}{/****************************接收数据的详细说明****************************/}}
+\DoxyCodeLine{00111\ \textcolor{comment}{/****************************接收数据的详细说明****************************/}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \textcolor{comment}{/*\ ID:\ 0x0001\ \ Byte:\ \ 11\ \ \ \ 比赛状态数据\ */}}
+\DoxyCodeLine{00114\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00115\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ uint8\_t\ game\_type\ :\ 4;}
+\DoxyCodeLine{00117\ \ \ \ \ uint8\_t\ game\_progress\ :\ 4;}
+\DoxyCodeLine{00118\ \ \ \ \ uint16\_t\ stage\_remain\_time;}
+\DoxyCodeLine{00119\ \ \ \ \ uint64\_t\ SyncTimeStamp;}
+\DoxyCodeLine{00120\ \}\ \mbox{\hyperlink{structext__game__state__t}{ext\_game\_state\_t}};}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \textcolor{comment}{/*\ ID:\ 0x0002\ \ Byte:\ \ 1\ \ \ \ 比赛结果数据\ */}}
+\DoxyCodeLine{00123\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00124\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ uint8\_t\ winner;}
+\DoxyCodeLine{00126\ \}\ \mbox{\hyperlink{structext__game__result__t}{ext\_game\_result\_t}};}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{comment}{/*\ ID:\ 0x0003\ \ Byte:\ \ 32\ \ \ \ 比赛机器人血量数据\ */}}
+\DoxyCodeLine{00129\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00130\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ uint16\_t\ red\_1\_robot\_HP;}
+\DoxyCodeLine{00132\ \ \ \ \ uint16\_t\ red\_2\_robot\_HP;}
+\DoxyCodeLine{00133\ \ \ \ \ uint16\_t\ red\_3\_robot\_HP;}
+\DoxyCodeLine{00134\ \ \ \ \ uint16\_t\ red\_4\_robot\_HP;}
+\DoxyCodeLine{00135\ \ \ \ \ uint16\_t\ red\_5\_robot\_HP;}
+\DoxyCodeLine{00136\ \ \ \ \ uint16\_t\ red\_7\_robot\_HP;}
+\DoxyCodeLine{00137\ \ \ \ \ uint16\_t\ red\_outpost\_HP;}
+\DoxyCodeLine{00138\ \ \ \ \ uint16\_t\ red\_base\_HP;}
+\DoxyCodeLine{00139\ \ \ \ \ uint16\_t\ blue\_1\_robot\_HP;}
+\DoxyCodeLine{00140\ \ \ \ \ uint16\_t\ blue\_2\_robot\_HP;}
+\DoxyCodeLine{00141\ \ \ \ \ uint16\_t\ blue\_3\_robot\_HP;}
+\DoxyCodeLine{00142\ \ \ \ \ uint16\_t\ blue\_4\_robot\_HP;}
+\DoxyCodeLine{00143\ \ \ \ \ uint16\_t\ blue\_5\_robot\_HP;}
+\DoxyCodeLine{00144\ \ \ \ \ uint16\_t\ blue\_7\_robot\_HP;}
+\DoxyCodeLine{00145\ \ \ \ \ uint16\_t\ blue\_outpost\_HP;}
+\DoxyCodeLine{00146\ \ \ \ \ uint16\_t\ blue\_base\_HP;}
+\DoxyCodeLine{00147\ \}\ \mbox{\hyperlink{structext__game__robot___h_p__t}{ext\_game\_robot\_HP\_t}};}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{comment}{/*\ ID:\ 0x0101\ \ Byte:\ \ 4\ \ \ \ 场地事件数据\ */}}
+\DoxyCodeLine{00150\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00151\ \{}
+\DoxyCodeLine{00152\ \ \ \ \ uint32\_t\ event\_type;}
+\DoxyCodeLine{00153\ \}\ \mbox{\hyperlink{structext__event__data__t}{ext\_event\_data\_t}};}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \textcolor{comment}{/*\ ID:\ 0x0102\ \ Byte:\ \ 3\ \ \ \ 场地补给站动作标识数据\ */}}
+\DoxyCodeLine{00156\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00157\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ uint8\_t\ supply\_projectile\_id;}
+\DoxyCodeLine{00159\ \ \ \ \ uint8\_t\ supply\_robot\_id;}
+\DoxyCodeLine{00160\ \ \ \ \ uint8\_t\ supply\_projectile\_step;}
+\DoxyCodeLine{00161\ \ \ \ \ uint8\_t\ supply\_projectile\_num;}
+\DoxyCodeLine{00162\ \}\ \mbox{\hyperlink{structext__supply__projectile__action__t}{ext\_supply\_projectile\_action\_t}};}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \textcolor{comment}{/*\ ID:\ 0X0201\ \ Byte:\ 13\ \ \ \ 机器人状态数据\ */}}
+\DoxyCodeLine{00165\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00166\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ uint8\_t\ robot\_id;}
+\DoxyCodeLine{00168\ \ \ \ \ uint8\_t\ robot\_level;}
+\DoxyCodeLine{00169\ \ \ \ \ uint16\_t\ current\_HP;}
+\DoxyCodeLine{00170\ \ \ \ \ uint16\_t\ maximum\_HP;}
+\DoxyCodeLine{00171\ \ \ \ \ uint16\_t\ shooter\_barrel\_cooling\_value;}
+\DoxyCodeLine{00172\ \ \ \ \ uint16\_t\ shooter\_barrel\_heat\_limit;}
+\DoxyCodeLine{00173\ \ \ \ \ uint16\_t\ chassis\_power\_limit;}
+\DoxyCodeLine{00174\ \ \ \ \ uint8\_t\ power\_management\_gimbal\_output\ :\ 1;}
+\DoxyCodeLine{00175\ \ \ \ \ uint8\_t\ power\_management\_chassis\_output\ :\ 1;}
+\DoxyCodeLine{00176\ \ \ \ \ uint8\_t\ power\_management\_shooter\_output\ :\ 1;}
+\DoxyCodeLine{00177\ \}\ \mbox{\hyperlink{structext__game__robot__state__t}{ext\_game\_robot\_state\_t}};}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \textcolor{comment}{/*\ ID:\ 0X0202\ \ Byte:\ 16\ \ \ \ 实时功率热量数据\ */}}
+\DoxyCodeLine{00180\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00181\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ uint16\_t\ chassis\_voltage;}
+\DoxyCodeLine{00183\ \ \ \ \ uint16\_t\ chassis\_current;}
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordtype}{float}\ chassis\_power;}
+\DoxyCodeLine{00185\ \ \ \ \ uint16\_t\ buffer\_energy;}
+\DoxyCodeLine{00186\ \ \ \ \ uint16\_t\ shooter\_17mm\_1\_barrel\_heat;}
+\DoxyCodeLine{00187\ \ \ \ \ uint16\_t\ shooter\_17mm\_2\_barrel\_heat;}
+\DoxyCodeLine{00188\ \ \ \ \ uint16\_t\ shooter\_42mm\_barrel\_heat;}
+\DoxyCodeLine{00189\ \}\ \mbox{\hyperlink{structext__power__heat__data__t}{ext\_power\_heat\_data\_t}};}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \textcolor{comment}{/*\ ID:\ 0x0203\ \ Byte:\ 16\ \ \ \ 机器人位置数据\ */}}
+\DoxyCodeLine{00192\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00193\ \{}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keywordtype}{float}\ x;}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keywordtype}{float}\ y;}
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keywordtype}{float}\ z;}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keywordtype}{float}\ yaw;}
+\DoxyCodeLine{00198\ \}\ \mbox{\hyperlink{structext__game__robot__pos__t}{ext\_game\_robot\_pos\_t}};}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \textcolor{comment}{/*\ ID:\ 0x0204\ \ Byte:\ \ 6\ \ \ \ 机器人增益数据\ */}}
+\DoxyCodeLine{00201\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00202\ \{}
+\DoxyCodeLine{00203\ \ \ \ \ uint8\_t\ recovery\_buff;}
+\DoxyCodeLine{00204\ \ \ \ \ uint8\_t\ cooling\_buff;}
+\DoxyCodeLine{00205\ \ \ \ \ uint8\_t\ defence\_buff;}
+\DoxyCodeLine{00206\ \ \ \ \ uint8\_t\ vulnerability\_buff;}
+\DoxyCodeLine{00207\ \ \ \ \ uint16\_t\ attack\_buff;}
+\DoxyCodeLine{00208\ \}\ \mbox{\hyperlink{structext__buff__musk__t}{ext\_buff\_musk\_t}};}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \textcolor{comment}{/*\ ID:\ 0x0205\ \ Byte:\ \ 2\ \ \ \ 空中机器人能量状态数据\ */}}
+\DoxyCodeLine{00211\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00212\ \{}
+\DoxyCodeLine{00213\ \ \ \ \ uint8\_t\ airforce\_status;}
+\DoxyCodeLine{00214\ \ \ \ \ uint8\_t\ time\_remain;}
+\DoxyCodeLine{00215\ \}\ \mbox{\hyperlink{structaerial__robot__energy__t}{aerial\_robot\_energy\_t}};}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \textcolor{comment}{/*\ ID:\ 0x0206\ \ Byte:\ \ 1\ \ \ \ 伤害状态数据\ */}}
+\DoxyCodeLine{00218\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00219\ \{}
+\DoxyCodeLine{00220\ \ \ \ \ uint8\_t\ armor\_id\ :\ 4;}
+\DoxyCodeLine{00221\ \ \ \ \ uint8\_t\ hurt\_type\ :\ 4;}
+\DoxyCodeLine{00222\ \}\ \mbox{\hyperlink{structext__robot__hurt__t}{ext\_robot\_hurt\_t}};}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \textcolor{comment}{/*\ ID:\ 0x0207\ \ Byte:\ \ 7\ \ \ \ 实时射击数据\ */}}
+\DoxyCodeLine{00225\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00226\ \{}
+\DoxyCodeLine{00227\ \ \ \ \ uint8\_t\ bullet\_type;}
+\DoxyCodeLine{00228\ \ \ \ \ uint8\_t\ shooter\_id;}
+\DoxyCodeLine{00229\ \ \ \ \ uint8\_t\ bullet\_freq;}
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keywordtype}{float}\ bullet\_speed;}
+\DoxyCodeLine{00231\ \}\ \mbox{\hyperlink{structext__shoot__data__t}{ext\_shoot\_data\_t}};}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \textcolor{comment}{/****************************机器人交互数据****************************/}}
+\DoxyCodeLine{00234\ \textcolor{comment}{/****************************机器人交互数据****************************/}}
+\DoxyCodeLine{00235\ \textcolor{comment}{/*\ 发送的内容数据段最大为\ 113\ 检测是否超出大小限制?实际上图形段不会超，数据段最多30个，也不会超*/}}
+\DoxyCodeLine{00236\ \textcolor{comment}{/*\ 交互数据头结构\ */}}
+\DoxyCodeLine{00237\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00238\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ uint8\_t\ graphic\_name[3];}
+\DoxyCodeLine{00240\ \ \ \ \ uint32\_t\ operate\_tpye\ :\ 3;}
+\DoxyCodeLine{00241\ \ \ \ \ uint32\_t\ graphic\_tpye\ :\ 3;}
+\DoxyCodeLine{00242\ \ \ \ \ uint32\_t\ layer\ :\ 4;}
+\DoxyCodeLine{00243\ \ \ \ \ uint32\_t\ color\ :\ 4;}
+\DoxyCodeLine{00244\ \ \ \ \ uint32\_t\ start\_angle\ :\ 9;}
+\DoxyCodeLine{00245\ \ \ \ \ uint32\_t\ end\_angle\ :\ 9;}
+\DoxyCodeLine{00246\ \ \ \ \ uint32\_t\ width\ :\ 10;}
+\DoxyCodeLine{00247\ \ \ \ \ uint32\_t\ start\_x\ :\ 11;}
+\DoxyCodeLine{00248\ \ \ \ \ uint32\_t\ start\_y\ :\ 11;}
+\DoxyCodeLine{00249\ \ \ \ \ uint32\_t\ radius\ :\ 10;}
+\DoxyCodeLine{00250\ \ \ \ \ uint32\_t\ end\_x\ :\ 11;}
+\DoxyCodeLine{00251\ \ \ \ \ uint32\_t\ end\_y\ :\ 11;}
+\DoxyCodeLine{00252\ \}\ \mbox{\hyperlink{struct_graph___data__t}{Graph\_Data\_t}};}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00255\ \{}
+\DoxyCodeLine{00256\ \ \ \ \ uint16\_t\ data\_cmd\_id;\ \textcolor{comment}{//\ 由于存在多个内容\ ID，但整个cmd\_id\ 上行频率最大为\ 10Hz，请合理安排带宽。注意交互部分的上行频率}}
+\DoxyCodeLine{00257\ \ \ \ \ uint16\_t\ sender\_ID;}
+\DoxyCodeLine{00258\ \ \ \ \ uint16\_t\ receiver\_ID;}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \mbox{\hyperlink{struct_graph___data__t}{Graph\_Data\_t}}\ graph\_data;}
+\DoxyCodeLine{00261\ \}\ \mbox{\hyperlink{structext__student__interactive__header__data__t}{ext\_student\_interactive\_header\_data\_t}};}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \textcolor{comment}{/*\ 机器人id\ */}}
+\DoxyCodeLine{00264\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00265\ \{}
+\DoxyCodeLine{00266\ \ \ \ \ \textcolor{comment}{//\ 红方机器人ID}}
+\DoxyCodeLine{00267\ \ \ \ \ RobotID\_RHero\ =\ 1,}
+\DoxyCodeLine{00268\ \ \ \ \ RobotID\_REngineer\ =\ 2,}
+\DoxyCodeLine{00269\ \ \ \ \ RobotID\_RStandard1\ =\ 3,}
+\DoxyCodeLine{00270\ \ \ \ \ RobotID\_RStandard2\ =\ 4,}
+\DoxyCodeLine{00271\ \ \ \ \ RobotID\_RStandard3\ =\ 5,}
+\DoxyCodeLine{00272\ \ \ \ \ RobotID\_RAerial\ =\ 6,}
+\DoxyCodeLine{00273\ \ \ \ \ RobotID\_RSentry\ =\ 7,}
+\DoxyCodeLine{00274\ \ \ \ \ RobotID\_RRadar\ =\ 9,}
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{comment}{//\ 蓝方机器人ID}}
+\DoxyCodeLine{00276\ \ \ \ \ RobotID\_BHero\ =\ 101,}
+\DoxyCodeLine{00277\ \ \ \ \ RobotID\_BEngineer\ =\ 102,}
+\DoxyCodeLine{00278\ \ \ \ \ RobotID\_BStandard1\ =\ 103,}
+\DoxyCodeLine{00279\ \ \ \ \ RobotID\_BStandard2\ =\ 104,}
+\DoxyCodeLine{00280\ \ \ \ \ RobotID\_BStandard3\ =\ 105,}
+\DoxyCodeLine{00281\ \ \ \ \ RobotID\_BAerial\ =\ 106,}
+\DoxyCodeLine{00282\ \ \ \ \ RobotID\_BSentry\ =\ 107,}
+\DoxyCodeLine{00283\ \ \ \ \ RobotID\_BRadar\ =\ 109,}
+\DoxyCodeLine{00284\ \}\ Robot\_ID\_e;}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \textcolor{comment}{/*\ 交互数据ID\ */}}
+\DoxyCodeLine{00287\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00288\ \{}
+\DoxyCodeLine{00289\ \ \ \ \ UI\_Data\_ID\_Del\ =\ 0x100,}
+\DoxyCodeLine{00290\ \ \ \ \ UI\_Data\_ID\_Draw1\ =\ 0x101,}
+\DoxyCodeLine{00291\ \ \ \ \ UI\_Data\_ID\_Draw2\ =\ 0x102,}
+\DoxyCodeLine{00292\ \ \ \ \ UI\_Data\_ID\_Draw5\ =\ 0x103,}
+\DoxyCodeLine{00293\ \ \ \ \ UI\_Data\_ID\_Draw7\ =\ 0x104,}
+\DoxyCodeLine{00294\ \ \ \ \ UI\_Data\_ID\_DrawChar\ =\ 0x110,}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{comment}{/*\ 自定义交互数据部分\ */}}
+\DoxyCodeLine{00297\ \ \ \ \ Communicate\_Data\_ID\ =\ 0x0200,}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \}\ Interactive\_Data\_ID\_e;}
+\DoxyCodeLine{00300\ \textcolor{comment}{/*\ 交互数据长度\ */}}
+\DoxyCodeLine{00301\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00302\ \{}
+\DoxyCodeLine{00303\ \ \ \ \ Interactive\_Data\_LEN\_Head\ =\ 6,}
+\DoxyCodeLine{00304\ \ \ \ \ UI\_Operate\_LEN\_Del\ =\ 2,}
+\DoxyCodeLine{00305\ \ \ \ \ UI\_Operate\_LEN\_PerDraw\ =\ 15,}
+\DoxyCodeLine{00306\ \ \ \ \ UI\_Operate\_LEN\_DrawChar\ =\ 15\ +\ 30,}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \ \ \ \ \textcolor{comment}{/*\ 自定义交互数据部分\ */}}
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{comment}{//\ Communicate\_Data\_LEN\ =\ 5,}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \}\ Interactive\_Data\_Length\_e;}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ \textcolor{comment}{/****************************自定义交互数据****************************/}}
+\DoxyCodeLine{00314\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ 学生机器人间通信\ cmd\_id\ 0x0301，内容\ ID:0x0200\string~0x02FF}}
+\DoxyCodeLine{00316\ \textcolor{comment}{\ \ \ \ 自定义交互数据\ 机器人间通信：0x0301。}}
+\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ 发送频率：上限\ 10Hz}}
+\DoxyCodeLine{00318\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00319\ \textcolor{comment}{//\ 自定义交互数据协议，可更改，更改后需要修改最上方宏定义数据长度的值}}
+\DoxyCodeLine{00320\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00321\ \{}
+\DoxyCodeLine{00322\ \ \ \ \ uint8\_t\ data[Communicate\_Data\_LEN];\ \textcolor{comment}{//\ 数据段,n需要小于113}}
+\DoxyCodeLine{00323\ \}\ \mbox{\hyperlink{structrobot__interactive__data__t}{robot\_interactive\_data\_t}};}
+\DoxyCodeLine{00324\ }
+\DoxyCodeLine{00325\ \textcolor{comment}{//\ \ 机器人交互信息\_发送}}
+\DoxyCodeLine{00326\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00327\ \{}
+\DoxyCodeLine{00328\ \ \ \ \ \mbox{\hyperlink{structx_frame_header}{xFrameHeader}}\ FrameHeader;}
+\DoxyCodeLine{00329\ \ \ \ \ uint16\_t\ CmdID;}
+\DoxyCodeLine{00330\ \ \ \ \ \mbox{\hyperlink{structext__student__interactive__header__data__t}{ext\_student\_interactive\_header\_data\_t}}\ datahead;}
+\DoxyCodeLine{00331\ \ \ \ \ \mbox{\hyperlink{structrobot__interactive__data__t}{robot\_interactive\_data\_t}}\ Data;\ \textcolor{comment}{//\ 数据段}}
+\DoxyCodeLine{00332\ \ \ \ \ uint16\_t\ frametail;}
+\DoxyCodeLine{00333\ \}\ \mbox{\hyperlink{struct_communicate___send_data__t}{Communicate\_SendData\_t}};}
+\DoxyCodeLine{00334\ \textcolor{comment}{//\ \ 机器人交互信息\_接收}}
+\DoxyCodeLine{00335\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00336\ \{}
+\DoxyCodeLine{00337\ \ \ \ \ \mbox{\hyperlink{structext__student__interactive__header__data__t}{ext\_student\_interactive\_header\_data\_t}}\ datahead;}
+\DoxyCodeLine{00338\ \ \ \ \ \mbox{\hyperlink{structrobot__interactive__data__t}{robot\_interactive\_data\_t}}\ Data;\ \textcolor{comment}{//\ 数据段}}
+\DoxyCodeLine{00339\ \}\ \mbox{\hyperlink{struct_communicate___receive_data__t}{Communicate\_ReceiveData\_t}};}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \textcolor{comment}{/****************************UI交互数据****************************/}}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \textcolor{comment}{/*\ 图形数据\ */}}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00345\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00346\ \{}
+\DoxyCodeLine{00347\ \ \ \ \ \mbox{\hyperlink{struct_graph___data__t}{Graph\_Data\_t}}\ Graph\_Control;}
+\DoxyCodeLine{00348\ \ \ \ \ uint8\_t\ show\_Data[30];}
+\DoxyCodeLine{00349\ \}\ \mbox{\hyperlink{struct_string___data__t}{String\_Data\_t}};\ \textcolor{comment}{//\ 打印字符串数据}}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00351\ \textcolor{comment}{/*\ 删除操作\ */}}
+\DoxyCodeLine{00352\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00353\ \{}
+\DoxyCodeLine{00354\ \ \ \ \ UI\_Data\_Del\_NoOperate\ =\ 0,}
+\DoxyCodeLine{00355\ \ \ \ \ UI\_Data\_Del\_Layer\ =\ 1,}
+\DoxyCodeLine{00356\ \ \ \ \ UI\_Data\_Del\_ALL\ =\ 2,\ \textcolor{comment}{//\ 删除全部图层，后面的参数已经不重要了。}}
+\DoxyCodeLine{00357\ \}\ UI\_Delete\_Operate\_e;}
+\DoxyCodeLine{00358\ }
+\DoxyCodeLine{00359\ \textcolor{comment}{/*\ 图形配置参数\_\_图形操作\ */}}
+\DoxyCodeLine{00360\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00361\ \{}
+\DoxyCodeLine{00362\ \ \ \ \ UI\_Graph\_ADD\ =\ 1,}
+\DoxyCodeLine{00363\ \ \ \ \ UI\_Graph\_Change\ =\ 2,}
+\DoxyCodeLine{00364\ \ \ \ \ UI\_Graph\_Del\ =\ 3,}
+\DoxyCodeLine{00365\ \}\ UI\_Graph\_Operate\_e;}
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00367\ \textcolor{comment}{/*\ 图形配置参数\_\_图形类型\ */}}
+\DoxyCodeLine{00368\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00369\ \{}
+\DoxyCodeLine{00370\ \ \ \ \ UI\_Graph\_Line\ =\ 0,\ \ \ \ \ \ \textcolor{comment}{//\ 直线}}
+\DoxyCodeLine{00371\ \ \ \ \ UI\_Graph\_Rectangle\ =\ 1,\ \textcolor{comment}{//\ 矩形}}
+\DoxyCodeLine{00372\ \ \ \ \ UI\_Graph\_Circle\ =\ 2,\ \ \ \ \textcolor{comment}{//\ 整圆}}
+\DoxyCodeLine{00373\ \ \ \ \ UI\_Graph\_Ellipse\ =\ 3,\ \ \ \textcolor{comment}{//\ 椭圆}}
+\DoxyCodeLine{00374\ \ \ \ \ UI\_Graph\_Arc\ =\ 4,\ \ \ \ \ \ \ \textcolor{comment}{//\ 圆弧}}
+\DoxyCodeLine{00375\ \ \ \ \ UI\_Graph\_Float\ =\ 5,\ \ \ \ \ \textcolor{comment}{//\ 浮点型}}
+\DoxyCodeLine{00376\ \ \ \ \ UI\_Graph\_Int\ =\ 6,\ \ \ \ \ \ \ \textcolor{comment}{//\ 整形}}
+\DoxyCodeLine{00377\ \ \ \ \ UI\_Graph\_Char\ =\ 7,\ \ \ \ \ \ \textcolor{comment}{//\ 字符型}}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \}\ UI\_Graph\_Type\_e;}
+\DoxyCodeLine{00380\ }
+\DoxyCodeLine{00381\ \textcolor{comment}{/*\ 图形配置参数\_\_图形颜色\ */}}
+\DoxyCodeLine{00382\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00383\ \{}
+\DoxyCodeLine{00384\ \ \ \ \ UI\_Color\_Main\ =\ 0,\ \textcolor{comment}{//\ 红蓝主色}}
+\DoxyCodeLine{00385\ \ \ \ \ UI\_Color\_Yellow\ =\ 1,}
+\DoxyCodeLine{00386\ \ \ \ \ UI\_Color\_Green\ =\ 2,}
+\DoxyCodeLine{00387\ \ \ \ \ UI\_Color\_Orange\ =\ 3,}
+\DoxyCodeLine{00388\ \ \ \ \ UI\_Color\_Purplish\_red\ =\ 4,\ \textcolor{comment}{//\ 紫红色}}
+\DoxyCodeLine{00389\ \ \ \ \ UI\_Color\_Pink\ =\ 5,}
+\DoxyCodeLine{00390\ \ \ \ \ UI\_Color\_Cyan\ =\ 6,\ \textcolor{comment}{//\ 青色}}
+\DoxyCodeLine{00391\ \ \ \ \ UI\_Color\_Black\ =\ 7,}
+\DoxyCodeLine{00392\ \ \ \ \ UI\_Color\_White\ =\ 8,}
+\DoxyCodeLine{00393\ }
+\DoxyCodeLine{00394\ \}\ UI\_Graph\_Color\_e;}
+\DoxyCodeLine{00395\ }
+\DoxyCodeLine{00396\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00397\ \{}
+\DoxyCodeLine{00398\ \ \ \ \ int32\_t\ encoder\_1\_value;}
+\DoxyCodeLine{00399\ \ \ \ \ int32\_t\ encoder\_2\_value;}
+\DoxyCodeLine{00400\ \ \ \ \ int32\_t\ encoder\_3\_value;}
+\DoxyCodeLine{00401\ \ \ \ \ int32\_t\ encoder\_4\_value;}
+\DoxyCodeLine{00402\ \ \ \ \ int32\_t\ encoder\_5\_value;}
+\DoxyCodeLine{00403\ \ \ \ \ int32\_t\ encoder\_6\_value;}
+\DoxyCodeLine{00404\ \}\ \mbox{\hyperlink{structcustom__controller__data__t}{custom\_controller\_data\_t}};}
+\DoxyCodeLine{00405\ }
+\DoxyCodeLine{00406\ \textcolor{preprocessor}{\#pragma\ pack()}}
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00408\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

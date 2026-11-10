@@ -1,0 +1,44 @@
+\doxysection{key\+Board.\+h}
+\hypertarget{key_board_8h_source}{}\label{key_board_8h_source}\index{source/bsp/keyboard/keyBoard.h@{source/bsp/keyboard/keyBoard.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ KeyBoard\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ KeyBoard\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00007\ \{}
+\DoxyCodeLine{00008\ \ \ \ \ int16\_t\ mouse\_x;}
+\DoxyCodeLine{00009\ \ \ \ \ int16\_t\ mouse\_y;}
+\DoxyCodeLine{00010\ \ \ \ \ int16\_t\ mouse\_z;}
+\DoxyCodeLine{00011\ \ \ \ \ int8\_t\ left\_button\_down;}
+\DoxyCodeLine{00012\ \ \ \ \ int8\_t\ right\_button\_down;}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{union\ }\{}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ uint16\_t\ key\_code;}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ W\ :\ 1;}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ S\ :\ 1;}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ A\ :\ 1;}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ D\ :\ 1;}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ SHIFT\ :\ 1;}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ CTRL\ :\ 1;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ Q\ :\ 1;}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ E\ :\ 1;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ R\ :\ 1;}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ F\ :\ 1;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ G\ :\ 1;}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ Z\ :\ 1;}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ X\ :\ 1;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ C\ :\ 1;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ V\ :\ 1;}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ uint16\_t\ B\ :\ 1;}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \}\ bit;}
+\DoxyCodeLine{00034\ \ \ \ \ \}\ key\_code;}
+\DoxyCodeLine{00035\ \ \ \ \ uint16\_t\ reserved;}
+\DoxyCodeLine{00036\ \}\mbox{\hyperlink{structkeyboard__t}{keyboard\_t}};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

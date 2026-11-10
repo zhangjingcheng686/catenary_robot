@@ -1,0 +1,121 @@
+\chapter{裁判系统模块说明文档 }
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module}{}\label{md_source_2module_2referee_sys_2referee_sys__module}\index{裁判系统模块说明文档@{裁判系统模块说明文档}}
+\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md151}%
+\Hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md151}%
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md152}{}\doxysection{\texorpdfstring{模块概述}{模块概述}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md152}
+裁判系统模块负责处理与\+Robo\+Master比赛裁判系统的通信，包括：
+\begin{DoxyItemize}
+\item 比赛状态数据解析
+\item 机器人状态数据上报
+\item 自定义控制器数据交互
+\item 图形化\+UI数据发送
+\end{DoxyItemize}\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md153}{}\doxysection{\texorpdfstring{主要功能}{主要功能}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md153}
+
+\begin{DoxyEnumerate}
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}数据解析\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}：
+\begin{DoxyItemize}
+\item 裁判系统数据帧解析
+\item 自定义控制器数据解析
+\item CRC校验检查
+\item 多帧数据包处理
+\end{DoxyItemize}
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}数据上报\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}：
+\begin{DoxyItemize}
+\item 机器人状态数据打包
+\item 自定义\+UI数据打包
+\item 数据帧序列号管理
+\item UART数据发送
+\end{DoxyItemize}
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}数据获取\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}：
+\begin{DoxyItemize}
+\item 比赛状态实时获取
+\item 机器人血量/状态获取
+\item 自定义控制器数据获取
+\end{DoxyItemize}
+\end{DoxyEnumerate}\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md154}{}\doxysection{\texorpdfstring{关键数据结构}{关键数据结构}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md154}
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md155}{}\doxysubsection{\texorpdfstring{裁判系统数据结构}{裁判系统数据结构}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md155}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structx_frame_header}{xFrameHeader}}\ FrameHeader;\ \textcolor{comment}{//\ 帧头信息}}
+\DoxyCodeLine{\ \ \ \ uint16\_t\ CmdID;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 命令ID}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structext__game__state__t}{ext\_game\_state\_t}}\ GameState;\ \ \ \ \ \ \textcolor{comment}{//\ 比赛状态}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structext__game__result__t}{ext\_game\_result\_t}}\ GameResult;\ \ \ \ \textcolor{comment}{//\ 比赛结果}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structext__game__robot___h_p__t}{ext\_game\_robot\_HP\_t}}\ GameRobotHP;\ \textcolor{comment}{//\ 机器人血量}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structext__event__data__t}{ext\_event\_data\_t}}\ EventData;\ \ \ \ \ \ \textcolor{comment}{//\ 事件数据}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structext__supply__projectile__action__t}{ext\_supply\_projectile\_action\_t}}\ SupplyProjectileAction;\ \textcolor{comment}{//\ 补给动作}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structext__game__robot__state__t}{ext\_game\_robot\_state\_t}}\ GameRobotState;\ \textcolor{comment}{//\ 机器人状态}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structext__power__heat__data__t}{ext\_power\_heat\_data\_t}}\ PowerHeatData;\ \ \ \textcolor{comment}{//\ 功率热量数据}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structext__game__robot__pos__t}{ext\_game\_robot\_pos\_t}}\ GameRobotPos;\ \ \ \ \ \textcolor{comment}{//\ 机器人位置}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structext__buff__musk__t}{ext\_buff\_musk\_t}}\ BuffMusk;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 增益状态}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structaerial__robot__energy__t}{aerial\_robot\_energy\_t}}\ AerialRobotEnergy;\ \textcolor{comment}{//\ 空中机器人能量}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structext__robot__hurt__t}{ext\_robot\_hurt\_t}}\ RobotHurt;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 伤害数据}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structext__shoot__data__t}{ext\_shoot\_data\_t}}\ ShootData;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 发射数据}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{struct_communicate___receive_data__t}{Communicate\_ReceiveData\_t}}\ ReceiveData;\ \textcolor{comment}{//\ 自定义接收数据}}
+\DoxyCodeLine{\ \ \ \ uint8\_t\ init\_flag;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 初始化标志}}
+\DoxyCodeLine{\}\ \mbox{\hyperlink{structreferee__info__t}{referee\_info\_t}};}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md156}{}\doxysubsection{\texorpdfstring{自定义控制器数据结构}{自定义控制器数据结构}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md156}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structx_frame_header}{xFrameHeader}}\ FrameHeader;\ \textcolor{comment}{//\ 帧头信息}}
+\DoxyCodeLine{\ \ \ \ uint16\_t\ CmdID;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 命令ID}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structcustom__controller__data__t}{custom\_controller\_data\_t}}\ CustomController;\ \textcolor{comment}{//\ 自定义控制器数据}}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{structkeyboard__t}{keyboard\_t}}\ keyboard;\ \ \ \ \ \textcolor{comment}{//\ 键鼠数据}}
+\DoxyCodeLine{\}\ \mbox{\hyperlink{structcustom__controller__info__t}{custom\_controller\_info\_t}};}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md157}{}\doxysection{\texorpdfstring{主要\+API说明}{主要\+API说明}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md157}
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md158}{}\doxysubsection{\texorpdfstring{{\ttfamily referee\+\_\+init}}{{\ttfamily referee\+\_\+init}}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md158}
+初始化裁判系统\+UART接收 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ referee\_init(UART\_HandleTypeDef\ *huart);}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md159}{}\doxysubsection{\texorpdfstring{{\ttfamily Judge\+Read\+Data}}{{\ttfamily Judge\+Read\+Data}}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md159}
+裁判系统数据解析 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ JudgeReadData(uint8\_t\ *buff);}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md160}{}\doxysubsection{\texorpdfstring{{\ttfamily get\+\_\+referee\+\_\+msg}}{{\ttfamily get\+\_\+referee\+\_\+msg}}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md160}
+获取裁判系统消息 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structreferee__info__t}{referee\_info\_t}}\ *get\_referee\_msg(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md161}{}\doxysubsection{\texorpdfstring{{\ttfamily Ctrller\+Read\+Data}}{{\ttfamily Ctrller\+Read\+Data}}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md161}
+自定义控制器数据解析 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ CtrllerReadData(uint8\_t\ *buff);}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md162}{}\doxysubsection{\texorpdfstring{{\ttfamily get\+\_\+custom\+\_\+controller\+\_\+msg}}{{\ttfamily get\+\_\+custom\+\_\+controller\+\_\+msg}}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md162}
+获取自定义控制器消息 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structcustom__controller__info__t}{custom\_controller\_info\_t}}\ *get\_custom\_controller\_msg(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md163}{}\doxysubsection{\texorpdfstring{{\ttfamily referee\+\_\+data\+\_\+pack\+\_\+handle}}{{\ttfamily referee\+\_\+data\+\_\+pack\+\_\+handle}}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md163}
+数据打包发送 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ referee\_data\_pack\_handle(}
+\DoxyCodeLine{\ \ \ \ uint8\_t\ sof,\ \ \ \ \ \ \textcolor{comment}{//\ 帧头标识符}}
+\DoxyCodeLine{\ \ \ \ uint16\_t\ cmd\_id,\ \ \textcolor{comment}{//\ 命令ID}}
+\DoxyCodeLine{\ \ \ \ uint8\_t\ *p\_data,\ \ \textcolor{comment}{//\ 数据指针}}
+\DoxyCodeLine{\ \ \ \ uint16\_t\ len\ \ \ \ \ \ \textcolor{comment}{//\ 数据长度}}
+\DoxyCodeLine{);}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md164}{}\doxysection{\texorpdfstring{使用示例}{使用示例}}\label{md_source_2module_2referee_sys_2referee_sys__module_autotoc_md164}
+\`{}\`{}\`{}c // 初始化 referee\+\_\+init(\&huart1);
+
+// 主循环中获取裁判数据 while(1) \{ \doxylink{structreferee__info__t}{referee\+\_\+info\+\_\+t} \texorpdfstring{$\ast$}{*}referee = get\+\_\+referee\+\_\+msg();
+
+// 使用裁判数据 if(referee-\/\texorpdfstring{$>$}{>}Cmd\+ID == ID\+\_\+game\+\_\+state) \{ // 处理比赛状态... \}
+
+// 发送自定义数据 uint8\+\_\+t custom\+\_\+data\mbox{[}128\mbox{]}; // 填充自定义数据... referee\+\_\+data\+\_\+pack\+\_\+handle(0x\+A5, 0x0301, custom\+\_\+data, sizeof(custom\+\_\+data));
+
+HAL\+\_\+\+Delay(10); \} 

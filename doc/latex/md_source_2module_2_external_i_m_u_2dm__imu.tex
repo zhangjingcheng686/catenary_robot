@@ -1,0 +1,49 @@
+\chapter{达秒\+IMU模块使用说明 }
+\hypertarget{md_source_2module_2_external_i_m_u_2dm__imu}{}\label{md_source_2module_2_external_i_m_u_2dm__imu}\index{达秒IMU模块使用说明@{达秒IMU模块使用说明}}
+\label{md_source_2module_2_external_i_m_u_2dm__imu_autotoc_md123}%
+\Hypertarget{md_source_2module_2_external_i_m_u_2dm__imu_autotoc_md123}%
+\hypertarget{md_source_2module_2_external_i_m_u_2dm__imu_autotoc_md124}{}\doxysection{\texorpdfstring{1. 示例代码}{1. 示例代码}}\label{md_source_2module_2_external_i_m_u_2dm__imu_autotoc_md124}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ imu\ =\ pvPortMalloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{struct_d_m__imu__t}{DM\_imu\_t}}));}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ imu-\/>can\_cfg.port\ =\ CAN3\_PORT;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ imu-\/>can\_cfg.id\ =\ 0x6FF;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ imu-\/>can\_cfg.len\ =\ FDCAN\_DLC\_BYTES\_4;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ imu-\/>can\_cfg.port=CAN3\_PORT;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ imu-\/>imu\_msg.can\_msg.id=0x11;\ \textcolor{comment}{//这个取决于上位机设置的msgid}}
+\DoxyCodeLine{}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ DM\_IMU\_Init(imu);}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 开始无限循环，持续对IMU发送命令}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{while}\ (1)}
+\DoxyCodeLine{\ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ tick\_ms++;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tick\_ms\%3==0)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IMU\_RequestData(imu,0x01,1)\ ;\ \ \ \textcolor{comment}{//请求加速度数据}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tick\_ms\%2==0)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IMU\_RequestData(imu,0x01,2);\ \ \textcolor{comment}{//请求角速度数据}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tick\_ms\%1==0)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IMU\_RequestData(imu,0x01,3)\ \ \ \ \textcolor{comment}{//请求欧拉角数据}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//！！！！这三种请求依据情况来选用}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tick\_ms>1000)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ tick\_ms=0;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ IMU\_Refresh(imu);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+ 

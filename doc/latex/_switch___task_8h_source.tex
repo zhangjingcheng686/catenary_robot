@@ -1,0 +1,44 @@
+\doxysection{Switch\+\_\+\+Task.\+h}
+\hypertarget{_switch___task_8h_source}{}\label{_switch___task_8h_source}\index{source/task/Switch\_Task.h@{source/task/Switch\_Task.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ SWITCH\_TASK\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ SWITCH\_TASK\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}motor\_DM.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}cmsis\_os2.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#define\ TOTAL\_MOTOR\_COUNT\ \ \ 17\ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ KP\_GAIN\ \ \ \ \ \ \ \ \ \ \ \ \ 35.0f\ \ \ \ \ \ }}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ KD\_GAIN\ \ \ \ \ \ \ \ \ \ \ \ \ 1.5f\ \ \ \ }}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *right\_arm\_motors[6];\ \ }
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *left\_arm\_motors[5];\ \ \ }
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *middle\_motors[5];\ \ \ \ \ }
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *wheel\_motor[1];\ \ \ \ \ \ }
+\DoxyCodeLine{00017\ \}\ \mbox{\hyperlink{struct_arm_motors___info__t}{ArmMotors\_Info\_t}};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{extern}\ osThreadId\_t\ ArmControlHandle;}
+\DoxyCodeLine{00020\ \textcolor{keyword}{extern}\ osThreadId\_t\ ClawControlHandle;}
+\DoxyCodeLine{00021\ \textcolor{keyword}{extern}\ osThreadId\_t\ BalanceControlHandle;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{extern}\ \textcolor{keyword}{const}\ uint8\_t\ right\_arm\_ids[6];\ \ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{extern}\ \textcolor{keyword}{const}\ uint8\_t\ left\_arm\_ids[5];\ \ \ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{extern}\ \textcolor{keyword}{const}\ uint8\_t\ middle\_arm\_ids[5];\ \ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{extern}\ \textcolor{keyword}{const}\ uint8\_t\ wheel\_motor\_id[1];\ }
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{extern}\ \textcolor{keyword}{const}\ can\_port\_t\ motor\_ports[TOTAL\_MOTOR\_COUNT];\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{extern}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ init\_angles[TOTAL\_MOTOR\_COUNT];\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_arm_motors___info__t}{ArmMotors\_Info\_t}}\ Switch\_Motors;}
+\DoxyCodeLine{00032\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{float}\ Motor\_TargetAngles[TOTAL\_MOTOR\_COUNT];\ \ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keywordtype}{void}\ Motors\_InitAll(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00035\ \textcolor{keywordtype}{void}\ ApplyInitPose(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00036\ \textcolor{keywordtype}{void}\ Switch\_Motors\_RefreshAll(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ SWITCH\_TASK\_H}}
+
+\end{DoxyCode}

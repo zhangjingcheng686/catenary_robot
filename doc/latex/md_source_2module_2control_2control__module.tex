@@ -1,0 +1,232 @@
+\chapter{控制模块文档 }
+\hypertarget{md_source_2module_2control_2control__module}{}\label{md_source_2module_2control_2control__module}\index{控制模块文档@{控制模块文档}}
+\label{md_source_2module_2control_2control__module_autotoc_md94}%
+\Hypertarget{md_source_2module_2control_2control__module_autotoc_md94}%
+\hypertarget{md_source_2module_2control_2control__module_autotoc_md95}{}\doxysection{\texorpdfstring{概述}{概述}}\label{md_source_2module_2control_2control__module_autotoc_md95}
+本文档描述了控制模块，负责机器人运动控制和功率管理。主要功能包括：
+\begin{DoxyItemize}
+\item 功率分配与管理
+\item PID控制算法实现
+\item 运动学解算（麦克纳姆轮、舵轮）
+\item 通用工具函数
+\end{DoxyItemize}\hypertarget{md_source_2module_2control_2control__module_autotoc_md96}{}\doxysection{\texorpdfstring{函数}{函数}}\label{md_source_2module_2control_2control__module_autotoc_md96}
+\hypertarget{md_source_2module_2control_2control__module_autotoc_md97}{}\doxysubsection{\texorpdfstring{Power\+Control\+\_\+\+Init}{Power\+Control\+\_\+\+Init}}\label{md_source_2module_2control_2control__module_autotoc_md97}
+初始化功率控制系统参看具体子文档功率控制系统\hypertarget{md_source_2module_2control_2control__module_autotoc_md98}{}\doxysubsection{\texorpdfstring{PID\+\_\+\+Init}{PID\+\_\+\+Init}}\label{md_source_2module_2control_2control__module_autotoc_md98}
+初始化\+PID控制器
+
+{\bfseries{原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ PID\_Init(\mbox{\hyperlink{structpid__type__def}{pid\_type\_def}}\ *pid,\ \textcolor{keywordtype}{float}\ kp,\ \textcolor{keywordtype}{float}\ ki,\ \textcolor{keywordtype}{float}\ kd,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ max\_out,\ \textcolor{keywordtype}{float}\ max\_iout);}
+
+\end{DoxyCode}
+
+
+{\bfseries{参数}}
+\begin{DoxyItemize}
+\item {\ttfamily pid}\+: PID参数结构体指针
+\item {\ttfamily kp}\+: 比例系数
+\item {\ttfamily ki}\+: 积分系数 ~\newline
+
+\item {\ttfamily kd}\+: 微分系数
+\item {\ttfamily max\+\_\+out}\+: 输出限幅
+\item {\ttfamily max\+\_\+iout}\+: 积分限幅
+\end{DoxyItemize}
+
+{\bfseries{返回值}}
+\begin{DoxyItemize}
+\item 无
+\end{DoxyItemize}\hypertarget{md_source_2module_2control_2control__module_autotoc_md99}{}\doxysubsection{\texorpdfstring{omni\+\_\+mecanum\+\_\+kinematics}{omni\+\_\+mecanum\+\_\+kinematics}}\label{md_source_2module_2control_2control__module_autotoc_md99}
+麦克纳姆轮运动学解算
+
+{\bfseries{原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ omni\_mecanum\_kinematics(\mbox{\hyperlink{structbasic__vector__t}{basic\_vector\_t}}\ *motion\_vector,\ \textcolor{keywordtype}{float}\ *motor\_speed\_out);}
+
+\end{DoxyCode}
+
+
+{\bfseries{参数}}
+\begin{DoxyItemize}
+\item {\ttfamily motion\+\_\+vector}\+: 运动向量指针
+\item {\ttfamily motor\+\_\+speed\+\_\+out}\+: 电机速度输出数组指针
+\end{DoxyItemize}
+
+{\bfseries{返回值}}
+\begin{DoxyItemize}
+\item 无
+\end{DoxyItemize}\hypertarget{md_source_2module_2control_2control__module_autotoc_md100}{}\doxysubsection{\texorpdfstring{circule\+\_\+compensate}{circule\+\_\+compensate}}\label{md_source_2module_2control_2control__module_autotoc_md100}
+圆周补偿计算
+
+{\bfseries{原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ circule\_compensate(\textcolor{keywordtype}{float}\ target,\ \textcolor{keywordtype}{float}\ current,\ \textcolor{keywordtype}{float}\ circule\_num);}
+
+\end{DoxyCode}
+
+
+{\bfseries{参数}}
+\begin{DoxyItemize}
+\item {\ttfamily target}\+: 目标角度
+\item {\ttfamily current}\+: 当前角度
+\item {\ttfamily circule\+\_\+num}\+: 圆周周期数(如2π为1)
+\end{DoxyItemize}
+
+{\bfseries{返回值}}
+\begin{DoxyItemize}
+\item 补偿后的角度值
+\end{DoxyItemize}\hypertarget{md_source_2module_2control_2control__module_autotoc_md101}{}\doxysubsection{\texorpdfstring{map}{map}}\label{md_source_2module_2control_2control__module_autotoc_md101}
+数值映射
+
+{\bfseries{原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ map(\textcolor{keywordtype}{float}\ value,\ \textcolor{keywordtype}{float}\ in\_min,\ \textcolor{keywordtype}{float}\ in\_max,\ \textcolor{keywordtype}{float}\ out\_min,\ \textcolor{keywordtype}{float}\ out\_max);}
+
+\end{DoxyCode}
+
+
+{\bfseries{参数}}
+\begin{DoxyItemize}
+\item {\ttfamily value}\+: 输入值
+\item {\ttfamily in\+\_\+min}\+: 输入范围最小值
+\item {\ttfamily in\+\_\+max}\+: 输入范围最大值
+\item {\ttfamily out\+\_\+min}\+: 输出范围最小值
+\item {\ttfamily out\+\_\+max}\+: 输出范围最大值
+\end{DoxyItemize}
+
+{\bfseries{返回值}}
+\begin{DoxyItemize}
+\item 映射后的值
+\end{DoxyItemize}\hypertarget{md_source_2module_2control_2control__module_autotoc_md102}{}\doxysubsection{\texorpdfstring{limit}{limit}}\label{md_source_2module_2control_2control__module_autotoc_md102}
+数值限幅
+
+{\bfseries{原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ limit(\textcolor{keywordtype}{float}\ value,\ \textcolor{keywordtype}{float}\ min,\ \textcolor{keywordtype}{float}\ max);}
+
+\end{DoxyCode}
+
+
+{\bfseries{参数}}
+\begin{DoxyItemize}
+\item {\ttfamily value}\+: 输入值
+\item {\ttfamily min}\+: 最小值
+\item {\ttfamily max}\+: 最大值
+\end{DoxyItemize}
+
+{\bfseries{返回值}}
+\begin{DoxyItemize}
+\item 限幅后的值
+\end{DoxyItemize}\hypertarget{md_source_2module_2control_2control__module_autotoc_md103}{}\doxysubsection{\texorpdfstring{Ref\+Frame\+\_\+\+Transform\+\_\+\+Calc}{Ref\+Frame\+\_\+\+Transform\+\_\+\+Calc}}\label{md_source_2module_2control_2control__module_autotoc_md103}
+参考系变换计算
+
+{\bfseries{原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structbasic__vector__t}{basic\_vector\_t}}\ RefFrame\_Transform\_Calc(\textcolor{keyword}{const}\ \mbox{\hyperlink{structbasic__vector__t}{basic\_vector\_t}}\ basic,\ \textcolor{keywordtype}{float}\ angle);}
+
+\end{DoxyCode}
+
+
+{\bfseries{参数}}
+\begin{DoxyItemize}
+\item {\ttfamily basic}\+: 基础运动向量
+\item {\ttfamily angle}\+: 变换角度(弧度)
+\end{DoxyItemize}
+
+{\bfseries{返回值}}
+\begin{DoxyItemize}
+\item 变换后的运动向量
+\end{DoxyItemize}\hypertarget{md_source_2module_2control_2control__module_autotoc_md104}{}\doxysubsection{\texorpdfstring{steering\+\_\+wheel\+\_\+kinematics}{steering\+\_\+wheel\+\_\+kinematics}}\label{md_source_2module_2control_2control__module_autotoc_md104}
+舵轮运动学解算
+
+{\bfseries{原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structbasic__angle_v__t}{basic\_angleV\_t}}\ steering\_wheel\_kinematics(\mbox{\hyperlink{structbasic__vector__t}{basic\_vector\_t}}\ *motion\_vector,\ \mbox{\hyperlink{structbasic__angle_v__t}{basic\_angleV\_t}}\ *motor\_angleV\_out);}
+
+\end{DoxyCode}
+
+
+{\bfseries{参数}}
+\begin{DoxyItemize}
+\item {\ttfamily motion\+\_\+vector}\+: 运动向量指针
+\item {\ttfamily motor\+\_\+angle\+V\+\_\+out}\+: 电机角度速度输出指针
+\end{DoxyItemize}
+
+{\bfseries{返回值}}
+\begin{DoxyItemize}
+\item 舵轮角度速度结构体
+\end{DoxyItemize}\hypertarget{md_source_2module_2control_2control__module_autotoc_md105}{}\doxysection{\texorpdfstring{数据结构}{数据结构}}\label{md_source_2module_2control_2control__module_autotoc_md105}
+\hypertarget{md_source_2module_2control_2control__module_autotoc_md106}{}\doxysubsection{\texorpdfstring{PID参数结构}{PID参数结构}}\label{md_source_2module_2control_2control__module_autotoc_md106}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ Kp;\textcolor{comment}{//PID\ 三参数}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ Ki;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ Kd;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ max\_out;\ \ \textcolor{comment}{//输出限幅}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ max\_iout;\ \textcolor{comment}{//最大积分输出}}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ set;\textcolor{comment}{//\ 设定值和反馈值}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ fdb;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ out;\ \textcolor{comment}{//总输出}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ Pout;\textcolor{comment}{//PID\ 分项输出}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ Iout;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ Dout;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ Dbuf[3];\ \ \textcolor{comment}{//微分项\ 0最新\ 1上一次\ 2上上次}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ error[3];\ \textcolor{comment}{//误差项\ 0最新\ 1上一次\ 2上上次}}
+\DoxyCodeLine{\}\ \mbox{\hyperlink{structpid__type__def}{pid\_type\_def}};}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2control_2control__module_autotoc_md107}{}\doxysubsection{\texorpdfstring{运动状态结构体}{运动状态结构体}}\label{md_source_2module_2control_2control__module_autotoc_md107}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ x;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ y;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ wz;}
+\DoxyCodeLine{\}\ \mbox{\hyperlink{structbasic__vector__t}{basic\_vector\_t}};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ angle;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ v;}
+\DoxyCodeLine{\}\ \mbox{\hyperlink{structbasic__angle_v__t}{basic\_angleV\_t}};}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2control_2control__module_autotoc_md108}{}\doxysection{\texorpdfstring{使用示例}{使用示例}}\label{md_source_2module_2control_2control__module_autotoc_md108}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ PID控制示例}}
+\DoxyCodeLine{\mbox{\hyperlink{structpid__type__def}{pid\_type\_def}}\ pid;}
+\DoxyCodeLine{PID\_Init(\&pid,\ 1.0,\ 0.1,\ 0.05,\ 1000,\ 500);}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ output\ =\ PID\_Calc\_Pos(\&pid,\ current,\ target);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 麦克纳姆轮控制示例\ \ }}
+\DoxyCodeLine{\mbox{\hyperlink{structbasic__vector__t}{basic\_vector\_t}}\ motion\ =\ \{.x=1.0,\ .y=0.5,\ .wz=0.2\};}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ motor\_speeds[4];}
+\DoxyCodeLine{omni\_mecanum\_kinematics(\&motion,\ motor\_speeds);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 舵轮控制示例}}
+\DoxyCodeLine{\mbox{\hyperlink{structbasic__vector__t}{basic\_vector\_t}}\ steering\_motion\ =\ \{.x=0.8,\ .y=0.3,\ .wz=0.1\};}
+\DoxyCodeLine{\mbox{\hyperlink{structbasic__angle_v__t}{basic\_angleV\_t}}\ motor\_angles[4];\ }
+\DoxyCodeLine{steering\_wheel\_kinematics(\&steering\_motion,\ motor\_angles);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 参考系变换示例}}
+\DoxyCodeLine{\mbox{\hyperlink{structbasic__vector__t}{basic\_vector\_t}}\ original\ =\ \{.x=1.0,\ .y=0.0,\ .wz=0.0\};}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ transform\_angle\ =\ PI/4;\ \textcolor{comment}{//\ 45度}}
+\DoxyCodeLine{\mbox{\hyperlink{structbasic__vector__t}{basic\_vector\_t}}\ transformed\ =\ RefFrame\_Transform\_Calc(original,\ transform\_angle);}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2control_2control__module_autotoc_md109}{}\doxysection{\texorpdfstring{注意事项}{注意事项}}\label{md_source_2module_2control_2control__module_autotoc_md109}
+
+\begin{DoxyEnumerate}
+\item 使用前必须正确初始化各子系统
+\item PID参数需要根据实际系统调试
+\item 运动学解算需匹配机械结构
+\item 工具函数已包含安全检查
+\item 确保指针参数有效 
+\end{DoxyEnumerate}

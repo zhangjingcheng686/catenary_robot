@@ -1,0 +1,102 @@
+\doxysection{log.\+h}
+\hypertarget{log_8h_source}{}\label{log_8h_source}\index{source/bsp/rtt/log.h@{source/bsp/rtt/log.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ LOG\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ LOG\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}SEGGER\_RTT.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ 日志级别定义}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#define\ LOG\_LEVEL\_NOLOG\ 0\ }\textcolor{comment}{//\ 无日志输出}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ LOG\_LEVEL\_ERROR\ 1\ }\textcolor{comment}{//\ 只输出错误}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ LOG\_LEVEL\_WARN\ 2\ \ }\textcolor{comment}{//\ 输出警告和错误}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ LOG\_LEVEL\_INFO\ 3\ \ }\textcolor{comment}{//\ 输出信息、警告和错误}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ LOG\_LEVEL\_DEBUG\ 4\ }\textcolor{comment}{//\ 输出调试信息、信息、警告和错误}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ 设置当前日志级别}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ LOG\_LEVEL\ LOG\_LEVEL\_DEBUG}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ 常用文本颜色控制宏}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ LOG\_RESET\ RTT\_CTRL\_RESET}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ LOG\_RED\ RTT\_CTRL\_TEXT\_RED}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ LOG\_GREEN\ RTT\_CTRL\_TEXT\_GREEN}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ LOG\_YELLOW\ RTT\_CTRL\_TEXT\_YELLOW}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ LOG\_BLUE\ RTT\_CTRL\_TEXT\_BLUE}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ LOG\_MAGENTA\ RTT\_CTRL\_TEXT\_MAGENTA}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ LOG\_CYAN\ RTT\_CTRL\_TEXT\_CYAN}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ LOG\_WHITE\ RTT\_CTRL\_TEXT\_WHITE}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{//\ 日志输出宏定义}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#if\ LOG\_LEVEL\ >=\ LOG\_LEVEL\_DEBUG}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ LOG(fmt,\ ...)\ SEGGER\_RTT\_printf(0,\ LOG\_RESET\ "{}[DEBUG]:\ "{}\ fmt\ "{}\(\backslash\)r\(\backslash\)n"{},\ \#\#\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ LOG(fmt,\ ...)}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#if\ LOG\_LEVEL\ >=\ LOG\_LEVEL\_INFO}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ LOG\_INFO(fmt,\ ...)\ SEGGER\_RTT\_printf(0,\ LOG\_GREEN\ "{}[INFO]:\ "{}\ fmt\ "{}\(\backslash\)r\(\backslash\)n"{},\ \#\#\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ LOG\_INFO(fmt,\ ...)}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#if\ LOG\_LEVEL\ >=\ LOG\_LEVEL\_WARN}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ LOG\_WARN(fmt,\ ...)\ SEGGER\_RTT\_printf(0,\ LOG\_YELLOW\ "{}[WARN]:\ "{}\ fmt\ "{}\(\backslash\)r\(\backslash\)n"{},\ \#\#\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ LOG\_WARN(fmt,\ ...)}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#if\ LOG\_LEVEL\ >=\ LOG\_LEVEL\_ERROR}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ LOG\_ERROR(fmt,\ ...)\ SEGGER\_RTT\_printf(0,\ LOG\_RED\ "{}[ERROR]:\ "{}\ fmt\ "{}\(\backslash\)r\(\backslash\)n"{},\ \#\#\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ LOG\_ERROR(fmt,\ ...)}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#define\ LOG\_CLEAR()\ SEGGER\_RTT\_WriteString(0,\ "{}\(\backslash\)r\(\backslash\)n"{}\ RTT\_CTRL\_CLEAR)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 清屏}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{comment}{//\ 打印数组}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#define\ LOG\_ARRAY(pArr,\ len,\ logArrayType,\ terminal)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\ \ \ \ do\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\ \ \ \ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ SEGGER\_RTT\_SetTerminal(terminal);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ for\ (int\ i\ =\ 0;\ i\ <\ len;\ i++)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ switch\ (logArrayType)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ case\ LOG\_ARR\_BYTE1:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SEGGER\_RTT\_printf(0,\ "{}\%02x\ "{},\ *(uint8\_t\ *)(pArr\ +\ i));\ \ \(\backslash\)}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ break;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ case\ LOG\_ARR\_BYTE2:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SEGGER\_RTT\_printf(0,\ "{}\%04x\ "{},\ *(uint16\_t\ *)(pArr\ +\ i));\ \(\backslash\)}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ break;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ case\ LOG\_ARR\_BYTE4:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SEGGER\_RTT\_printf(0,\ "{}\%08x\ "{},\ *(uint32\_t\ *)(pArr\ +\ i));\ \(\backslash\)}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ break;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ case\ LOG\_ARR\_FLOAT:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SEGGER\_RTT\_printf(0,\ "{}\%f\ "{},\ *(float\ *)(pArr\ +\ i));\ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ break;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ case\ LOG\_ARR\_INT:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SEGGER\_RTT\_printf(0,\ "{}\%d\ "{},\ *(int\ *)(pArr\ +\ i));\ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ break;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ default:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ break;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00081\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ SEGGER\_RTT\_printf(0,\ "{}\(\backslash\)r\(\backslash\)n"{});\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ SEGGER\_RTT\_SetTerminal(0);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\ \ \ \ \}\ while\ (0)}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{comment}{//\ 初始化}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#define\ LOG\_INIT()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\ \ \ \ do\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\ \ \ \ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ SEGGER\_RTT\_Init();\ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ DWT\_Init(480);\ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ LOG\_CLEAR();\ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ LOG\_INFO("{}RTT\ Inited!"{});\ \(\backslash\)}}
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\ \ \ \ \}\ while\ (0)}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ LOG\_H}}
+
+\end{DoxyCode}

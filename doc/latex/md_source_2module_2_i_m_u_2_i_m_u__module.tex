@@ -1,0 +1,108 @@
+\chapter{IMU模块文档 }
+\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module}{}\label{md_source_2module_2_i_m_u_2_i_m_u__module}\index{IMU模块文档@{IMU模块文档}}
+\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md133}%
+\Hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md133}%
+\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md134}{}\doxysection{\texorpdfstring{概述}{概述}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md134}
+本模块处理惯性测量单元数据，主要功能包括：
+\begin{DoxyItemize}
+\item 使用\+Mahony互补滤波算法进行姿态解算
+\item 实时提供横滚角、俯仰角和偏航角
+\item 支持偏航角偏移校正
+\end{DoxyItemize}\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md135}{}\doxysection{\texorpdfstring{核心函数}{核心函数}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md135}
+\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md136}{}\doxysubsection{\texorpdfstring{Mahony\+\_\+\+Init}{Mahony\+\_\+\+Init}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md136}
+初始化\+Mahony滤波器
+
+{\bfseries{函数原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ Mahony\_Init(\textcolor{keywordtype}{float}\ sample\_rate\_hz);}
+
+\end{DoxyCode}
+
+
+{\bfseries{参数说明}}
+\begin{DoxyItemize}
+\item {\ttfamily sample\+\_\+rate\+\_\+hz}\+: 采样频率(\+Hz)
+\end{DoxyItemize}\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md137}{}\doxysubsection{\texorpdfstring{BMI088\+\_\+init}{BMI088\+\_\+init}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md137}
+初始化\+BMI088传感器
+
+{\bfseries{函数原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ BMI088\_init(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md138}{}\doxysubsection{\texorpdfstring{IMUsys}{IMUsys}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md138}
+姿态解算主函数
+
+{\bfseries{函数原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ IMUsys(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md139}{}\doxysection{\texorpdfstring{姿态获取函数}{姿态获取函数}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md139}
+\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md140}{}\doxysubsection{\texorpdfstring{Get\+\_\+\+Roll}{Get\+\_\+\+Roll}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md140}
+获取横滚角
+
+{\bfseries{函数原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ getRoll(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md141}{}\doxysubsection{\texorpdfstring{Get\+\_\+\+Pitch}{Get\+\_\+\+Pitch}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md141}
+获取俯仰角
+
+{\bfseries{函数原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ getPitch(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md142}{}\doxysubsection{\texorpdfstring{Get\+\_\+\+Yaw}{Get\+\_\+\+Yaw}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md142}
+获取偏航角
+
+{\bfseries{函数原型}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ getYaw(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md143}{}\doxysection{\texorpdfstring{配置参数}{配置参数}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md143}
+\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md144}{}\doxysubsection{\texorpdfstring{偏航角校正}{偏航角校正}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md144}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ IMU\_YAW\_OFFSET\_CORRECTION\ (360.0f\ /\ 292.0f)}}
+
+\end{DoxyCode}
+
+\begin{DoxyItemize}
+\item 应用于\+Mahony滤波器中的偏航角数据
+\item 默认值补偿传感器特定偏差
+\item 可根据校准结果调整
+\end{DoxyItemize}\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md145}{}\doxysection{\texorpdfstring{使用示例}{使用示例}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md145}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}IMUtool.h"{}}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ IMU\_Task(\textcolor{keywordtype}{void})\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 初始化}}
+\DoxyCodeLine{\ \ \ \ Mahony\_Init(1000);\ \textcolor{comment}{//\ 1kHz采样率}}
+\DoxyCodeLine{\ \ \ \ BMI088\_init();}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{while}(1)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ IMUsys();\ \textcolor{comment}{//\ 姿态解算}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 获取姿态数据}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ roll\ =\ getRoll();}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ pitch\ =\ getPitch();}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ yaw\ =\ getYaw();}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ osDelay(1);\ \textcolor{comment}{//\ 1ms周期}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md146}{}\doxysection{\texorpdfstring{注意事项}{注意事项}}\label{md_source_2module_2_i_m_u_2_i_m_u__module_autotoc_md146}
+
+\begin{DoxyEnumerate}
+\item 需要定期调用\+IMUsys()进行连续估计
+\item 传感器校准对结果准确性至关重要
+\item 磁力计数据可提高偏航角精度(可选)
+\item 默认配置适用于\+BMI088传感器 
+\end{DoxyEnumerate}

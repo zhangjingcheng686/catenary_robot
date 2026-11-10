@@ -1,0 +1,237 @@
+\chapter{uart\+\_\+api }
+\hypertarget{md_source_2bsp_2uart_2uart__api}{}\label{md_source_2bsp_2uart_2uart__api}\index{uart\_api@{uart\_api}}
+以下是格式化后的文档内容，使用了清晰的标题、列表和代码块标记，方便阅读和理解：\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md65}{}\doxysection{\texorpdfstring{UART 通讯代码文档}{UART 通讯代码文档}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md65}
+\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md66}{}\doxysubsection{\texorpdfstring{概述}{概述}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md66}
+本文档介绍了基于 STM32 的 UART 通讯代码，包括初始化、数据接收和发送等功能。代码主要分为两个文件：{\ttfamily uart\+\_\+bsp.\+c} 和 {\ttfamily uart\+\_\+api.\+c}。\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md67}{}\doxysubsection{\texorpdfstring{文件结构}{文件结构}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md67}
+\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md68}{}\doxysubsubsection{\texorpdfstring{{\ttfamily uart\+\_\+bsp.\+c}}{{\ttfamily uart\+\_\+bsp.\+c}}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md68}
+包含 UART 的底层驱动回调函数：
+\begin{DoxyItemize}
+\item {\ttfamily HAL\+\_\+\+UARTEx\+\_\+\+Rx\+Event\+Callback}
+\item {\ttfamily HAL\+\_\+\+UART\+\_\+\+Error\+Callback}
+\end{DoxyItemize}\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md69}{}\doxysubsubsection{\texorpdfstring{{\ttfamily uart\+\_\+api.\+c}}{{\ttfamily uart\+\_\+api.\+c}}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md69}
+提供 UART 的高级 API 接口，包括：
+\begin{DoxyItemize}
+\item 初始化
+\item 数据接收
+\item 数据发送
+\end{DoxyItemize}\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md70}{}\doxysubsection{\texorpdfstring{接口函数说明}{接口函数说明}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md70}
+\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md71}{}\doxysubsubsection{\texorpdfstring{1. {\ttfamily uart\+\_\+rx\+\_\+cheak}}{1. {\ttfamily uart\+\_\+rx\+\_\+cheak}}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md71}
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}功能\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}：检查 {\ttfamily \doxylink{structuart__rx__t}{uart\+\_\+rx\+\_\+t}} 结构体的有效性。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}参数\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\begin{DoxyItemize}
+\item {\ttfamily \doxylink{structuart__rx__t}{uart\+\_\+rx\+\_\+t} \texorpdfstring{$\ast$}{*}uart\+\_\+rx\+\_\+msg}：指向 {\ttfamily \doxylink{structuart__rx__t}{uart\+\_\+rx\+\_\+t}} 结构体的指针。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}返回值\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\item {\ttfamily UART\+\_\+\+OK}：检查通过。 ~\newline
+
+\item {\ttfamily UART\+\_\+\+ERROR}：检查失败。 ~\newline
+
+\end{DoxyItemize}
+
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}示例\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{if}\ (uart\_rx\_cheak(uart\_rx\_msg)\ ==\ UART\_ERROR)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 处理错误}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md72}{}\doxysubsubsection{\texorpdfstring{2. {\ttfamily uart\+\_\+msg\+\_\+cheak}}{2. {\ttfamily uart\+\_\+msg\+\_\+cheak}}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md72}
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}功能\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}：检查 {\ttfamily \doxylink{structuart__msg__t}{uart\+\_\+msg\+\_\+t}} 结构体的有效性。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}参数\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\begin{DoxyItemize}
+\item {\ttfamily \doxylink{structuart__msg__t}{uart\+\_\+msg\+\_\+t} \texorpdfstring{$\ast$}{*}rx\+\_\+msg}：指向 {\ttfamily \doxylink{structuart__msg__t}{uart\+\_\+msg\+\_\+t}} 结构体的指针。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}返回值\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\item {\ttfamily UART\+\_\+\+OK}：检查通过。 ~\newline
+
+\item {\ttfamily UART\+\_\+\+ERROR}：检查失败。 ~\newline
+
+\end{DoxyItemize}
+
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}示例\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{if}\ (uart\_msg\_cheak(rx\_msg)\ ==\ UART\_ERROR)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 处理错误}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md73}{}\doxysubsubsection{\texorpdfstring{3. {\ttfamily uart\+\_\+reg\+\_\+cheak}}{3. {\ttfamily uart\+\_\+reg\+\_\+cheak}}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md73}
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}功能\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}：检查 UART 实例是否已被注册。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}参数\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\begin{DoxyItemize}
+\item {\ttfamily \doxylink{structuart__rx__t}{uart\+\_\+rx\+\_\+t} \texorpdfstring{$\ast$}{*}uart\+\_\+rx\+\_\+msg}：指向 {\ttfamily \doxylink{structuart__rx__t}{uart\+\_\+rx\+\_\+t}} 结构体的指针。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}返回值\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\item {\ttfamily UART\+\_\+\+OK}：未注册。 ~\newline
+
+\item {\ttfamily UART\+\_\+\+ERROR}：已注册。 ~\newline
+
+\end{DoxyItemize}
+
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}示例\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{if}\ (uart\_reg\_cheak(uart\_rx\_msg)\ ==\ UART\_ERROR)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 处理错误}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md74}{}\doxysubsubsection{\texorpdfstring{4. {\ttfamily uart\+\_\+rx\+\_\+init}}{4. {\ttfamily uart\+\_\+rx\+\_\+init}}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md74}
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}功能\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}：初始化 UART 接收。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}参数\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\begin{DoxyItemize}
+\item {\ttfamily \doxylink{structuart__rx__t}{uart\+\_\+rx\+\_\+t} \texorpdfstring{$\ast$}{*}uart\+\_\+rx\+\_\+msg}：指向 {\ttfamily \doxylink{structuart__rx__t}{uart\+\_\+rx\+\_\+t}} 结构体的指针。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}返回值\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\item {\ttfamily UART\+\_\+\+OK}：初始化成功。 ~\newline
+
+\item {\ttfamily UART\+\_\+\+ERROR}：初始化失败。 ~\newline
+
+\end{DoxyItemize}
+
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}示例\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structuart__rx__t}{uart\_rx\_t}}\ uart5\_rx\_msg;}
+\DoxyCodeLine{\textcolor{comment}{//\ 初始化\ uart5\_rx\_msg\ 结构体}}
+\DoxyCodeLine{\textcolor{keywordflow}{if}\ (uart\_rx\_init(\&uart5\_rx\_msg)\ ==\ UART\_ERROR)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 处理错误}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md75}{}\doxysubsubsection{\texorpdfstring{5. {\ttfamily uart\+\_\+tx\+\_\+send\+\_\+\+IT}}{5. {\ttfamily uart\+\_\+tx\+\_\+send\+\_\+\+IT}}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md75}
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}功能\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}：通过中断发送数据。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}参数\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\begin{DoxyItemize}
+\item {\ttfamily \doxylink{structuart__msg__t}{uart\+\_\+msg\+\_\+t} \texorpdfstring{$\ast$}{*}uart\+\_\+msg}：指向 {\ttfamily \doxylink{structuart__msg__t}{uart\+\_\+msg\+\_\+t}} 结构体的指针。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}返回值\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\item {\ttfamily UART\+\_\+\+OK}：发送成功。 ~\newline
+
+\item {\ttfamily UART\+\_\+\+ERROR}：发送失败。 ~\newline
+
+\end{DoxyItemize}
+
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}示例\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structuart__msg__t}{uart\_msg\_t}}\ uart\_msg;}
+\DoxyCodeLine{\textcolor{comment}{//\ 初始化\ uart\_msg\ 结构体}}
+\DoxyCodeLine{\textcolor{keywordflow}{if}\ (uart\_tx\_send\_IT(\&uart\_msg)\ ==\ UART\_ERROR)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 处理错误}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md76}{}\doxysubsubsection{\texorpdfstring{6. {\ttfamily uart\+\_\+rx\+\_\+hook\+\_\+reg}}{6. {\ttfamily uart\+\_\+rx\+\_\+hook\+\_\+reg}}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md76}
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}功能\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}：注册 UART 接收钩子函数。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}参数\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\begin{DoxyItemize}
+\item {\ttfamily \doxylink{structuart__rx__t}{uart\+\_\+rx\+\_\+t} \texorpdfstring{$\ast$}{*}uart\+\_\+rx\+\_\+msg}：指向 {\ttfamily \doxylink{structuart__rx__t}{uart\+\_\+rx\+\_\+t}} 结构体的指针。 ~\newline
+
+\item {\ttfamily void (\texorpdfstring{$\ast$}{*}hook)(uint8\+\_\+t \texorpdfstring{$\ast$}{*}p\+Data, uint32\+\_\+t size)}：钩子函数指针。 ~\newline
+ \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}返回值\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\item {\ttfamily UART\+\_\+\+OK}：注册成功。 ~\newline
+
+\item {\ttfamily UART\+\_\+\+ERROR}：注册失败。 ~\newline
+
+\end{DoxyItemize}
+
+\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}示例\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ my\_uart5\_rx\_hook(uint8\_t\ *pData,\ uint32\_t\ size)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 处理接收到的数据}}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordflow}{if}\ (uart\_rx\_hook\_reg(\&uart5\_rx\_msg,\ my\_uart5\_rx\_hook)\ ==\ UART\_ERROR)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 处理错误}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md77}{}\doxysubsection{\texorpdfstring{使用示例}{使用示例}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md77}
+以下是一个完整的使用示例，展示了如何初始化 UART、注册钩子函数以及发送数据：
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}uart\_api.h"{}}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}usart.h"{}}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 定义\ UART\ 接收消息结构体}}
+\DoxyCodeLine{\mbox{\hyperlink{structuart__rx__t}{uart\_rx\_t}}\ uart5\_rx\_msg;}
+\DoxyCodeLine{\mbox{\hyperlink{structuart__msg__t}{uart\_msg\_t}}\ uart5\_msg;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 定义\ UART\ 接收消息数组}}
+\DoxyCodeLine{uint8\_t\ uart5\_rx\_buffer[100];}
+\DoxyCodeLine{\textcolor{comment}{//\ 定义\ UART\ 发送消息结构体}}
+\DoxyCodeLine{\mbox{\hyperlink{structuart__msg__t}{uart\_msg\_t}}\ uart5\_tx\_msg;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 定义钩子函数}}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ my\_uart5\_rx\_hook(uint8\_t\ *pData,\ uint32\_t\ size)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 处理接收到的数据}}
+\DoxyCodeLine{\ \ \ \ printf(\textcolor{stringliteral}{"{}Received\ data:\ \%s\(\backslash\)n"{}},\ pData);}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{int}\ main(\textcolor{keywordtype}{void})\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 初始化\ HAL\ 库}}
+\DoxyCodeLine{\ \ \ \ HAL\_Init();}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 初始化\ UART5}}
+\DoxyCodeLine{\ \ \ \ uart5\_msg.huart\ =\ \&huart5;}
+\DoxyCodeLine{\ \ \ \ uart5\_msg.pBuffer\ =\ uart5\_rx\_buffer;\ \textcolor{comment}{//\ 分配缓冲区}}
+\DoxyCodeLine{\ \ \ \ uart5\_msg.Len\ =\ 100;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ uart5\_rx\_msg.rx\_msg\ =\ \&uart5\_msg;}
+\DoxyCodeLine{\ \ \ \ uart5\_rx\_msg.count\ =\ 0;}
+\DoxyCodeLine{\ \ \ \ uart5\_rx\_msg.time\ =\ 0;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 初始化\ UART\ 接收}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (uart\_rx\_init(\&uart5\_rx\_msg)\ ==\ UART\_ERROR)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 处理错误}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 注册钩子函数}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (uart\_rx\_hook\_reg(\&uart5\_rx\_msg,\ my\_uart5\_rx\_hook)\ ==\ UART\_ERROR)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 处理错误}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 初始化\ UART5\ 发送消息}}
+\DoxyCodeLine{\ \ \ \ uart5\_tx\_msg.huart\ =\ \&huart5;}
+\DoxyCodeLine{\ \ \ \ uart5\_tx\_msg.pBuffer\ =\ (uint8\_t\ *)\textcolor{stringliteral}{"{}Hello\ UART5"{}};}
+\DoxyCodeLine{\ \ \ \ uart5\_tx\_msg.Len\ =\ strlen((\textcolor{keywordtype}{char}\ *)uart5\_tx\_msg.pBuffer);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 发送数据}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (uart\_tx\_send\_IT(\&uart5\_tx\_msg)\ ==\ UART\_ERROR)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 处理错误}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 主循环}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{while}\ (1)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 主程序逻辑}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2uart_2uart__api_autotoc_md78}{}\doxysubsection{\texorpdfstring{注意事项}{注意事项}}\label{md_source_2bsp_2uart_2uart__api_autotoc_md78}
+
+\begin{DoxyEnumerate}
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}缓冲区管理\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\begin{DoxyItemize}
+\item 确保分配的缓冲区足够大。 ~\newline
+
+\item 在使用完毕后释放缓冲区。
+\end{DoxyItemize}
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}错误处理\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\begin{DoxyItemize}
+\item 在每个函数调用后检查返回值，确保操作成功。
+\end{DoxyItemize}
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}钩子函数\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： ~\newline
+
+\begin{DoxyItemize}
+\item 钩子函数应在初始化 UART 接收后注册，以确保接收到数据时能够正确处理。 
+\end{DoxyItemize}
+\end{DoxyEnumerate}

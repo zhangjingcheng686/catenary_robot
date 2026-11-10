@@ -1,0 +1,19 @@
+\doxysection{LPF.\+h}
+\hypertarget{_l_p_f_8h_source}{}\label{_l_p_f_8h_source}\index{source/module/filter/lpf/LPF.h@{source/module/filter/lpf/LPF.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_\_LPF\_H\_\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_\_LPF\_H\_\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00005\ \{}
+\DoxyCodeLine{00006\ \ \ \ \ \textcolor{keywordtype}{float}\ alpha;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 时间常数}}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keywordtype}{float}\ previous\_output;\ \textcolor{comment}{//\ 上一时刻的输出}}
+\DoxyCodeLine{00008\ \}\ \mbox{\hyperlink{struct_low_pass_filter}{LowPassFilter}};}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keywordtype}{float}\ filterValue(\mbox{\hyperlink{struct_low_pass_filter}{LowPassFilter}}\ *filter,\ \textcolor{keywordtype}{float}\ input);\ \ \ \ \ \textcolor{comment}{//\ 输入新的数据，返回滤波后的数据}}
+\DoxyCodeLine{00011\ \textcolor{keywordtype}{void}\ initializeFilter(\mbox{\hyperlink{struct_low_pass_filter}{LowPassFilter}}\ *filter,\ \textcolor{keywordtype}{float}\ alpha);\ \textcolor{comment}{//\ 初始化滤波器}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

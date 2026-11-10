@@ -1,0 +1,75 @@
+\chapter{滤波模块说明文档 }
+\hypertarget{md_source_2module_2filter_2filter__module}{}\label{md_source_2module_2filter_2filter__module}\index{滤波模块说明文档@{滤波模块说明文档}}
+\label{md_source_2module_2filter_2filter__module_autotoc_md125}%
+\Hypertarget{md_source_2module_2filter_2filter__module_autotoc_md125}%
+\hypertarget{md_source_2module_2filter_2filter__module_autotoc_md126}{}\doxysection{\texorpdfstring{模块概述}{模块概述}}\label{md_source_2module_2filter_2filter__module_autotoc_md126}
+本模块提供多种数字滤波算法实现，主要用于：
+\begin{DoxyItemize}
+\item 传感器数据平滑处理
+\item 信号噪声抑制
+\item 数据预处理
+\end{DoxyItemize}\hypertarget{md_source_2module_2filter_2filter__module_autotoc_md127}{}\doxysection{\texorpdfstring{子模块说明}{子模块说明}}\label{md_source_2module_2filter_2filter__module_autotoc_md127}
+\hypertarget{md_source_2module_2filter_2filter__module_autotoc_md128}{}\doxysubsection{\texorpdfstring{1. 低通滤波器(\+LPF)}{1. 低通滤波器(\+LPF)}}\label{md_source_2module_2filter_2filter__module_autotoc_md128}
+
+\begin{DoxyItemize}
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}功能\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}：一阶低通滤波，用于信号平滑处理
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}核心文件\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}：
+\begin{DoxyItemize}
+\item \doxylink{_l_p_f_8h_source}{LPF.\+h}/c -\/ 低通滤波实现
+\end{DoxyItemize}
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}算法原理\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{output\ =\ (1.0\ -\/\ alpha)\ *\ previous\_output\ +\ alpha\ *\ input}
+
+\end{DoxyCode}
+ 其中alpha为平滑因子(0-\/1)，值越小滤波效果越强
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}主要接口\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ 初始化滤波器}}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ lizeFilter\_init(\mbox{\hyperlink{struct_low_pass_filter}{LowPassFilter}}\ *filter,\ \textcolor{keywordtype}{float}\ alpha);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 滤波计算}}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ filterValue\_Calc(\mbox{\hyperlink{struct_low_pass_filter}{LowPassFilter}}\ *filter,\ \textcolor{keywordtype}{float}\ input);}
+
+\end{DoxyCode}
+
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}数据结构\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\ \ \textcolor{keywordtype}{float}\ alpha;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 时间常数(0-\/1)}}
+\DoxyCodeLine{\ \ \textcolor{keywordtype}{float}\ previous\_output;\ \textcolor{comment}{//\ 上一时刻输出}}
+\DoxyCodeLine{\}\ \mbox{\hyperlink{struct_low_pass_filter}{LowPassFilter}};}
+
+\end{DoxyCode}
+
+\item \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}参数说明\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}： 
+\begin{DoxyTable}{3}{}{}{1}
+\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}参数  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}范围  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}说明  \\
+alpha  &0.\+0-\/1.\+0  &值越小滤波效果越强，响应越慢  \\
+\end{DoxyTable}
+
+\end{DoxyItemize}\hypertarget{md_source_2module_2filter_2filter__module_autotoc_md129}{}\doxysection{\texorpdfstring{使用示例}{使用示例}}\label{md_source_2module_2filter_2filter__module_autotoc_md129}
+\hypertarget{md_source_2module_2filter_2filter__module_autotoc_md130}{}\doxysubsection{\texorpdfstring{低通滤波使用}{低通滤波使用}}\label{md_source_2module_2filter_2filter__module_autotoc_md130}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{struct_low_pass_filter}{LowPassFilter}}\ lpf;}
+\DoxyCodeLine{lizeFilter\_init(\&lpf,\ 0.1f);\ \textcolor{comment}{//\ 初始化，alpha=0.1}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ raw\_value\ =\ getSensorValue();}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ filtered\ =\ filterValue(\&lpf,\ raw\_value);\ \textcolor{comment}{//\ 滤波处理}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2module_2filter_2filter__module_autotoc_md131}{}\doxysubsection{\texorpdfstring{参数选择建议}{参数选择建议}}\label{md_source_2module_2filter_2filter__module_autotoc_md131}
+
+\begin{DoxyEnumerate}
+\item 对于快速变化信号：alpha=0.\+3-\/0.\+5
+\item 对于缓慢变化信号：alpha=0.\+1-\/0.\+2
+\item 对于强噪声信号：alpha=0.\+05-\/0.\+1
+\end{DoxyEnumerate}\hypertarget{md_source_2module_2filter_2filter__module_autotoc_md132}{}\doxysection{\texorpdfstring{注意事项}{注意事项}}\label{md_source_2module_2filter_2filter__module_autotoc_md132}
+
+\begin{DoxyEnumerate}
+\item 首次使用需调用lize\+Filter\+\_\+init初始化
+\item alpha参数需根据信号特性调整
+\item 对于阶跃信号会有延迟，不适合快速响应场景
+\item 多通道信号需为每个通道创建独立滤波器实例 
+\end{DoxyEnumerate}

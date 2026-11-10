@@ -1,0 +1,65 @@
+\doxysection{referee\+\_\+api.\+h}
+\hypertarget{referee__api_8h_source}{}\label{referee__api_8h_source}\index{source/module/refereeSys/referee\_api.h@{source/module/refereeSys/referee\_api.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_REFEREE\_API\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_REFEREE\_API\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{referee__protocol_8h}{referee\_protocol.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}crc\_api.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}string.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}uart\_api.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}usart.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ RE\_RX\_BUFFER\_SIZE\ 255u\ }\textcolor{comment}{//\ 裁判系统接收缓冲区大小}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ SCREEN\_WIDTH\ 1080}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ SCREEN\_LENGTH\ 1920}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ MAX\_SIZE\ 128}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ frameheader\_len\ 5\ }\textcolor{comment}{//\ 帧头长度}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ cmd\_len\ 2\ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 命令码长度}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ crc\_len\ 2\ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ CRC16校验码长度}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00022\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{//\ referee\_id\_t\ referee\_id;}}
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{structx_frame_header}{xFrameHeader}}\ FrameHeader;\ \textcolor{comment}{//\ 接收到的帧头信息}}
+\DoxyCodeLine{00025\ \ \ \ \ uint16\_t\ CmdID;}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{structext__game__state__t}{ext\_game\_state\_t}}\ GameState;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0001}}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{structext__game__result__t}{ext\_game\_result\_t}}\ GameResult;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0002}}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{structext__game__robot___h_p__t}{ext\_game\_robot\_HP\_t}}\ GameRobotHP;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0003}}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{structext__event__data__t}{ext\_event\_data\_t}}\ EventData;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0101}}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{structext__supply__projectile__action__t}{ext\_supply\_projectile\_action\_t}}\ SupplyProjectileAction;\ \textcolor{comment}{//\ 0x0102}}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{structext__game__robot__state__t}{ext\_game\_robot\_state\_t}}\ GameRobotState;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0201}}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{structext__power__heat__data__t}{ext\_power\_heat\_data\_t}}\ PowerHeatData;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0202}}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{structext__game__robot__pos__t}{ext\_game\_robot\_pos\_t}}\ GameRobotPos;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0203}}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{structext__buff__musk__t}{ext\_buff\_musk\_t}}\ BuffMusk;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0204}}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{structaerial__robot__energy__t}{aerial\_robot\_energy\_t}}\ AerialRobotEnergy;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0205}}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{structext__robot__hurt__t}{ext\_robot\_hurt\_t}}\ RobotHurt;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0206}}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{structext__shoot__data__t}{ext\_shoot\_data\_t}}\ ShootData;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0207}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ 自定义交互数据的接收}}
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{struct_communicate___receive_data__t}{Communicate\_ReceiveData\_t}}\ ReceiveData;}
+\DoxyCodeLine{00040\ \ \ \ \ uint8\_t\ init\_flag;}
+\DoxyCodeLine{00041\ \}\ \mbox{\hyperlink{structreferee__info__t}{referee\_info\_t}};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00044\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{structx_frame_header}{xFrameHeader}}\ FrameHeader;\ \textcolor{comment}{//\ 接收到的帧头信息}}
+\DoxyCodeLine{00046\ \ \ \ \ uint16\_t\ CmdID;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{//\ 自定义控制器数据\ \ 0x0302}}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{structcustom__controller__data__t}{custom\_controller\_data\_t}}\ CustomController;\ \textcolor{comment}{//\ 0x0302}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//\ 键鼠数据\ \ 0x0304}}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{structkeyboard__t}{keyboard\_t}}\ keyboard;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0304}}
+\DoxyCodeLine{00051\ \}\ \mbox{\hyperlink{structcustom__controller__info__t}{custom\_controller\_info\_t}};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{keywordtype}{void}\ JudgeReadData(uint8\_t\ *buff);}
+\DoxyCodeLine{00054\ \textcolor{keywordtype}{void}\ CtrllerReadData(uint8\_t\ *buff);}
+\DoxyCodeLine{00055\ \mbox{\hyperlink{structreferee__info__t}{referee\_info\_t}}\ *get\_referee\_msg(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00056\ \mbox{\hyperlink{structcustom__controller__info__t}{custom\_controller\_info\_t}}\ *get\_custom\_controller\_msg(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00057\ \textcolor{keywordtype}{void}\ referee\_data\_pack\_handle(uint8\_t\ sof,\ uint16\_t\ cmd\_id,\ uint8\_t\ *p\_data,\ uint16\_t\ len);}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

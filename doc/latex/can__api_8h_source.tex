@@ -1,0 +1,44 @@
+\doxysection{can\+\_\+api.\+h}
+\hypertarget{can__api_8h_source}{}\label{can__api_8h_source}\index{source/bsp/can/can\_api.h@{source/bsp/can/can\_api.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_\_CAN\_API\_H\_\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_\_CAN\_API\_H\_\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}FreeRTOS.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}list.h"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}can\_struct.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ CAN\_MSG\_Get\_PORT(msg)\ ((msg)-\/>port)}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ CAN\_MSG\_Get\_ID(msg)\ ((msg)-\/>id)}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ CAN\_MSG\_Get\_DATA(msg)\ ((msg)-\/>*data)}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ CAN\_MSG\_Get\_LEN(msg)\ ((msg)-\/>len)}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ CAN\_MSG\_Get\_RTR(msg)\ ((msg)-\/>rtr)}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ 初始化CAN系统的函数}}
+\DoxyCodeLine{00018\ \textcolor{keywordtype}{void}\ can\_sys\_init(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ 根据CAN端口查找相应的消息列表(可以不用)}}
+\DoxyCodeLine{00021\ List\_t\ *can\_msg\_find\_list(can\_port\_t\ port);}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ 在给定的消息列表中查找特定ID的消息项}}
+\DoxyCodeLine{00023\ \mbox{\hyperlink{structcan__msg__t}{can\_msg\_t}}\ *can\_msg\_find\_item(List\_t\ *can\_msg\_list,\ uint32\_t\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\ 向消息列表中添加消息项}}
+\DoxyCodeLine{00025\ can\_status\_t\ can\_msg\_add\_item(\mbox{\hyperlink{structcan__msg__t}{can\_msg\_t}}\ *msg);}
+\DoxyCodeLine{00026\ \textcolor{comment}{//\ 从消息列表中删除指定ID的消息项}}
+\DoxyCodeLine{00027\ can\_status\_t\ can\_msg\_del\_item(can\_port\_t\ port,\ uint32\_t\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{comment}{//\ 发送经典CAN消息}}
+\DoxyCodeLine{00030\ can\_status\_t\ can\_msg\_send\_classical(\mbox{\hyperlink{structcan__msg__t}{can\_msg\_t}}\ *msg);}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ 发送扩展CAN消息}}
+\DoxyCodeLine{00033\ can\_status\_t\ can\_msg\_send\_extended(\mbox{\hyperlink{structcan__msg__t}{can\_msg\_t}}\ *msg);}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{comment}{//\ 发送fdCAN消息}}
+\DoxyCodeLine{00036\ can\_status\_t\ can\_msg\_send\_fd(\mbox{\hyperlink{structcan__msg__t}{can\_msg\_t}}\ *msg);}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_CAN\_API\_H\_\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

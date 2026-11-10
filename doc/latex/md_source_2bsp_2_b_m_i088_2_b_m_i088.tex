@@ -1,0 +1,132 @@
+\chapter{BMI088 传感器驱动说明 }
+\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088}{}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088}\index{BMI088 传感器驱动说明@{BMI088 传感器驱动说明}}
+\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md0}%
+\Hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md0}%
+\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md1}{}\doxysection{\texorpdfstring{概述}{概述}}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md1}
+BMI088 是一款6轴惯性测量单元(\+IMU)，包含3轴加速度计和3轴陀螺仪。本驱动支持通过\+SPI接口与\+BMI088通信。\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md2}{}\doxysection{\texorpdfstring{硬件连接}{硬件连接}}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md2}
+
+\begin{DoxyItemize}
+\item 使用\+SPI2接口 (hspi2)
+\item 加速度计片选引脚\+: ACC\+\_\+\+CS\+\_\+\+Pin
+\item 陀螺仪片选引脚\+: GYRO\+\_\+\+CS\+\_\+\+Pin
+\item 需要\+TIM3用于延时(PWM模式)
+\end{DoxyItemize}\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md3}{}\doxysection{\texorpdfstring{初始化流程}{初始化流程}}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md3}
+\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md4}{}\doxysubsection{\texorpdfstring{1. 整体初始化}{1. 整体初始化}}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md4}
+调用 {\ttfamily BMI088\+\_\+init()} 函数完成以下操作：
+\begin{DoxyEnumerate}
+\item 初始化\+GPIO和\+SPI接口
+\item 初始化加速度计
+\item 初始化陀螺仪
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{uint8\_t\ error\ =\ BMI088\_init();}
+\DoxyCodeLine{\textcolor{keywordflow}{if}(error\ !=\ BMI088\_NO\_ERROR)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 错误处理}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md5}{}\doxysubsection{\texorpdfstring{2. 加速度计初始化}{2. 加速度计初始化}}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md5}
+{\ttfamily bmi088\+\_\+accel\+\_\+init()} 函数执行以下步骤：
+\begin{DoxyEnumerate}
+\item 检查通信(读取芯片\+ID)
+\item 软件复位
+\item 配置以下寄存器：
+\begin{DoxyItemize}
+\item 电源控制(\+ACC\+\_\+\+PWR\+\_\+\+CTRL)
+\item 电源模式(\+ACC\+\_\+\+PWR\+\_\+\+CONF)
+\item 带宽和输出数据速率(\+ACC\+\_\+\+CONF)
+\item 量程(\+ACC\+\_\+\+RANGE)
+\item 中断配置(\+INT1\+\_\+\+IO\+\_\+\+CTRL, INT\+\_\+\+MAP\+\_\+\+DATA)
+\end{DoxyItemize}
+\end{DoxyEnumerate}\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md6}{}\doxysubsection{\texorpdfstring{3. 陀螺仪初始化}{3. 陀螺仪初始化}}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md6}
+{\ttfamily bmi088\+\_\+gyro\+\_\+init()} 函数执行以下步骤：
+\begin{DoxyEnumerate}
+\item 检查通信(读取芯片\+ID)
+\item 软件复位
+\item 配置以下寄存器：
+\begin{DoxyItemize}
+\item 量程(\+GYRO\+\_\+\+RANGE)
+\item 带宽(\+GYRO\+\_\+\+BANDWIDTH)
+\item 电源模式(\+GYRO\+\_\+\+LPM1)
+\item 数据就绪信号(\+GYRO\+\_\+\+CTRL)
+\item 中断配置(\+GYRO\+\_\+\+INT3\+\_\+\+INT4\+\_\+\+IO\+\_\+\+CONF, GYRO\+\_\+\+INT3\+\_\+\+INT4\+\_\+\+IO\+\_\+\+MAP)
+\end{DoxyItemize}
+\end{DoxyEnumerate}\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md7}{}\doxysection{\texorpdfstring{API说明}{API说明}}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md7}
+\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md8}{}\doxysubsection{\texorpdfstring{数据读取}{数据读取}}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md8}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ BMI088\_read(\textcolor{keywordtype}{float}\ gyro[3],\ \textcolor{keywordtype}{float}\ accel[3],\ \textcolor{keywordtype}{float}\ *temperate);}
+
+\end{DoxyCode}
+
+\begin{DoxyItemize}
+\item 参数：
+\begin{DoxyItemize}
+\item gyro\+: 陀螺仪数据(rad/s)，数组顺序\mbox{[}x,y,z\mbox{]}
+\item accel\+: 加速度数据(m/s²)，数组顺序\mbox{[}x,y,z\mbox{]}
+\item temperate\+: 温度数据(℃)指针
+\end{DoxyItemize}
+\item 注意：数据已根据配置的量程进行转换
+\end{DoxyItemize}\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md9}{}\doxysubsection{\texorpdfstring{寄存器读写宏}{寄存器读写宏}}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md9}
+驱动提供以下\+SPI读写宏： 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ 加速度计}}
+\DoxyCodeLine{BMI088\_accel\_write\_single\_reg(reg,\ data)}
+\DoxyCodeLine{BMI088\_accel\_read\_single\_reg(reg,\ data)}
+\DoxyCodeLine{BMI088\_accel\_read\_muli\_reg(reg,\ data,\ len)}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 陀螺仪\ \ }}
+\DoxyCodeLine{BMI088\_gyro\_write\_single\_reg(reg,\ data)}
+\DoxyCodeLine{BMI088\_gyro\_read\_single\_reg(reg,\ data)}
+\DoxyCodeLine{BMI088\_gyro\_read\_muli\_reg(reg,\ data,\ len)}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md10}{}\doxysection{\texorpdfstring{使用示例}{使用示例}}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md10}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ gyro[3],\ accel[3],\ temp;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 初始化}}
+\DoxyCodeLine{\textcolor{keywordflow}{if}(BMI088\_init()\ !=\ BMI088\_NO\_ERROR)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 错误处理}}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 循环读取数据}}
+\DoxyCodeLine{\textcolor{keywordflow}{while}(1)\ \{}
+\DoxyCodeLine{\ \ \ \ BMI088\_read(gyro,\ accel,\ \&temp);}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 使用数据...}}
+\DoxyCodeLine{\ \ \ \ HAL\_Delay(10);}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md11}{}\doxysection{\texorpdfstring{注意事项}{注意事项}}\label{md_source_2bsp_2_b_m_i088_2_b_m_i088_autotoc_md11}
+
+\begin{DoxyEnumerate}
+\item 严格的时序要求：
+\begin{DoxyItemize}
+\item 寄存器写入后需要延迟 {\ttfamily BMI088\+\_\+\+COM\+\_\+\+WAIT\+\_\+\+SENSOR\+\_\+\+TIME} (us级)
+\item 复位后需要延迟 {\ttfamily BMI088\+\_\+\+LONG\+\_\+\+DELAY\+\_\+\+TIME} (ms级)
+\end{DoxyItemize}
+\item 量程配置：
+\begin{DoxyItemize}
+\item 加速度计量程\+: 默认3G ({\ttfamily BMI088\+\_\+\+ACCEL\+\_\+3\+G\+\_\+\+SEN})
+\item 陀螺仪量程\+: 默认2000dps ({\ttfamily BMI088\+\_\+\+GYRO\+\_\+2000\+\_\+\+SEN})
+\end{DoxyItemize}
+\item 错误处理：
+\begin{DoxyItemize}
+\item 初始化函数返回错误代码，需检查处理
+\item 常见错误：
+\begin{DoxyItemize}
+\item {\ttfamily BMI088\+\_\+\+NO\+\_\+\+SENSOR}\+: 通信失败
+\item {\ttfamily BMI088\+\_\+\+ACC\+\_\+\+PWR\+\_\+\+CTRL\+\_\+\+ERROR}\+: 加速度计电源控制错误
+\item {\ttfamily BMI088\+\_\+\+GYRO\+\_\+\+RANGE\+\_\+\+ERROR}\+: 陀螺仪量程配置错误
+\end{DoxyItemize}
+\end{DoxyItemize}
+\item 硬件依赖：
+\begin{DoxyItemize}
+\item 需要实现 {\ttfamily BMI088\+\_\+delay\+\_\+us()} 和 {\ttfamily BMI088\+\_\+delay\+\_\+ms()}
+\item 需要配置正确的\+SPI接口和片选引脚 
+\end{DoxyItemize}
+\end{DoxyEnumerate}

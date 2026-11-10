@@ -1,0 +1,77 @@
+\doxysection{Quaternion\+EKF.\+h}
+\hypertarget{_quaternion_e_k_f_8h_source}{}\label{_quaternion_e_k_f_8h_source}\index{source/module/IMU/ekf/QuaternionEKF.h@{source/module/IMU/ekf/QuaternionEKF.h}}
+\mbox{\hyperlink{_quaternion_e_k_f_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#ifndef\ \_QUAT\_EKF\_H}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ \_QUAT\_EKF\_H}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}kalman\_filter.h"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/*\ boolean\ type\ definitions\ */}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#ifndef\ TRUE}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ TRUE\ 1\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#ifndef\ FALSE}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ FALSE\ 0\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00030\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ uint8\_t\ Initialized;}
+\DoxyCodeLine{00032\ \ \ \ \ KalmanFilter\_t\ IMU\_QuaternionEKF;}
+\DoxyCodeLine{00033\ \ \ \ \ uint8\_t\ ConvergeFlag;}
+\DoxyCodeLine{00034\ \ \ \ \ uint8\_t\ StableFlag;}
+\DoxyCodeLine{00035\ \ \ \ \ uint64\_t\ ErrorCount;}
+\DoxyCodeLine{00036\ \ \ \ \ uint64\_t\ UpdateCount;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{float}\ q[4];\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 四元数估计值}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{float}\ GyroBias[3];\ \textcolor{comment}{//\ 陀螺仪零偏估计值}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{float}\ Gyro[3];}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{float}\ Accel[3];}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{float}\ OrientationCosine[3];}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{float}\ accLPFcoef;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{float}\ gyro\_norm;}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{float}\ accl\_norm;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{float}\ AdaptiveGainScale;}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{float}\ Roll;}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{float}\ Pitch;}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{float}\ Yaw;}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{float}\ YawTotalAngle;}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{float}\ Q1;\ \textcolor{comment}{//\ 四元数更新过程噪声}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{float}\ Q2;\ \textcolor{comment}{//\ 陀螺仪零偏过程噪声}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{float}\ R;\ \ \textcolor{comment}{//\ 加速度计量测噪声}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{float}\ dt;\ \textcolor{comment}{//\ 姿态更新周期}}
+\DoxyCodeLine{00062\ \ \ \ \ mat\ ChiSquare;}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{float}\ ChiSquare\_Data[1];\ \ \ \ \ \ \textcolor{comment}{//\ 卡方检验检测函数}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{float}\ ChiSquareTestThreshold;\ \textcolor{comment}{//\ 卡方检验阈值}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{float}\ lambda;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 渐消因子}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ int16\_t\ YawRoundCount;}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{float}\ YawAngleLast;}
+\DoxyCodeLine{00070\ \}\ \mbox{\hyperlink{struct_q_e_k_f___i_n_s__t}{QEKF\_INS\_t}};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_q_e_k_f___i_n_s__t}{QEKF\_INS\_t}}\ QEKF\_INS;}
+\DoxyCodeLine{00073\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{float}\ chiSquare;}
+\DoxyCodeLine{00074\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{float}\ ChiSquareTestThreshold;}
+\DoxyCodeLine{00075\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{_quaternion_e_k_f_8h_a5f6786be602a9b18cc716e3c6de14fc6}{IMU\_QuaternionEKF\_Init}}(\textcolor{keywordtype}{float}\ process\_noise1,\ \textcolor{keywordtype}{float}\ process\_noise2,\ \textcolor{keywordtype}{float}\ measure\_noise,\ \textcolor{keywordtype}{float}\ lambda,\ \textcolor{keywordtype}{float}\ dt,\ \textcolor{keywordtype}{float}\ lpf);}
+\DoxyCodeLine{00076\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{_quaternion_e_k_f_8h_ae323af11f1e78bd5438e27fb7cb494f1}{IMU\_QuaternionEKF\_Update}}(\textcolor{keywordtype}{float}\ gx,\ \textcolor{keywordtype}{float}\ gy,\ \textcolor{keywordtype}{float}\ gz,\ \textcolor{keywordtype}{float}\ ax,\ \textcolor{keywordtype}{float}\ ay,\ \textcolor{keywordtype}{float}\ az);}
+\DoxyCodeLine{00077\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{_quaternion_e_k_f_8h_a3e96165d892e72c475ed2a4a99bc8a3a}{IMU\_QuaternionEKF\_Reset}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{keywordtype}{float}\ Get\_Pitch(\textcolor{keywordtype}{void});\textcolor{comment}{//get\ pitch}}
+\DoxyCodeLine{00080\ \textcolor{keywordtype}{float}\ Get\_Roll(\textcolor{keywordtype}{void});\textcolor{comment}{//get\ roll}}
+\DoxyCodeLine{00081\ \textcolor{keywordtype}{float}\ Get\_Yaw(\textcolor{keywordtype}{void});\textcolor{comment}{//get\ yaw}}
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

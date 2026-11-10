@@ -1,0 +1,113 @@
+\doxysection{kalman\+\_\+filter.\+h}
+\hypertarget{kalman__filter_8h_source}{}\label{kalman__filter_8h_source}\index{source/module/IMU/ekf/kalman\_filter.h@{source/module/IMU/ekf/kalman\_filter.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#ifndef\ \_\_KALMAN\_FILTER\_H}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ \_\_KALMAN\_FILTER\_H}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ cortex-\/m4\ DSP\ lib}}
+\DoxyCodeLine{00017\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\#define\ \_\_CC\_ARM\ \ \ \ //\ Keil}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\#define\ ARM\_MATH\_CM4}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\#define\ ARM\_MATH\_MATRIX\_CHECK}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\#define\ ARM\_MATH\_ROUNDING}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\#define\ ARM\_MATH\_DSP\ \ \ \ //\ define\ in\ arm\_math.h}}
+\DoxyCodeLine{00023\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{//\#include\ "{}dsp/matrix\_functions.h"{}}}
+\DoxyCodeLine{00028\ \textcolor{comment}{//\#include\ "{}math.h"{}}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ "{}stdint.h"{}}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ "{}stdlib.h"{}}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#include\ "{}arm\_math.h"{}}}
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ \#include\ "{}dsp/matrix\_functions.h"{}}}
+\DoxyCodeLine{00033\ \textcolor{comment}{//\ \#include\ "{}dsp/fast\_math\_functions.h"{}\ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ mat\ arm\_matrix\_instance\_f32}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ Matrix\_Init\ arm\_mat\_init\_f32}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ Matrix\_Add\ arm\_mat\_add\_f32}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ Matrix\_Subtract\ arm\_mat\_sub\_f32}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ Matrix\_Multiply\ arm\_mat\_mult\_f32}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ Matrix\_Transpose\ arm\_mat\_trans\_f32}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ Matrix\_Inverse\ arm\_mat\_inverse\_f32}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structkf__t}{kf\_t}}}
+\DoxyCodeLine{00045\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{float}\ *FilteredValue;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{float}\ *MeasuredVector;}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{float}\ *ControlVector;}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ uint8\_t\ xhatSize;}
+\DoxyCodeLine{00051\ \ \ \ \ uint8\_t\ uSize;}
+\DoxyCodeLine{00052\ \ \ \ \ uint8\_t\ zSize;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ uint8\_t\ UseAutoAdjustment;}
+\DoxyCodeLine{00055\ \ \ \ \ uint8\_t\ MeasurementValidNum;}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ uint8\_t\ *MeasurementMap;\ \ \ \ \ \ \textcolor{comment}{//\ 量测与状态的关系\ how\ measurement\ relates\ to\ the\ state}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{float}\ *MeasurementDegree;\ \ \ \ \ \textcolor{comment}{//\ 测量值对应H矩阵元素值\ elements\ of\ each\ measurement\ in\ H}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{float}\ *MatR\_DiagonalElements;\ \textcolor{comment}{//\ 量测方差\ variance\ for\ each\ measurement}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{float}\ *StateMinVariance;\ \ \ \ \ \ \textcolor{comment}{//\ 最小方差\ 避免方差过度收敛\ suppress\ filter\ excessive\ convergence}}
+\DoxyCodeLine{00061\ \ \ \ \ uint8\_t\ *temp;}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{//\ 配合用户定义函数使用,作为标志位用于判断是否要跳过标准KF中五个环节中的任意一个}}
+\DoxyCodeLine{00064\ \ \ \ \ uint8\_t\ SkipEq1,\ SkipEq2,\ SkipEq3,\ SkipEq4,\ SkipEq5;}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ definiion\ of\ struct\ mat:\ rows\ \&\ cols\ \&\ pointer\ to\ vars}}
+\DoxyCodeLine{00067\ \ \ \ \ mat\ xhat;\ \ \ \ \ \ \textcolor{comment}{//\ x(k|k)}}
+\DoxyCodeLine{00068\ \ \ \ \ mat\ xhatminus;\ \textcolor{comment}{//\ x(k|k-\/1)}}
+\DoxyCodeLine{00069\ \ \ \ \ mat\ u;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ control\ vector\ u}}
+\DoxyCodeLine{00070\ \ \ \ \ mat\ z;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ measurement\ vector\ z}}
+\DoxyCodeLine{00071\ \ \ \ \ mat\ P;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ covariance\ matrix\ P(k|k)}}
+\DoxyCodeLine{00072\ \ \ \ \ mat\ Pminus;\ \ \ \ \textcolor{comment}{//\ covariance\ matrix\ P(k|k-\/1)}}
+\DoxyCodeLine{00073\ \ \ \ \ mat\ F,\ FT;\ \ \ \ \ \textcolor{comment}{//\ state\ transition\ matrix\ F\ FT}}
+\DoxyCodeLine{00074\ \ \ \ \ mat\ B;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ control\ matrix\ B}}
+\DoxyCodeLine{00075\ \ \ \ \ mat\ H,\ HT;\ \ \ \ \ \textcolor{comment}{//\ measurement\ matrix\ H}}
+\DoxyCodeLine{00076\ \ \ \ \ mat\ Q;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ process\ noise\ covariance\ matrix\ Q}}
+\DoxyCodeLine{00077\ \ \ \ \ mat\ R;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ measurement\ noise\ covariance\ matrix\ R}}
+\DoxyCodeLine{00078\ \ \ \ \ mat\ K;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ kalman\ gain\ \ K}}
+\DoxyCodeLine{00079\ \ \ \ \ mat\ S,\ temp\_matrix,\ temp\_matrix1,\ temp\_vector,\ temp\_vector1;}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ int8\_t\ MatStatus;}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{//\ 用户定义函数,可以替换或扩展基准KF的功能}}
+\DoxyCodeLine{00084\ \ \ \ \ void\ (*User\_Func0\_f)(\textcolor{keyword}{struct\ }\mbox{\hyperlink{structkf__t}{kf\_t}}\ *kf);}
+\DoxyCodeLine{00085\ \ \ \ \ void\ (*User\_Func1\_f)(\textcolor{keyword}{struct\ }\mbox{\hyperlink{structkf__t}{kf\_t}}\ *kf);}
+\DoxyCodeLine{00086\ \ \ \ \ void\ (*User\_Func2\_f)(\textcolor{keyword}{struct\ }\mbox{\hyperlink{structkf__t}{kf\_t}}\ *kf);}
+\DoxyCodeLine{00087\ \ \ \ \ void\ (*User\_Func3\_f)(\textcolor{keyword}{struct\ }\mbox{\hyperlink{structkf__t}{kf\_t}}\ *kf);}
+\DoxyCodeLine{00088\ \ \ \ \ void\ (*User\_Func4\_f)(\textcolor{keyword}{struct\ }\mbox{\hyperlink{structkf__t}{kf\_t}}\ *kf);}
+\DoxyCodeLine{00089\ \ \ \ \ void\ (*User\_Func5\_f)(\textcolor{keyword}{struct\ }\mbox{\hyperlink{structkf__t}{kf\_t}}\ *kf);}
+\DoxyCodeLine{00090\ \ \ \ \ void\ (*User\_Func6\_f)(\textcolor{keyword}{struct\ }\mbox{\hyperlink{structkf__t}{kf\_t}}\ *kf);}
+\DoxyCodeLine{00091\ \ \ \ \ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{//\ 矩阵存储空间指针}}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{float}\ *xhat\_data,\ *xhatminus\_data;}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{float}\ *u\_data;}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{float}\ *z\_data;}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{float}\ *P\_data,\ *Pminus\_data;}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{float}\ *F\_data,\ *FT\_data;}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{float}\ *B\_data;}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{float}\ *H\_data,\ *HT\_data;}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{float}\ *Q\_data;}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{float}\ *R\_data;}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{float}\ *K\_data;}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{float}\ *S\_data,\ *temp\_matrix\_data,\ *temp\_matrix\_data1,\ *temp\_vector\_data,\ *temp\_vector\_data1;}
+\DoxyCodeLine{00104\ \}\ KalmanFilter\_t;}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \textcolor{keyword}{extern}\ uint16\_t\ sizeof\_float,\ sizeof\_double;}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{keywordtype}{void}\ Kalman\_Filter\_Init(KalmanFilter\_t\ *kf,\ uint8\_t\ xhatSize,\ uint8\_t\ uSize,\ uint8\_t\ zSize);}
+\DoxyCodeLine{00109\ \textcolor{keywordtype}{void}\ Kalman\_Filter\_Reset(KalmanFilter\_t\ *kf,\ uint8\_t\ xhatSize,\ uint8\_t\ uSize,\ uint8\_t\ zSize);}
+\DoxyCodeLine{00110\ \textcolor{keywordtype}{void}\ Kalman\_Filter\_Measure(KalmanFilter\_t\ *kf);}
+\DoxyCodeLine{00111\ \textcolor{keywordtype}{void}\ Kalman\_Filter\_xhatMinusUpdate(KalmanFilter\_t\ *kf);}
+\DoxyCodeLine{00112\ \textcolor{keywordtype}{void}\ Kalman\_Filter\_PminusUpdate(KalmanFilter\_t\ *kf);}
+\DoxyCodeLine{00113\ \textcolor{keywordtype}{void}\ Kalman\_Filter\_SetK(KalmanFilter\_t\ *kf);}
+\DoxyCodeLine{00114\ \textcolor{keywordtype}{void}\ Kalman\_Filter\_xhatUpdate(KalmanFilter\_t\ *kf);}
+\DoxyCodeLine{00115\ \textcolor{keywordtype}{void}\ Kalman\_Filter\_P\_Update(KalmanFilter\_t\ *kf);}
+\DoxyCodeLine{00116\ \textcolor{keywordtype}{float}\ *Kalman\_Filter\_Update(KalmanFilter\_t\ *kf);}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\_\_KALMAN\_FILTER\_H}}
+
+\end{DoxyCode}

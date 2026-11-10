@@ -1,0 +1,54 @@
+\doxysection{keyboard\+\_\+t Struct Reference}
+\hypertarget{structkeyboard__t}{}\label{structkeyboard__t}\index{keyboard\_t@{keyboard\_t}}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structkeyboard__t_a7a4598018c30a2f10119956c4a4329f7}\label{structkeyboard__t_a7a4598018c30a2f10119956c4a4329f7} 
+int16\+\_\+t {\bfseries mouse\+\_\+x}
+\item 
+\Hypertarget{structkeyboard__t_a0795272da64e47b0269e9ec70419ba24}\label{structkeyboard__t_a0795272da64e47b0269e9ec70419ba24} 
+int16\+\_\+t {\bfseries mouse\+\_\+y}
+\item 
+\Hypertarget{structkeyboard__t_ab6ffd1ac90fae6e5458d89aff5da4fa3}\label{structkeyboard__t_ab6ffd1ac90fae6e5458d89aff5da4fa3} 
+int16\+\_\+t {\bfseries mouse\+\_\+z}
+\item 
+\Hypertarget{structkeyboard__t_a85f1034e7f02c153e182fb0b13c7543f}\label{structkeyboard__t_a85f1034e7f02c153e182fb0b13c7543f} 
+int8\+\_\+t {\bfseries left\+\_\+button\+\_\+down}
+\item 
+\Hypertarget{structkeyboard__t_a977a9d627aa1ffebaed4fe2ae1ad39b5}\label{structkeyboard__t_a977a9d627aa1ffebaed4fe2ae1ad39b5} 
+int8\+\_\+t {\bfseries right\+\_\+button\+\_\+down}
+\item 
+\Hypertarget{structkeyboard__t_a1a441c5254d9410735ad163936383205}\label{structkeyboard__t_a1a441c5254d9410735ad163936383205} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>uint16\_t {\bfseries key\_code}\\
+\>struct \{\\
+\>\>uint16\_t {\bfseries W}: 1\\
+\>\>uint16\_t {\bfseries S}: 1\\
+\>\>uint16\_t {\bfseries A}: 1\\
+\>\>uint16\_t {\bfseries D}: 1\\
+\>\>uint16\_t {\bfseries SHIFT}: 1\\
+\>\>uint16\_t {\bfseries CTRL}: 1\\
+\>\>uint16\_t {\bfseries Q}: 1\\
+\>\>uint16\_t {\bfseries E}: 1\\
+\>\>uint16\_t {\bfseries R}: 1\\
+\>\>uint16\_t {\bfseries F}: 1\\
+\>\>uint16\_t {\bfseries G}: 1\\
+\>\>uint16\_t {\bfseries Z}: 1\\
+\>\>uint16\_t {\bfseries X}: 1\\
+\>\>uint16\_t {\bfseries C}: 1\\
+\>\>uint16\_t {\bfseries V}: 1\\
+\>\>uint16\_t {\bfseries B}: 1\\
+\>\} {\bfseries bit}\\
+\} {\bfseries key\_code}\\
+
+\end{tabbing}\item 
+\Hypertarget{structkeyboard__t_af71a108b29c70d4ea4f37189d098252d}\label{structkeyboard__t_af71a108b29c70d4ea4f37189d098252d} 
+uint16\+\_\+t {\bfseries reserved}
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/bsp/keyboard/key\+Board.\+h\end{DoxyCompactItemize}

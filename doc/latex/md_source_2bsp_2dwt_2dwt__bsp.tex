@@ -1,0 +1,208 @@
+\chapter{DWT BSP 模块 }
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp}{}\label{md_source_2bsp_2dwt_2dwt__bsp}\index{DWT BSP 模块@{DWT BSP 模块}}
+\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md40}%
+\Hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md40}%
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md41}{}\doxysection{\texorpdfstring{概述}{概述}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md41}
+DWT (Data Watchpoint and Trace) BSP模块利用\+ARM Cortex-\/\+M内核的\+DWT外设，为\+STM32微控制器提供高精度的计时和延时功能。该模块能够实现精确的时间测量和微秒级的系统时间跟踪。\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md42}{}\doxysection{\texorpdfstring{功能特点}{功能特点}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md42}
+
+\begin{DoxyItemize}
+\item 高精度系统时间跟踪
+\item 微秒级分辨率的时间测量
+\item 精确的延时功能
+\item 64位计时器计数器，防止溢出问题
+\item 多种格式的时间获取（秒、毫秒、微秒）
+\end{DoxyItemize}\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md43}{}\doxysection{\texorpdfstring{硬件要求}{硬件要求}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md43}
+
+\begin{DoxyItemize}
+\item 带有\+DWT外设的\+ARM Cortex-\/\+M内核\+STM32微控制器
+\item 正确配置的系统时钟
+\end{DoxyItemize}\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md44}{}\doxysection{\texorpdfstring{API参考}{API参考}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md44}
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md45}{}\doxysubsection{\texorpdfstring{初始化}{初始化}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md45}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ DWT\_Init(uint32\_t\ CPU\_Freq\_mHz);}
+
+\end{DoxyCode}
+
+
+{\bfseries{描述：}} 初始化\+DWT外设用于计时操作。
+
+{\bfseries{参数：}}
+\begin{DoxyItemize}
+\item {\ttfamily CPU\+\_\+\+Freq\+\_\+m\+Hz}：\+CPU频率，单位为\+MHz
+\end{DoxyItemize}
+
+{\bfseries{示例：}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ 使用480MHz的CPU频率初始化DWT}}
+\DoxyCodeLine{DWT\_Init(480);}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md46}{}\doxysubsection{\texorpdfstring{时间测量函数}{时间测量函数}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md46}
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md47}{}\doxysubsubsection{\texorpdfstring{获取时间差（32位浮点数）}{获取时间差（32位浮点数）}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md47}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ DWT\_GetDeltaT(uint32\_t\ *cnt\_last);}
+
+\end{DoxyCode}
+
+
+{\bfseries{描述：}} 计算当前时间与之前时间戳之间的时间差。
+
+{\bfseries{参数：}}
+\begin{DoxyItemize}
+\item {\ttfamily cnt\+\_\+last}：指向存储之前时间戳的变量的指针（将被更新为当前时间）
+\end{DoxyItemize}
+
+{\bfseries{返回值：}} 时间差，单位为秒（float类型）
+
+{\bfseries{示例：}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{uint32\_t\ last\_time\ =\ 0;}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ dt\ =\ DWT\_GetDeltaT(\&last\_time);}
+\DoxyCodeLine{\textcolor{comment}{//\ dt包含了以秒为单位的经过时间}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md48}{}\doxysubsubsection{\texorpdfstring{获取时间差（64位双精度浮点数）}{获取时间差（64位双精度浮点数）}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md48}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{double}\ DWT\_GetDeltaT64(uint32\_t\ *cnt\_last);}
+
+\end{DoxyCode}
+
+
+{\bfseries{描述：}} 计算当前时间与之前时间戳之间的时间差，具有更高的精度。
+
+{\bfseries{参数：}}
+\begin{DoxyItemize}
+\item {\ttfamily cnt\+\_\+last}：指向存储之前时间戳的变量的指针（将被更新为当前时间）
+\end{DoxyItemize}
+
+{\bfseries{返回值：}} 时间差，单位为秒（double类型）\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md49}{}\doxysubsection{\texorpdfstring{系统时间函数}{系统时间函数}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md49}
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md50}{}\doxysubsubsection{\texorpdfstring{更新系统时间}{更新系统时间}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md50}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ DWT\_SysTimeUpdate(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
+
+
+{\bfseries{描述：}} 使用当前时间值更新内部系统时间结构。\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md51}{}\doxysubsubsection{\texorpdfstring{获取系统时间（秒）}{获取系统时间（秒）}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md51}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ DWT\_GetTimeline\_s(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
+
+
+{\bfseries{描述：}} 获取当前系统时间，单位为秒。
+
+{\bfseries{返回值：}} 当前系统时间，单位为秒（float类型）
+
+{\bfseries{示例：}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ current\_time\ =\ DWT\_GetTimeline\_s();}
+\DoxyCodeLine{\textcolor{comment}{//\ current\_time包含了以秒为单位的系统时间}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md52}{}\doxysubsubsection{\texorpdfstring{获取系统时间（毫秒）}{获取系统时间（毫秒）}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md52}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ DWT\_GetTimeline\_ms(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
+
+
+{\bfseries{描述：}} 获取当前系统时间，单位为毫秒。
+
+{\bfseries{返回值：}} 当前系统时间，单位为毫秒（float类型）
+
+{\bfseries{示例：}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ current\_time\_ms\ =\ DWT\_GetTimeline\_ms();}
+\DoxyCodeLine{\textcolor{comment}{//\ current\_time\_ms包含了以毫秒为单位的系统时间}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md53}{}\doxysubsubsection{\texorpdfstring{获取系统时间（微秒）}{获取系统时间（微秒）}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md53}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{uint64\_t\ DWT\_GetTimeline\_us(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
+
+
+{\bfseries{描述：}} 获取当前系统时间，单位为微秒。
+
+{\bfseries{返回值：}} 当前系统时间，单位为微秒（uint64\+\_\+t类型）
+
+{\bfseries{示例：}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{uint64\_t\ current\_time\_us\ =\ DWT\_GetTimeline\_us();}
+\DoxyCodeLine{\textcolor{comment}{//\ current\_time\_us包含了以微秒为单位的系统时间}}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md54}{}\doxysubsection{\texorpdfstring{延时函数}{延时函数}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md54}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ DWT\_Delay(\textcolor{keywordtype}{float}\ Delay);}
+
+\end{DoxyCode}
+
+
+{\bfseries{描述：}} 提供精确的延时，单位为秒。
+
+{\bfseries{参数：}}
+\begin{DoxyItemize}
+\item {\ttfamily Delay}：延时时间，单位为秒
+\end{DoxyItemize}
+
+{\bfseries{示例：}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ 延时0.5秒}}
+\DoxyCodeLine{DWT\_Delay(0.5);}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md55}{}\doxysection{\texorpdfstring{内部数据结构}{内部数据结构}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md55}
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md56}{}\doxysubsection{\texorpdfstring{DWT\+\_\+\+Time\+\_\+t}{DWT\+\_\+\+Time\+\_\+t}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md56}
+该结构体保存系统时间组件：
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ uint32\_t\ s;\ \ \textcolor{comment}{//\ 秒}}
+\DoxyCodeLine{\ \ \ \ uint32\_t\ ms;\ \textcolor{comment}{//\ 毫秒}}
+\DoxyCodeLine{\ \ \ \ uint32\_t\ us;\ \textcolor{comment}{//\ 微秒}}
+\DoxyCodeLine{\}\ \mbox{\hyperlink{struct_d_w_t___time__t}{DWT\_Time\_t}};}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md57}{}\doxysection{\texorpdfstring{实现细节}{实现细节}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md57}
+DWT模块使用\+Cortex-\/\+M内核的\+DWT CYCCNT寄存器，该寄存器计数\+CPU周期。该模块：
+
+
+\begin{DoxyEnumerate}
+\item 初始化\+DWT外设并启用周期计数器
+\item 跟踪计数器溢出以维持64位周期计数
+\item 根据\+CPU频率将周期计数转换为时间单位
+\item 提供各种函数以不同格式访问时间
+\end{DoxyEnumerate}
+
+该实现通过检测当前计数是否小于前一个计数来处理计数器溢出，这表明32位计数器已经环绕。\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md58}{}\doxysection{\texorpdfstring{使用注意事项}{使用注意事项}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md58}
+
+\begin{DoxyEnumerate}
+\item 在使用任何计时功能之前，必须使用正确的\+CPU频率初始化\+DWT模块
+\item 为了获得最大精度，请使用适合您应用程序的最高精度函数
+\item 64位计数器实现防止了计时器溢出问题，使其适用于长时间运行的应用程序
+\item 时间测量基于\+CPU周期，因此\+CPU频率的任何变化都会影响计时精度
+\end{DoxyEnumerate}\hypertarget{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md59}{}\doxysection{\texorpdfstring{使用示例}{使用示例}}\label{md_source_2bsp_2dwt_2dwt__bsp_autotoc_md59}
+\`{}\`{}\`{}c // 使用480\+MHz的\+CPU频率初始化\+DWT DWT\+\_\+\+Init(480);
+
+// 用于计时的变量 uint32\+\_\+t last\+\_\+time = 0; float elapsed\+\_\+time;
+
+// 主循环 while (1) \{ // 获取自上次测量以来的时间差 elapsed\+\_\+time = DWT\+\_\+\+Get\+Delta\+T(\&last\+\_\+time);
+
+// 使用经过的时间做一些事情 if (elapsed\+\_\+time \texorpdfstring{$>$}{>} 1.\+0f) \{ // 每秒执行一次的操作 // ... \}
+
+// 获取当前系统时间 float current\+\_\+time\+\_\+s = DWT\+\_\+\+Get\+Timeline\+\_\+s(); float current\+\_\+time\+\_\+ms = DWT\+\_\+\+Get\+Timeline\+\_\+ms(); uint64\+\_\+t current\+\_\+time\+\_\+us = DWT\+\_\+\+Get\+Timeline\+\_\+us();
+
+// 使用精确延时 DWT\+\_\+\+Delay(0.\+01); // 10毫秒延时 \} 

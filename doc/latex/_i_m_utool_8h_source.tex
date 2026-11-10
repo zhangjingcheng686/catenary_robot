@@ -1,0 +1,43 @@
+\doxysection{IMUtool.\+h}
+\hypertarget{_i_m_utool_8h_source}{}\label{_i_m_utool_8h_source}\index{source/module/IMU/IMUtool.h@{source/module/IMU/IMUtool.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ IMUTOOL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ IMUTOOL\_H}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}MahonyAHRS.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00007\ \{}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00009\ \ \ \ \ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ x;}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ y;}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ z;}
+\DoxyCodeLine{00013\ \ \ \ \ \}accel;}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00015\ \ \ \ \ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ x;}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ y;}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ z;}
+\DoxyCodeLine{00019\ \ \ \ \ \}gyro;}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00021\ \ \ \ \ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ pitch;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ roll;}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ yaw;}
+\DoxyCodeLine{00025\ \ \ \ \ \}angles;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{float}\ temp;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \}\mbox{\hyperlink{structbmi088__data__t}{bmi088\_data\_t}};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{structbmi088__data__t}{bmi088\_data\_t}}\ bmi088\_data;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{extern}\ uint8\_t\ attitude\_flag;\ \textcolor{comment}{/*姿态数据标志位*/}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keywordtype}{void}\ temple(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00035\ \textcolor{keywordtype}{void}\ IMUsys(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ !IMUTOOL\_H}}
+
+\end{DoxyCode}

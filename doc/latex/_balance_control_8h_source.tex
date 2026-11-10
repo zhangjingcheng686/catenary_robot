@@ -1,0 +1,62 @@
+\doxysection{Balance\+Control.\+h}
+\hypertarget{_balance_control_8h_source}{}\label{_balance_control_8h_source}\index{source/task/BalanceControl.h@{source/task/BalanceControl.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ BALANCE\_CONTROL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ BALANCE\_CONTROL\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}cmsis\_os2.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}motor\_DM.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}IMUtool.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}PIDtool.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ TARGET\_ROLL\_ANGLE\ \ \ \ 0.0f\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 目标滚转角}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ MAX\_ROLL\_ANGLE\ \ \ \ \ \ \ 90.0f\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 最大允许倾斜角度（度）}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ SAFE\_RESTORE\_ANGLE\ \ \ 15.0f\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 安全恢复角度（度）}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ CONTROL\_FREQ\ \ \ \ \ \ \ \ \ 200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 控制频率（Hz）}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ CONTROL\_PERIOD\ \ \ \ \ \ \ (1000/CONTROL\_FREQ)\ \ \ \ }\textcolor{comment}{//\ 控制周期（ms）}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ CALIBRATION\_DURATION\ 2000\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 校准持续时间（ms）}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ \#define\ BALANCE\_PID\_KP\ \ \ \ \ \ \ 6.71f}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\ \#define\ BALANCE\_PID\_KI\ \ \ \ \ \ \ 0.00f}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ \#define\ BALANCE\_PID\_KD\ \ \ \ \ \ \ 0.805f}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ BALANCE\_POLE\_PID\_KP\ \ \ \ \ \ \ 6.51f}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ BALANCE\_POLE\_PID\_KI\ \ \ \ \ \ \ 0.00f}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ BALANCE\_POLE\_PID\_KD\ \ \ \ \ \ \ 0.805f}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ BALANCE\_WIRE\_PID\_KP\ \ \ \ \ \ \ 1.21f}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ BALANCE\_WIRE\_PID\_KI\ \ \ \ \ \ \ 0.00f}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ BALANCE\_WIRE\_PID\_KD\ \ \ \ \ \ \ 0.305f}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ ELBOW\_INIT\_ANGLE\ \ \ \ \ \ \ \ \ \ 90.0f\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 垂直下垂}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ ELBOW\_MIN\_ANGLE\ \ \ \ \ \ \ \ \ \ \ 0.0f\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 最小安全向内角}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ ELBOW\_MAX\_ANGLE\ \ \ \ \ \ \ \ \ \ \ 180.0f\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 最大安全向外角}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ ELBOW\_RANGE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 90.0f\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 平衡调节范围}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ CLAMP(v,lo,hi)\ \ \ \ \ \ \ ((v)<(lo)?(lo):((v)>(hi)?(hi):(v)))}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ BALANCE\_INIT\ =\ 0,}
+\DoxyCodeLine{00038\ \ \ \ \ BALANCE\_CALIBRATING,}
+\DoxyCodeLine{00039\ \ \ \ \ BALANCE\_RUNNING,}
+\DoxyCodeLine{00040\ \ \ \ \ BALANCE\_SAFE\_STOP}
+\DoxyCodeLine{00041\ \}\ BalanceState;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ \ \ *left\_elbow\_motor;}
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ \ \ *right\_elbow\_motor;}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{structpid__type__def}{pid\_type\_def}}\ \ roll\_pid;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Roll→offset}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{float}\ \ \ \ \ \ \ \ \ target\_offset;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ PID\ 输出（度）}}
+\DoxyCodeLine{00048\ \ \ \ \ BalanceState\ \ state;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{float}\ \ \ \ \ \ \ \ \ max\_roll\_angle;}
+\DoxyCodeLine{00050\ \ \ \ \ uint32\_t\ \ \ \ \ \ last\_valid\_imu;}
+\DoxyCodeLine{00051\ \}\ \mbox{\hyperlink{struct_balance_system}{BalanceSystem}};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{keywordtype}{void}\ BalanceControl\_Init(\mbox{\hyperlink{struct_balance_system}{BalanceSystem}}*\ sys);}
+\DoxyCodeLine{00054\ \textcolor{keywordtype}{void}\ Balance\_MovePresetPose\_Simple(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ BALANCE\_CONTROL\_H}}
+
+\end{DoxyCode}

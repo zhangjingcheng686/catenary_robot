@@ -1,0 +1,70 @@
+\doxysection{motor\+\_\+\+DM.\+h}
+\hypertarget{motor___d_m_8h_source}{}\label{motor___d_m_8h_source}\index{source/module/motor/motor\_DM/motor\_DM.h@{source/module/motor/motor\_DM/motor\_DM.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_\_MOTOR\_DM\_H\_\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_\_MOTOR\_DM\_H\_\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}motor\_basic.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ MIT\_MODE\ \ \ \ \ \ \ \ \ \ \ \ 0x000}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ POS\_MODE\ \ \ \ \ \ \ \ \ \ \ \ 0x100}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ SPD\_MODE\ \ \ \ \ \ \ \ \ \ \ \ 0x200}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ PSI\_MODE\ \ \ \ \ \ \ \ \ \ \ \ 0x300}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ KP\_MIN\ 0.0f}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ KP\_MAX\ 500.0f}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ KD\_MIN\ 0.0f}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ KD\_MAX\ 5.0f}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ hcan\_t\ FDCAN\_HandleTypeDef}}
+\DoxyCodeLine{00019\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00020\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ }
+\DoxyCodeLine{00022\ \ \ \ \ uint32\_t\ MST\_ID;\ \ \ \ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{float}\ \ \ \ PMAX;\ \ \ \ \ \ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{float}\ \ \ \ VMAX;\ \ \ \ \ \ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{float}\ \ \ \ TMAX;\ \ \ \ \ \ }
+\DoxyCodeLine{00026\ \}\ \mbox{\hyperlink{structesc__inf__t}{esc\_inf\_t}};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00029\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ Motor\_DM\_DISABLE\ =\ 0,}
+\DoxyCodeLine{00031\ \ \ \ \ MOTOR\_DM\_ENABLE\ =\ 1,}
+\DoxyCodeLine{00032\ \ \ \ \ MOTOR\_DM\_ERROR\_OVER\_VOLTAGE\ =\ 8,}
+\DoxyCodeLine{00033\ \ \ \ \ MOTOR\_DM\_ERROR\_LESS\_VOLTAGE\ =\ 9,}
+\DoxyCodeLine{00034\ \ \ \ \ MOTOR\_DM\_ERROR\_OVER\_CURRENT\ =\ 0xA,}
+\DoxyCodeLine{00035\ \ \ \ \ MOTOR\_DM\_ERROR\_OVER\_TEMPERATURE\_MOS\ =\ 0xB,}
+\DoxyCodeLine{00036\ \ \ \ \ MOTOR\_DM\_ERROR\_OVER\_TEMPERATURE\_MOTOR\ =\ 0xC,}
+\DoxyCodeLine{00037\ \ \ \ \ MOTOR\_DM\_ERROR\_LOSS\_COMMUNICATION\ =\ 0xD,}
+\DoxyCodeLine{00038\ \ \ \ \ MOTOR\_DM\_ERROR\_OVER\_LOAD\ =\ 0xE,}
+\DoxyCodeLine{00039\ \}DM\_motor\_error\_t;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00042\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{structcan__motor__t}{can\_motor\_t}}\ motor\_msg;\textcolor{comment}{//电机数据包}}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{structcan__msg__t}{can\_msg\_t}}\ can\_cfg;\ \textcolor{comment}{//CAN发送数据配置}}
+\DoxyCodeLine{00045\ \ \ \ \ DM\_motor\_error\_t\ error\_code;\ \textcolor{comment}{//电机错误码}}
+\DoxyCodeLine{00046\ \ \ \ \ uint8\_t\ mode;\ \textcolor{comment}{//电机模式}}
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{structesc__inf__t}{esc\_inf\_t}}\ tmp;}
+\DoxyCodeLine{00048\ \}\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{keywordtype}{void}\ Motor\_DM4340\_Init(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor);}
+\DoxyCodeLine{00051\ \textcolor{keywordtype}{void}\ Motor\_DM4310\_Init(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor);}
+\DoxyCodeLine{00052\ \textcolor{keywordtype}{void}\ Motor\_DM\_Refresh(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor);}
+\DoxyCodeLine{00053\ \textcolor{keywordtype}{void}\ Motor\_DM\_Enable(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor);}
+\DoxyCodeLine{00054\ \textcolor{keywordtype}{void}\ Motor\_DM\_Disable(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor);}
+\DoxyCodeLine{00055\ \textcolor{keywordtype}{void}\ Motor\_DM\_Save\_Zero(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor);}
+\DoxyCodeLine{00056\ \textcolor{keywordtype}{void}\ Motor\_DM\_Clear\_Error(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor);}
+\DoxyCodeLine{00057\ \textcolor{keywordtype}{void}\ Speed\_CtrlMotorDM(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor,\ \textcolor{keywordtype}{float}\ vel);}
+\DoxyCodeLine{00058\ \textcolor{keywordtype}{void}\ PosSpeed\_CtrlMotorDM(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor,\ \textcolor{keywordtype}{float}\ \_pos,\ \textcolor{keywordtype}{float}\ \_vel);}
+\DoxyCodeLine{00059\ \textcolor{keywordtype}{void}\ MIT\_CtrlMotorDM(\ \mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor,\ \ \textcolor{keywordtype}{float}\ pos,\ \textcolor{keywordtype}{float}\ vel,\textcolor{keywordtype}{float}\ kp,\ \textcolor{keywordtype}{float}\ kd,\ \textcolor{keywordtype}{float}\ tor);}
+\DoxyCodeLine{00060\ \textcolor{keywordtype}{void}\ Motor\_DM4340\_sign(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor,\ uint32\_t\ can\_id,\ uint32\_t\ msg\_id,\ can\_port\_t\ can\_port);}
+\DoxyCodeLine{00061\ \textcolor{keywordtype}{void}\ Motor\_DM4310\_sign(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor,\ uint32\_t\ can\_id,\ uint32\_t\ msg\_id,\ can\_port\_t\ can\_port);}
+\DoxyCodeLine{00062\ \textcolor{keywordtype}{void}\ Send\_Motor\_Feedback(\mbox{\hyperlink{struct_d_m__motor__t}{DM\_motor\_t}}\ *motor);}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_MOTOR\_DM\_H\_\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

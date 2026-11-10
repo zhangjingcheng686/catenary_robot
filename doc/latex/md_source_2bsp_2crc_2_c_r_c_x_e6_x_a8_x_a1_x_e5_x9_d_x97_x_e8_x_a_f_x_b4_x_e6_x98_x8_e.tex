@@ -1,0 +1,83 @@
+\chapter{CRC校验模块说明文档 }
+\hypertarget{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e}{}\label{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e}\index{CRC校验模块说明文档@{CRC校验模块说明文档}}
+\label{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md31}%
+\Hypertarget{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md31}%
+\hypertarget{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md32}{}\doxysection{\texorpdfstring{1. 功能概述}{1. 功能概述}}\label{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md32}
+本模块提供\+CRC8和\+CRC16校验功能，包括：
+\begin{DoxyItemize}
+\item 计算数据的\+CRC校验值
+\item 验证数据的\+CRC校验值
+\item 为数据追加\+CRC校验值
+\end{DoxyItemize}\hypertarget{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md33}{}\doxysection{\texorpdfstring{2. API说明}{2. API说明}}\label{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md33}
+\hypertarget{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md34}{}\doxysubsection{\texorpdfstring{CRC8相关函数}{CRC8相关函数}}\label{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md34}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ 计算CRC8校验和}}
+\DoxyCodeLine{\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ Get\_CRC8\_Check\_Sum(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *pchMessage,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ dwLength,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ ucCRC8);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 验证CRC8校验和\ }}
+\DoxyCodeLine{\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ Verify\_CRC8\_Check\_Sum(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *pchMessage,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ dwLength);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 追加CRC8校验和到数据末尾}}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ Append\_CRC8\_Check\_Sum(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *pchMessage,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ dwLength);}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md35}{}\doxysubsection{\texorpdfstring{CRC16相关函数}{CRC16相关函数}}\label{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md35}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ 计算CRC16校验和}}
+\DoxyCodeLine{uint16\_t\ Get\_CRC16\_Check\_Sum(uint8\_t\ *pchMessage,\ uint32\_t\ dwLength,\ uint16\_t\ wCRC);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 验证CRC16校验和}}
+\DoxyCodeLine{uint32\_t\ Verify\_CRC16\_Check\_Sum(uint8\_t\ *pchMessage,\ uint32\_t\ dwLength);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 追加CRC16校验和到数据末尾}}
+\DoxyCodeLine{\textcolor{keywordtype}{void}\ Append\_CRC16\_Check\_Sum(uint8\_t\ *pchMessage,\ uint32\_t\ dwLength);}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md36}{}\doxysection{\texorpdfstring{3. 使用示例}{3. 使用示例}}\label{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md36}
+\hypertarget{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md37}{}\doxysubsection{\texorpdfstring{CRC8使用示例}{CRC8使用示例}}\label{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md37}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ data[10]\ =\ \{0x01,\ 0x02,\ 0x03,\ 0x04\};}
+\DoxyCodeLine{\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ length\ =\ 4;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 计算校验和}}
+\DoxyCodeLine{\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ crc\ =\ Get\_CRC8\_Check\_Sum(data,\ length,\ CRC8\_INIT);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 验证校验和}}
+\DoxyCodeLine{\textcolor{keywordflow}{if}(Verify\_CRC8\_Check\_Sum(data,\ length\ +\ 1))\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 校验通过}}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 追加校验和}}
+\DoxyCodeLine{Append\_CRC8\_Check\_Sum(data,\ length\ +\ 1);}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md38}{}\doxysubsection{\texorpdfstring{CRC16使用示例}{CRC16使用示例}}\label{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md38}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{uint8\_t\ data[10]\ =\ \{0x01,\ 0x02,\ 0x03,\ 0x04\};}
+\DoxyCodeLine{uint32\_t\ length\ =\ 4;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 计算校验和}}
+\DoxyCodeLine{uint16\_t\ crc\ =\ Get\_CRC16\_Check\_Sum(data,\ length,\ CRC\_INIT);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 验证校验和\ \ }}
+\DoxyCodeLine{\textcolor{keywordflow}{if}(Verify\_CRC16\_Check\_Sum(data,\ length\ +\ 2))\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ 校验通过}}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 追加校验和}}
+\DoxyCodeLine{Append\_CRC16\_Check\_Sum(data,\ length\ +\ 2);}
+
+\end{DoxyCode}
+\hypertarget{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md39}{}\doxysection{\texorpdfstring{4. 注意事项}{4. 注意事项}}\label{md_source_2bsp_2crc_2_c_r_c_x_e6_x_a8_x_a1_x_e5_x9_d_x97_x_e8_x_a_f_x_b4_x_e6_x98_x8_e_autotoc_md39}
+
+\begin{DoxyEnumerate}
+\item CRC8校验和占用1字节，\+CRC16校验和占用2字节
+\item 验证和追加函数需要确保数据缓冲区有足够空间存放校验和
+\item CRC8初始值为0xff，\+CRC16初始值为0xffff
+\item 校验表已预计算并存储在模块中
+\item 数据长度参数不包含校验和本身的长度 
+\end{DoxyEnumerate}

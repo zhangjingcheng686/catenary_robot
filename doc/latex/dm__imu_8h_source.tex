@@ -1,0 +1,66 @@
+\doxysection{dm\+\_\+imu.\+h}
+\hypertarget{dm__imu_8h_source}{}\label{dm__imu_8h_source}\index{source/module/ExternalIMU/dm\_imu.h@{source/module/ExternalIMU/dm\_imu.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_\_DM\_IMU\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_\_DM\_IMU\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}can\_struct.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#define\ ACCEL\_CAN\_MAX\ (58.8f)}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ ACCEL\_CAN\_MIN\ \ \ (-\/58.8f)}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ GYRO\_CAN\_MAX\ \ \ \ (34.88f)}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ GYRO\_CAN\_MIN\ \ \ \ (-\/34.88f)}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ PITCH\_CAN\_MAX\ \ \ (90.0f)}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ PITCH\_CAN\_MIN\ \ \ (-\/90.0f)}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ ROLL\_CAN\_MAX\ \ \ \ (180.0f)}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ ROLL\_CAN\_MIN\ \ \ \ (-\/180.0f)}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ YAW\_CAN\_MAX\ \ \ \ \ (180.0f)}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ YAW\_CAN\_MIN\ \ \ \ \ (-\/180.0f)}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ TEMP\_MIN\ \ \ \ \ \ \ \ \ \ \ \ (0.0f)}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ TEMP\_MAX\ \ \ \ \ \ \ \ \ \ \ \ (60.0f)}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ Quaternion\_MIN\ \ (-\/1.0f)}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ Quaternion\_MAX\ \ (1.0f)}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00025\ \{}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00028\ \ \ \ \ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ gyro[3];}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ accel[3];}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ cur\_temp;}
+\DoxyCodeLine{00032\ \ \ \ \ \}\ GyroscopeDataPacket;}
+\DoxyCodeLine{00033\ \ \ \ \ \ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00034\ \ \ \ \ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ q[4];}
+\DoxyCodeLine{00036\ \ \ \ \ \}\ Quarternion;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00039\ \ \ \ \ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ pitch;}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ roll;}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ yaw;}
+\DoxyCodeLine{00043\ \ \ \ \ \}\ Angles;}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{struct\ }}
+\DoxyCodeLine{00045\ \ \ \ \ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcan__msg__t}{can\_msg\_t}}\ can\_msg;\ \ \ \ }
+\DoxyCodeLine{00047\ \ \ \ \ \}\ imu\_msg;}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{structcan__msg__t}{can\_msg\_t}}\ can\_cfg;}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \}\mbox{\hyperlink{struct_d_m__imu__t}{DM\_imu\_t}};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{keyword}{extern}\ \ \mbox{\hyperlink{struct_d_m__imu__t}{DM\_imu\_t}}\ *imu;}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{keywordtype}{void}\ IMU\_UpdateData(uint8\_t*\ pData);}
+\DoxyCodeLine{00056\ \textcolor{keywordtype}{void}\ IMU\_RequestData(\mbox{\hyperlink{struct_d_m__imu__t}{DM\_imu\_t}}\ *imu,uint16\_t\ can\_id,uint8\_t\ reg);}
+\DoxyCodeLine{00057\ \textcolor{keywordtype}{void}\ DM\_IMU\_Init(\mbox{\hyperlink{struct_d_m__imu__t}{DM\_imu\_t}}\ *imu);}
+\DoxyCodeLine{00058\ \textcolor{keywordtype}{void}\ IMU\_Refresh(\mbox{\hyperlink{struct_d_m__imu__t}{DM\_imu\_t}}\ *imu);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

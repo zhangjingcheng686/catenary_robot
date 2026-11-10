@@ -1,0 +1,38 @@
+\doxysection{DBus\+Sys.\+h}
+\hypertarget{_d_bus_sys_8h_source}{}\label{_d_bus_sys_8h_source}\index{source/module/Dbus/DBusSys.h@{source/module/Dbus/DBusSys.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_\_DBUSSYS\_H\_\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_\_DBUSSYS\_H\_\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}uart\_api.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ DBUS\_BUFF\_SIZE\ 25\ \ }}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ SBUS\_HEAD\ 0x0F}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ SBUS\_END\ \ 0x00}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ DBUS\_TIMEOUT\_MS\ 1000\ }}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ uint16\_t\ online;}
+\DoxyCodeLine{00016\ \ \ \ \ uint32\_t\ last\_update\_time;}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00018\ \ \ \ \ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ int16\_t\ ch[16];}
+\DoxyCodeLine{00020\ \ \ \ \ \}\ rc;}
+\DoxyCodeLine{00021\ \ \ \ \ }
+\DoxyCodeLine{00022\ \}\ \mbox{\hyperlink{structremoter__t}{remoter\_t}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{structremoter__t}{remoter\_t}}\ remoter;}
+\DoxyCodeLine{00025\ \textcolor{keyword}{extern}\ uint8\_t\ Dbus\_rx\_buff[DBUS\_BUFF\_SIZE];\ \ }
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keywordtype}{void}\ DBus\_Init(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00028\ \textcolor{keywordtype}{void}\ DBus\_Refresh(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00029\ \textcolor{keywordtype}{void}\ sbus\_frame\_parse(\mbox{\hyperlink{structremoter__t}{remoter\_t}}\ *remoter,\ uint8\_t\ *buf);}
+\DoxyCodeLine{00030\ \textcolor{keywordtype}{void}\ DBus\_SendChannelData(\mbox{\hyperlink{structremoter__t}{remoter\_t}}\ *remoter,\ \textcolor{keywordtype}{int}\ channel);}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_\_DBUSSYS\_H\_\_}}
+
+\end{DoxyCode}

@@ -1,0 +1,47 @@
+\doxysection{Power\+Control.\+h}
+\hypertarget{_power_control_8h_source}{}\label{_power_control_8h_source}\index{source/module/control/PowerControl/PowerControl.h@{source/module/control/PowerControl/PowerControl.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ POWERCONTROL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ POWERCONTROL\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}main.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}PIDtool.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{comment}{/*\ 类型定义\ */}}
+\DoxyCodeLine{00008\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00009\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ POWER\_LOSS\ =\ 0,\ \textcolor{comment}{//\ 功率受限模式}}
+\DoxyCodeLine{00011\ \ \ \ \ POWER\_NORMAL,\ \ \ \textcolor{comment}{//\ 电容常规支持模式}}
+\DoxyCodeLine{00012\ \ \ \ \ POWER\_BURST\ \ \ \ \ \textcolor{comment}{//\ 电容爆发输出模式}}
+\DoxyCodeLine{00013\ \}\ power\_control\_state\_t;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{structpid__type__def}{pid\_type\_def}}\ chassis\_power\_pid;\ \textcolor{comment}{//\ 底盘功率缓冲PID}}
+\DoxyCodeLine{00018\ \ \ \ \ uint16\_t\ *chassis\_power\_buffer;\ \textcolor{comment}{//\ 指向功率缓冲值的指针}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{float}\ *chassis\_power\_MAX;\ \ \ \ \ \ \ \textcolor{comment}{//\ 裁判系统最大允许功率}}
+\DoxyCodeLine{00020\ \}\ \mbox{\hyperlink{structtotal__power__control__t}{total\_power\_control\_t}};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ 电机功率计算参数结构体}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00024\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{float}\ torque\_coeff;\ \textcolor{comment}{//\ 扭矩系数\ (3508电机:\ 1.99688994e-\/6f)}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{float}\ k1;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 速度平方功率修正(3508电机:\ 1.23e-\/07)}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{float}\ k2;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 力矩平方功率修正(3508电机:\ 1.453e-\/07)}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{float}\ k3;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 静态功率(3508电机:\ 4.081f)}}
+\DoxyCodeLine{00029\ \}\ \mbox{\hyperlink{struct_motor_power_params__t}{MotorPowerParams\_t}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{void}\ PowerControl\_Init(uint16\_t\ *buffer\_ptr,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ *cap\_ptr,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ *max\_power,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structpid__type__def}{pid\_type\_def}}\ *pid\_params,\ \textcolor{keywordtype}{void}\ (*hook)(\textcolor{keywordtype}{float}));}
+\DoxyCodeLine{00035\ \textcolor{keywordtype}{void}\ PowerControl\_Update(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 更新功率控制状态}}
+\DoxyCodeLine{00036\ \textcolor{keywordtype}{void}\ Set\_PowerControlMode(power\_control\_state\_t\ mode);\ \textcolor{comment}{//\ 设置功率控制模式}}
+\DoxyCodeLine{00037\ \textcolor{keywordtype}{float}\ MotorPower\_CalculateSingle(}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{float}\ torque\_nm,}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{float}\ speed\_rpm,}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_motor_power_params__t}{MotorPowerParams\_t}}\ *params);}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ !POWERCONTROL\_H}}
+
+\end{DoxyCode}

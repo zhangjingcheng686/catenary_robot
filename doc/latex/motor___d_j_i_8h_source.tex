@@ -1,0 +1,26 @@
+\doxysection{motor\+\_\+\+DJI.\+h}
+\hypertarget{motor___d_j_i_8h_source}{}\label{motor___d_j_i_8h_source}\index{source/module/motor/motor\_Dji/motor\_DJI.h@{source/module/motor/motor\_Dji/motor\_DJI.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MOTOR\_DJI\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MOTOR\_DJI\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}motor\_basic.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}can\_struct.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00009\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{structcan__motor__t}{can\_motor\_t}}\ motor\_msg[4];\textcolor{comment}{//电机数据包}}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{structcan__msg__t}{can\_msg\_t}}\ can\_cfg;\ \textcolor{comment}{//CAN发送数据配置}}
+\DoxyCodeLine{00012\ \ \ \ \ uint8\_t\ error\_code;\ \textcolor{comment}{//电机错误码}}
+\DoxyCodeLine{00013\ \ \ \ \ uint8\_t\ mode;\ \textcolor{comment}{//电机模式}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \}\mbox{\hyperlink{struct_d_j_i__motor__t}{DJI\_motor\_t}};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keywordtype}{void}\ set\_motor\_parameter(\mbox{\hyperlink{struct_d_j_i__motor__t}{DJI\_motor\_t}}\ *msg,int16\_t\ v1,int16\_t\ v2,int16\_t\ v3,int16\_t\ v4);}
+\DoxyCodeLine{00018\ \textcolor{keywordtype}{void}\ Motor\_DJI\_Init(\mbox{\hyperlink{struct_d_j_i__motor__t}{DJI\_motor\_t}}\ *motor);}
+\DoxyCodeLine{00019\ \textcolor{keywordtype}{void}\ Motor\_DJI\_Refresh(\mbox{\hyperlink{struct_d_j_i__motor__t}{DJI\_motor\_t}}\ *motor);}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MOTOR\_DJI\_H}}
+
+\end{DoxyCode}

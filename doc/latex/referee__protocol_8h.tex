@@ -1,0 +1,226 @@
+\doxysection{source/module/referee\+Sys/referee\+\_\+protocol.h File Reference}
+\hypertarget{referee__protocol_8h}{}\label{referee__protocol_8h}\index{source/module/refereeSys/referee\_protocol.h@{source/module/refereeSys/referee\_protocol.h}}
+{\ttfamily \#include "{}stdint.\+h"{}}\newline
+{\ttfamily \#include "{}keyboard.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structx_frame_header}{x\+Frame\+Header}}
+\item 
+struct \mbox{\hyperlink{structext__game__state__t}{ext\+\_\+game\+\_\+state\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structext__game__result__t}{ext\+\_\+game\+\_\+result\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structext__game__robot___h_p__t}{ext\+\_\+game\+\_\+robot\+\_\+\+HP\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structext__event__data__t}{ext\+\_\+event\+\_\+data\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structext__supply__projectile__action__t}{ext\+\_\+supply\+\_\+projectile\+\_\+action\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structext__game__robot__state__t}{ext\+\_\+game\+\_\+robot\+\_\+state\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structext__power__heat__data__t}{ext\+\_\+power\+\_\+heat\+\_\+data\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structext__game__robot__pos__t}{ext\+\_\+game\+\_\+robot\+\_\+pos\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structext__buff__musk__t}{ext\+\_\+buff\+\_\+musk\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structaerial__robot__energy__t}{aerial\+\_\+robot\+\_\+energy\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structext__robot__hurt__t}{ext\+\_\+robot\+\_\+hurt\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structext__shoot__data__t}{ext\+\_\+shoot\+\_\+data\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{struct_graph___data__t}{Graph\+\_\+\+Data\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structext__student__interactive__header__data__t}{ext\+\_\+student\+\_\+interactive\+\_\+header\+\_\+data\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structrobot__interactive__data__t}{robot\+\_\+interactive\+\_\+data\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{struct_communicate___send_data__t}{Communicate\+\_\+\+Send\+Data\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{struct_communicate___receive_data__t}{Communicate\+\_\+\+Receive\+Data\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{struct_string___data__t}{String\+\_\+\+Data\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structcustom__controller__data__t}{custom\+\_\+controller\+\_\+data\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{referee__protocol_8h_a8bd70b9c0eb16965f6bac2c97ca0d9cb}\label{referee__protocol_8h_a8bd70b9c0eb16965f6bac2c97ca0d9cb} 
+\#define {\bfseries REFEREE\+\_\+\+SOF}~0x\+A5
+\item 
+\Hypertarget{referee__protocol_8h_a0b7cc2733bd2f02a173bef5569f2d22e}\label{referee__protocol_8h_a0b7cc2733bd2f02a173bef5569f2d22e} 
+\#define {\bfseries Robot\+\_\+\+Red}~0
+\item 
+\Hypertarget{referee__protocol_8h_ae07eefcadbb8964c4ceb41d85a0251e1}\label{referee__protocol_8h_ae07eefcadbb8964c4ceb41d85a0251e1} 
+\#define {\bfseries Robot\+\_\+\+Blue}~1
+\item 
+\Hypertarget{referee__protocol_8h_a9a57d5084965554eeebcf051284acbce}\label{referee__protocol_8h_a9a57d5084965554eeebcf051284acbce} 
+\#define {\bfseries Communicate\+\_\+\+Data\+\_\+\+LEN}~5
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{referee__protocol_8h_a0f3239cac1e1f98203d496f550018e2f}\label{referee__protocol_8h_a0f3239cac1e1f98203d496f550018e2f} 
+enum {\bfseries Judge\+Frame\+Offset\+\_\+e} \{ {\bfseries FRAME\+\_\+\+HEADER\+\_\+\+Offset} = 0
+, {\bfseries CMD\+\_\+\+ID\+\_\+\+Offset} = 5
+, {\bfseries DATA\+\_\+\+Offset} = 7
+ \}
+\item 
+\Hypertarget{referee__protocol_8h_a3ab7d46cd17fa1691f25c0c7273fe82e}\label{referee__protocol_8h_a3ab7d46cd17fa1691f25c0c7273fe82e} 
+enum {\bfseries Judge\+Frame\+Length\+\_\+e} \{ {\bfseries LEN\+\_\+\+HEADER} = 5
+, {\bfseries LEN\+\_\+\+CMDID} = 2
+, {\bfseries LEN\+\_\+\+TAIL} = 2
+, {\bfseries LEN\+\_\+\+CRC8} = 4
+ \}
+\item 
+\Hypertarget{referee__protocol_8h_a5ed77ca35e2f25536f6303dc4213c48d}\label{referee__protocol_8h_a5ed77ca35e2f25536f6303dc4213c48d} 
+enum {\bfseries Frame\+Header\+Offset\+\_\+e} \{ {\bfseries SOF} = 0
+, {\bfseries DATA\+\_\+\+LENGTH} = 1
+, {\bfseries SEQ} = 3
+, {\bfseries CRC8} = 4
+ \}
+\item 
+\Hypertarget{referee__protocol_8h_ae214f2133148521c75bbe672fc377d82}\label{referee__protocol_8h_ae214f2133148521c75bbe672fc377d82} 
+enum {\bfseries Cmd\+ID\+\_\+e} \{ \newline
+{\bfseries ID\+\_\+game\+\_\+state} = 0x0001
+, {\bfseries ID\+\_\+game\+\_\+result} = 0x0002
+, {\bfseries ID\+\_\+game\+\_\+robot\+\_\+survivors} = 0x0003
+, {\bfseries ID\+\_\+event\+\_\+data} = 0x0101
+, \newline
+{\bfseries ID\+\_\+supply\+\_\+projectile\+\_\+action} = 0x0102
+, {\bfseries ID\+\_\+supply\+\_\+projectile\+\_\+booking} = 0x0103
+, {\bfseries ID\+\_\+game\+\_\+robot\+\_\+state} = 0x0201
+, {\bfseries ID\+\_\+power\+\_\+heat\+\_\+data} = 0x0202
+, \newline
+{\bfseries ID\+\_\+game\+\_\+robot\+\_\+pos} = 0x0203
+, {\bfseries ID\+\_\+buff\+\_\+musk} = 0x0204
+, {\bfseries ID\+\_\+aerial\+\_\+robot\+\_\+energy} = 0x0205
+, {\bfseries ID\+\_\+robot\+\_\+hurt} = 0x0206
+, \newline
+{\bfseries ID\+\_\+shoot\+\_\+data} = 0x0207
+, {\bfseries ID\+\_\+student\+\_\+interactive} = 0x0301
+, {\bfseries ID\+\_\+custom\+\_\+controller} = 0x0302
+ \}
+\item 
+\Hypertarget{referee__protocol_8h_a0a34e9aa1f3ec7834dd52bf725dc88af}\label{referee__protocol_8h_a0a34e9aa1f3ec7834dd52bf725dc88af} 
+enum {\bfseries Judge\+Data\+Length\+\_\+e} \{ \newline
+{\bfseries LEN\+\_\+game\+\_\+state} = 11
+, {\bfseries LEN\+\_\+game\+\_\+result} = 1
+, {\bfseries LEN\+\_\+game\+\_\+robot\+\_\+\+HP} = 32
+, {\bfseries LEN\+\_\+event\+\_\+data} = 4
+, \newline
+{\bfseries LEN\+\_\+supply\+\_\+projectile\+\_\+action} = 4
+, {\bfseries LEN\+\_\+game\+\_\+robot\+\_\+state} = 13
+, {\bfseries LEN\+\_\+power\+\_\+heat\+\_\+data} = 16
+, {\bfseries LEN\+\_\+game\+\_\+robot\+\_\+pos} = 16
+, \newline
+{\bfseries LEN\+\_\+buff\+\_\+musk} = 6
+, {\bfseries LEN\+\_\+aerial\+\_\+robot\+\_\+energy} = 2
+, {\bfseries LEN\+\_\+robot\+\_\+hurt} = 1
+, {\bfseries LEN\+\_\+shoot\+\_\+data} = 7
+, \newline
+{\bfseries LEN\+\_\+receive\+\_\+data} = 6 + Communicate\+\_\+\+Data\+\_\+\+LEN
+, {\bfseries LEN\+\_\+custom\+\_\+controller} = 20
+, {\bfseries LEN\+\_\+keyboard} = 12
+ \}
+\item 
+\Hypertarget{referee__protocol_8h_a387f365443d2f9be5b00a7325876eb6b}\label{referee__protocol_8h_a387f365443d2f9be5b00a7325876eb6b} 
+enum {\bfseries Robot\+\_\+\+ID\+\_\+e} \{ \newline
+{\bfseries Robot\+ID\+\_\+\+RHero} = 1
+, {\bfseries Robot\+ID\+\_\+\+REngineer} = 2
+, {\bfseries Robot\+ID\+\_\+\+RStandard1} = 3
+, {\bfseries Robot\+ID\+\_\+\+RStandard2} = 4
+, \newline
+{\bfseries Robot\+ID\+\_\+\+RStandard3} = 5
+, {\bfseries Robot\+ID\+\_\+\+RAerial} = 6
+, {\bfseries Robot\+ID\+\_\+\+RSentry} = 7
+, {\bfseries Robot\+ID\+\_\+\+RRadar} = 9
+, \newline
+{\bfseries Robot\+ID\+\_\+\+BHero} = 101
+, {\bfseries Robot\+ID\+\_\+\+BEngineer} = 102
+, {\bfseries Robot\+ID\+\_\+\+BStandard1} = 103
+, {\bfseries Robot\+ID\+\_\+\+BStandard2} = 104
+, \newline
+{\bfseries Robot\+ID\+\_\+\+BStandard3} = 105
+, {\bfseries Robot\+ID\+\_\+\+BAerial} = 106
+, {\bfseries Robot\+ID\+\_\+\+BSentry} = 107
+, {\bfseries Robot\+ID\+\_\+\+BRadar} = 109
+ \}
+\item 
+\Hypertarget{referee__protocol_8h_ae84dd4eec4d60e51701acd8f3382bf23}\label{referee__protocol_8h_ae84dd4eec4d60e51701acd8f3382bf23} 
+enum {\bfseries Interactive\+\_\+\+Data\+\_\+\+ID\+\_\+e} \{ \newline
+{\bfseries UI\+\_\+\+Data\+\_\+\+ID\+\_\+\+Del} = 0x100
+, {\bfseries UI\+\_\+\+Data\+\_\+\+ID\+\_\+\+Draw1} = 0x101
+, {\bfseries UI\+\_\+\+Data\+\_\+\+ID\+\_\+\+Draw2} = 0x102
+, {\bfseries UI\+\_\+\+Data\+\_\+\+ID\+\_\+\+Draw5} = 0x103
+, \newline
+{\bfseries UI\+\_\+\+Data\+\_\+\+ID\+\_\+\+Draw7} = 0x104
+, {\bfseries UI\+\_\+\+Data\+\_\+\+ID\+\_\+\+Draw\+Char} = 0x110
+, {\bfseries Communicate\+\_\+\+Data\+\_\+\+ID} = 0x0200
+ \}
+\item 
+\Hypertarget{referee__protocol_8h_a995bbef0fa91b0937112c9da6f2397c5}\label{referee__protocol_8h_a995bbef0fa91b0937112c9da6f2397c5} 
+enum {\bfseries Interactive\+\_\+\+Data\+\_\+\+Length\+\_\+e} \{ {\bfseries Interactive\+\_\+\+Data\+\_\+\+LEN\+\_\+\+Head} = 6
+, {\bfseries UI\+\_\+\+Operate\+\_\+\+LEN\+\_\+\+Del} = 2
+, {\bfseries UI\+\_\+\+Operate\+\_\+\+LEN\+\_\+\+Per\+Draw} = 15
+, {\bfseries UI\+\_\+\+Operate\+\_\+\+LEN\+\_\+\+Draw\+Char} = 15 + 30
+ \}
+\item 
+\Hypertarget{referee__protocol_8h_ae6ed5ce3862a8dff49d6f45a22a90f62}\label{referee__protocol_8h_ae6ed5ce3862a8dff49d6f45a22a90f62} 
+enum {\bfseries UI\+\_\+\+Delete\+\_\+\+Operate\+\_\+e} \{ {\bfseries UI\+\_\+\+Data\+\_\+\+Del\+\_\+\+No\+Operate} = 0
+, {\bfseries UI\+\_\+\+Data\+\_\+\+Del\+\_\+\+Layer} = 1
+, {\bfseries UI\+\_\+\+Data\+\_\+\+Del\+\_\+\+ALL} = 2
+ \}
+\item 
+\Hypertarget{referee__protocol_8h_a6fbf82e3a08b8b56e6bd8c688ee384e5}\label{referee__protocol_8h_a6fbf82e3a08b8b56e6bd8c688ee384e5} 
+enum {\bfseries UI\+\_\+\+Graph\+\_\+\+Operate\+\_\+e} \{ {\bfseries UI\+\_\+\+Graph\+\_\+\+ADD} = 1
+, {\bfseries UI\+\_\+\+Graph\+\_\+\+Change} = 2
+, {\bfseries UI\+\_\+\+Graph\+\_\+\+Del} = 3
+ \}
+\item 
+\Hypertarget{referee__protocol_8h_ad2e98bc0eced878e29164187f1e64c08}\label{referee__protocol_8h_ad2e98bc0eced878e29164187f1e64c08} 
+enum {\bfseries UI\+\_\+\+Graph\+\_\+\+Type\+\_\+e} \{ \newline
+{\bfseries UI\+\_\+\+Graph\+\_\+\+Line} = 0
+, {\bfseries UI\+\_\+\+Graph\+\_\+\+Rectangle} = 1
+, {\bfseries UI\+\_\+\+Graph\+\_\+\+Circle} = 2
+, {\bfseries UI\+\_\+\+Graph\+\_\+\+Ellipse} = 3
+, \newline
+{\bfseries UI\+\_\+\+Graph\+\_\+\+Arc} = 4
+, {\bfseries UI\+\_\+\+Graph\+\_\+\+Float} = 5
+, {\bfseries UI\+\_\+\+Graph\+\_\+\+Int} = 6
+, {\bfseries UI\+\_\+\+Graph\+\_\+\+Char} = 7
+ \}
+\item 
+\Hypertarget{referee__protocol_8h_a821be2ee23089ff8960f5f1e96ef2a1e}\label{referee__protocol_8h_a821be2ee23089ff8960f5f1e96ef2a1e} 
+enum {\bfseries UI\+\_\+\+Graph\+\_\+\+Color\+\_\+e} \{ \newline
+{\bfseries UI\+\_\+\+Color\+\_\+\+Main} = 0
+, {\bfseries UI\+\_\+\+Color\+\_\+\+Yellow} = 1
+, {\bfseries UI\+\_\+\+Color\+\_\+\+Green} = 2
+, {\bfseries UI\+\_\+\+Color\+\_\+\+Orange} = 3
+, \newline
+{\bfseries UI\+\_\+\+Color\+\_\+\+Purplish\+\_\+red} = 4
+, {\bfseries UI\+\_\+\+Color\+\_\+\+Pink} = 5
+, {\bfseries UI\+\_\+\+Color\+\_\+\+Cyan} = 6
+, {\bfseries UI\+\_\+\+Color\+\_\+\+Black} = 7
+, \newline
+{\bfseries UI\+\_\+\+Color\+\_\+\+White} = 8
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+kidneygood (\href{mailto:you@domain.com}{\texttt{you@domain.\+com}}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2022-\/12-\/02
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) HNU Yue\+Lu EC 2022 all rights reserved 
+\end{DoxyCopyright}
