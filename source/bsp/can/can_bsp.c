@@ -211,6 +211,7 @@ void fdcan1_rx_callback(void)
 	memcpy(msg->data, rx_data1, fdcan_RxHeader.DataLength);
 	msg->len = fdcan_RxHeader.DataLength;
 	msg->cnt++;
+	msg->last_receive_time_ms = HAL_GetTick();
 }
 uint8_t rx_data2[8] = {0};
 void fdcan2_rx_callback(void)
@@ -224,6 +225,7 @@ void fdcan2_rx_callback(void)
 	memcpy(msg->data, rx_data2, fdcan_RxHeader.DataLength);
 	msg->len = fdcan_RxHeader.DataLength;
 	msg->cnt++;
+	msg->last_receive_time_ms = HAL_GetTick();
 }
 uint8_t rx_data3[8] = {0};
 void fdcan3_rx_callback(void)
@@ -237,4 +239,5 @@ void fdcan3_rx_callback(void)
 	memcpy(msg->data, rx_data3, fdcan_RxHeader.DataLength);
 	msg->len = fdcan_RxHeader.DataLength;
 	msg->cnt++;
+	msg->last_receive_time_ms = HAL_GetTick();
 }

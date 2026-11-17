@@ -115,8 +115,8 @@ uart_status_t uart_rx_init(uart_rx_t *uart_rx_msg)
         return UART_ERROR;
     }
 
-    // ⚠️ 新增：保存缓冲区大小（保存 Len * 2 的值）
-    uint16_t buffer_size = uart_rx_msg->rx_msg->Len * 2;
+    // 初始化时 Len 表示实际接收缓冲区容量，回调按保存的容量重新接收。
+    uint16_t buffer_size = uart_rx_msg->rx_msg->Len;
     uart_save_buffer_size(uart_rx_msg->rx_msg->huart, buffer_size);
 
     // 注册串口消息指针

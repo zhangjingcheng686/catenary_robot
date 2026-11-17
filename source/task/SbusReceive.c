@@ -14,7 +14,7 @@
 #include "DBusSys.h"
 #include "dwt_bsp.h"
 
-void Remoter_Task(void const *argument)
+void SbusReceive_Task(void const *argument)
 {
     UNUSED(argument);
     osDelay(100);

@@ -1,12 +1,9 @@
 /**
- * @file ArmControl_Task.c
- * @brief 核心步态与机械臂动作控制任务 
- * @note 注意：这里的具体步态逻辑目前仍保留了原先的代码逻辑，
- * 你需要根据新的7轴架构替换各个 Step 中的 J[x] 目标生成。
+ * @file RLControl.c
+ * @brief RL 控制周期入口，保留原有空动作框架，上位机指令后续接入。
  */
 
-#include "ArmControl_Task.h"
-#include "Switch_Task.h"
+#include "RLControl.h"
 #include "DBusSys.h"
 #include <string.h>
 #include <math.h>
@@ -123,50 +120,55 @@ void Action3_Control(void)
 }
 
 
-void ArmControl_Task(void const *argument) 
+static ArmControl_Mode_t last_mode = MODE_IDLE;
+
+void RLControl_Reset(void)
 {
-    (void)argument;
-    osDelay(1500);  
-    static ArmControl_Mode_t last_mode = MODE_IDLE;
+    ResetAction1State();
+    ResetAction2State();
+    ResetAction3State();
+    last_mode = MODE_IDLE;
+}
+
+void RLControl_Update(MotorCommand_t commands[TOTAL_MOTOR_COUNT])
+{
+    /* RLCommandQueue 与上位机协议暂未接入，现有空动作不改变目标。 */
+    (void)commands;
+    CheckCrabWalkModeSwitch();
     
-    while (1) {
-        CheckCrabWalkModeSwitch();
-        
-        int ch5 = remoter.rc.ch[5];
-        ArmControl_Mode_t current_mode;
+    int ch5 = remoter.rc.ch[5];
+    ArmControl_Mode_t current_mode;
 
-        if (ch5 < CH5_LOW_THRESHOLD) {
-            current_mode = MODE_ACTION1;       
-        } else if (ch5 >= CH5_LOW_THRESHOLD && ch5 <= CH5_HIGH_THRESHOLD) {
-            current_mode = MODE_ACTION2; 
-        } else {
-            current_mode = MODE_ACTION3;
-        }
+    if (ch5 < CH5_LOW_THRESHOLD) {
+        current_mode = MODE_ACTION1;       
+    } else if (ch5 >= CH5_LOW_THRESHOLD && ch5 <= CH5_HIGH_THRESHOLD) {
+        current_mode = MODE_ACTION2; 
+    } else {
+        current_mode = MODE_ACTION3;
+    }
 
-        if (current_mode != last_mode) {
-            switch (last_mode) {
-                case MODE_ACTION1: ResetAction1State(); break;
-                case MODE_ACTION2: ResetAction2State(); break; 
-                case MODE_ACTION3: ResetAction3State(); break; 
-                default: break;
-            }
-  
-            switch (current_mode) {
-                case MODE_ACTION1: ResetAction1State(); break;
-                case MODE_ACTION2: ResetAction2State(); break; 
-                case MODE_ACTION3: ResetAction3State(); break; 
-                default: break;
-            }
-        }
-
-        switch (current_mode) {
-            case MODE_ACTION1: Action1_Control(); break;
-            case MODE_ACTION2: Action2_Control(); break;
-            case MODE_ACTION3: Action3_Control(); break; 
+    if (current_mode != last_mode) {
+        switch (last_mode) {
+            case MODE_ACTION1: ResetAction1State(); break;
+            case MODE_ACTION2: ResetAction2State(); break; 
+            case MODE_ACTION3: ResetAction3State(); break; 
             default: break;
         }
-
-        last_mode = current_mode;
-        osDelay(12); 
+  
+        switch (current_mode) {
+            case MODE_ACTION1: ResetAction1State(); break;
+            case MODE_ACTION2: ResetAction2State(); break; 
+            case MODE_ACTION3: ResetAction3State(); break; 
+            default: break;
+        }
     }
+
+    switch (current_mode) {
+        case MODE_ACTION1: Action1_Control(); break;
+        case MODE_ACTION2: Action2_Control(); break;
+        case MODE_ACTION3: Action3_Control(); break; 
+        default: break;
+    }
+
+    last_mode = current_mode;
 }

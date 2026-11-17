@@ -9,6 +9,14 @@
 #define SBUS_HEAD 0x0F
 #define SBUS_END  0x00
 #define DBUS_TIMEOUT_MS 1000 
+#define SBUS_FLAG_FRAME_LOST (1U << 2)
+#define SBUS_FLAG_FAILSAFE   (1U << 3)
+
+typedef enum {
+    SBUS_FRAME_INVALID = 0,
+    SBUS_FRAME_VALID,
+    SBUS_FRAME_FAILSAFE
+} SbusFrameResult_t;
 
 typedef struct
 {
@@ -26,7 +34,7 @@ extern uint8_t Dbus_rx_buff[DBUS_BUFF_SIZE];
 
 void DBus_Init(void);
 void DBus_Refresh(void);
-void sbus_frame_parse(remoter_t *remoter, uint8_t *buf);
+SbusFrameResult_t sbus_frame_parse(remoter_t *remoter, const uint8_t *buf, uint32_t size);
 void DBus_SendChannelData(remoter_t *remoter, int channel);
 
 #endif // __DBUSSYS_H__

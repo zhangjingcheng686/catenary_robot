@@ -1,7 +1,7 @@
-#ifndef DEMONSTRATOR_TASK_H
-#define DEMONSTRATOR_TASK_H
+#ifndef TEACH_CONTROL_H
+#define TEACH_CONTROL_H
 
-#include "can_struct.h"
+#include "MotorControl.h"
 
 /* --- 运动速度定义 --- */
 #define DEMO_FOLLOW_VELOCITY          3.0f     // 普通关节跟随速度
@@ -34,6 +34,9 @@
 #define SPECIAL_JOINT_TARGET_MIN_DEG  -120.0f
 #define SPECIAL_JOINT_TARGET_MAX_DEG   120.0f
 
-void Demonstrator_Task(void *argument);
+/* 切换模式时清除本地目标，下次 Update 重新读取队列并检查时间。 */
+void TeachControl_Reset(void);
+void TeachControl_Update(const MotorFeedback_t *feedback,
+                         MotorCommand_t commands[TOTAL_MOTOR_COUNT]);
 
-#endif /* DEMONSTRATOR_TASK_H */
+#endif /* TEACH_CONTROL_H */

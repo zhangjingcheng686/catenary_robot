@@ -7,7 +7,7 @@ typedef struct
 {
     UART_HandleTypeDef *huart;
     uint8_t *pBuffer;
-    uint16_t Len;
+    uint16_t Len; // 接收初始化时为缓冲区容量，接收回调中为实际长度；发送时为数据长度
 }uart_msg_t;
 
 typedef struct

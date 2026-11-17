@@ -3,7 +3,7 @@
 
 #include "motor_DM.h"
 #include "cmsis_os2.h"
-#include "Switch_Task.h"
+#include "MotorControl.h"
 #include <stdbool.h>
 
 #define RAD_TO_DEG (180.0f / 3.1415926f)
@@ -153,5 +153,9 @@ void Action3_Control(void);
 void ResetAction1State(void);
 void ResetAction2State(void);
 void ResetAction3State(void);
+
+/* 当前动作函数仍为空；上位机协议与 RLCommandQueue 后续接入。 */
+void RLControl_Reset(void);
+void RLControl_Update(MotorCommand_t commands[TOTAL_MOTOR_COUNT]);
 
 #endif // ARMCONTROL_TASK_H

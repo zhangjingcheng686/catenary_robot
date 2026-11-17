@@ -30,7 +30,7 @@
 // #include "dma.h"
 // #include "usart.h"
 // #include "PIDtool.h"
-
+#include "robot_messages.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,91 +58,94 @@ osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
-};
-/* Definitions for IMU_TempCtrl */
-osThreadId_t IMU_TempCtrlHandle;
-uint32_t IMU_TempCtrlBuffer[ 256 ];
-osStaticThreadDef_t IMU_TempCtrlControlBlock;
-const osThreadAttr_t IMU_TempCtrl_attributes = {
-  .name = "IMU_TempCtrl",
-  .cb_mem = &IMU_TempCtrlControlBlock,
-  .cb_size = sizeof(IMU_TempCtrlControlBlock),
-  .stack_mem = &IMU_TempCtrlBuffer[0],
-  .stack_size = sizeof(IMU_TempCtrlBuffer),
-  .priority = (osPriority_t) osPriorityNormal,
-};
-/* Definitions for Remoter */
-osThreadId_t RemoterHandle;
-uint32_t RemoterBuffer[ 256 ];
-osStaticThreadDef_t RemoterControlBlock;
-const osThreadAttr_t Remoter_attributes = {
-  .name = "Remoter",
-  .cb_mem = &RemoterControlBlock,
-  .cb_size = sizeof(RemoterControlBlock),
-  .stack_mem = &RemoterBuffer[0],
-  .stack_size = sizeof(RemoterBuffer),
   .priority = (osPriority_t) osPriorityLow,
 };
-/* Definitions for ArmControl */
-osThreadId_t ArmControlHandle;
-uint32_t ArmControlBuffer[ 2048 ];
-osStaticThreadDef_t ArmControlControlBlock;
-const osThreadAttr_t ArmControl_attributes = {
-  .name = "ArmControl",
-  .cb_mem = &ArmControlControlBlock,
-  .cb_size = sizeof(ArmControlControlBlock),
-  .stack_mem = &ArmControlBuffer[0],
-  .stack_size = sizeof(ArmControlBuffer),
+/* Definitions for SbusReceive */
+osThreadId_t SbusReceiveHandle;
+uint32_t SbusReceiveBuffer[ 256 ];
+osStaticThreadDef_t SbusReceiveControlBlock;
+const osThreadAttr_t SbusReceive_attributes = {
+  .name = "SbusReceive",
+  .cb_mem = &SbusReceiveControlBlock,
+  .cb_size = sizeof(SbusReceiveControlBlock),
+  .stack_mem = &SbusReceiveBuffer[0],
+  .stack_size = sizeof(SbusReceiveBuffer),
   .priority = (osPriority_t) osPriorityLow,
 };
-/* Definitions for ClawControl */
-osThreadId_t ClawControlHandle;
-uint32_t ClawControlBuffer[ 256 ];
-osStaticThreadDef_t ClawControlControlBlock;
-const osThreadAttr_t ClawControl_attributes = {
-  .name = "ClawControl",
-  .cb_mem = &ClawControlControlBlock,
-  .cb_size = sizeof(ClawControlControlBlock),
-  .stack_mem = &ClawControlBuffer[0],
-  .stack_size = sizeof(ClawControlBuffer),
-  .priority = (osPriority_t) osPriorityLow,
-};
-/* Definitions for Switch */
-osThreadId_t SwitchHandle;
-uint32_t SwitchBuffer[ 2048 ];
-osStaticThreadDef_t SwitchControlBlock;
-const osThreadAttr_t Switch_attributes = {
-  .name = "Switch",
-  .cb_mem = &SwitchControlBlock,
-  .cb_size = sizeof(SwitchControlBlock),
-  .stack_mem = &SwitchBuffer[0],
-  .stack_size = sizeof(SwitchBuffer),
+/* Definitions for MotorControl */
+osThreadId_t MotorControlHandle;
+uint32_t MotorControlBuffer[ 2048 ];
+osStaticThreadDef_t MotorControlControlBlock;
+const osThreadAttr_t MotorControl_attributes = {
+  .name = "MotorControl",
+  .cb_mem = &MotorControlControlBlock,
+  .cb_size = sizeof(MotorControlControlBlock),
+  .stack_mem = &MotorControlBuffer[0],
+  .stack_size = sizeof(MotorControlBuffer),
   .priority = (osPriority_t) osPriorityBelowNormal,
 };
-/* Definitions for Demonstrator */
-osThreadId_t DemonstratorHandle;
-uint32_t DemonstratorBuffer[ 512 ];
-osStaticThreadDef_t DemonstratorControlBlock;
-const osThreadAttr_t Demonstrator_attributes = {
-  .name = "Demonstrator",
-  .cb_mem = &DemonstratorControlBlock,
-  .cb_size = sizeof(DemonstratorControlBlock),
-  .stack_mem = &DemonstratorBuffer[0],
-  .stack_size = sizeof(DemonstratorBuffer),
+/* Definitions for RobotManager */
+osThreadId_t RobotManagerHandle;
+uint32_t RobotManagerBuffer[ 2048 ];
+osStaticThreadDef_t RobotManagerControlBlock;
+const osThreadAttr_t RobotManager_attributes = {
+  .name = "RobotManager",
+  .cb_mem = &RobotManagerControlBlock,
+  .cb_size = sizeof(RobotManagerControlBlock),
+  .stack_mem = &RobotManagerBuffer[0],
+  .stack_size = sizeof(RobotManagerBuffer),
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for TeachReceive */
+osThreadId_t TeachReceiveHandle;
+uint32_t TeachReceiveBuffer[ 256 ];
+osStaticThreadDef_t TeachReceiveControlBlock;
+const osThreadAttr_t TeachReceive_attributes = {
+  .name = "TeachReceive",
+  .cb_mem = &TeachReceiveControlBlock,
+  .cb_size = sizeof(TeachReceiveControlBlock),
+  .stack_mem = &TeachReceiveBuffer[0],
+  .stack_size = sizeof(TeachReceiveBuffer),
   .priority = (osPriority_t) osPriorityLow,
 };
-/* Definitions for Zigbee */
-osThreadId_t ZigbeeHandle;
-uint32_t ZigbeeBuffer[ 256 ];
-osStaticThreadDef_t ZigbeeControlBlock;
-const osThreadAttr_t Zigbee_attributes = {
-  .name = "Zigbee",
-  .cb_mem = &ZigbeeControlBlock,
-  .cb_size = sizeof(ZigbeeControlBlock),
-  .stack_mem = &ZigbeeBuffer[0],
-  .stack_size = sizeof(ZigbeeBuffer),
+/* Definitions for MotorFeedback */
+osThreadId_t MotorFeedbackHandle;
+uint32_t MotorFeedbackBuffer[ 512 ];
+osStaticThreadDef_t MotorFeedbackControlBlock;
+const osThreadAttr_t MotorFeedback_attributes = {
+  .name = "MotorFeedback",
+  .cb_mem = &MotorFeedbackControlBlock,
+  .cb_size = sizeof(MotorFeedbackControlBlock),
+  .stack_mem = &MotorFeedbackBuffer[0],
+  .stack_size = sizeof(MotorFeedbackBuffer),
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for HostComm */
+osThreadId_t HostCommHandle;
+uint32_t HostCommBuffer[ 1024 ];
+osStaticThreadDef_t HostCommControlBlock;
+const osThreadAttr_t HostComm_attributes = {
+  .name = "HostComm",
+  .cb_mem = &HostCommControlBlock,
+  .cb_size = sizeof(HostCommControlBlock),
+  .stack_mem = &HostCommBuffer[0],
+  .stack_size = sizeof(HostCommBuffer),
   .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for TeachTargetQueue */
+osMessageQueueId_t TeachTargetQueueHandle;
+const osMessageQueueAttr_t TeachTargetQueue_attributes = {
+  .name = "TeachTargetQueue"
+};
+/* Definitions for RLCommandQueue */
+osMessageQueueId_t RLCommandQueueHandle;
+const osMessageQueueAttr_t RLCommandQueue_attributes = {
+  .name = "RLCommandQueue"
+};
+/* Definitions for MotorFeedbackQueue */
+osMessageQueueId_t MotorFeedbackQueueHandle;
+const osMessageQueueAttr_t MotorFeedbackQueue_attributes = {
+  .name = "MotorFeedbackQueue"
 };
 /* Definitions for imuBinarySem01 */
 osSemaphoreId_t imuBinarySem01Handle;
@@ -161,13 +164,12 @@ const osSemaphoreAttr_t controlBinaryIMU_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
-void IMU_TempCtrlTask(void *argument);
-void Remoter_Task(void *argument);
-void ArmControl_Task(void *argument);
-void ClawControl_Task(void *argument);
-void Switch_Task(void *argument);
-void Demonstrator_Task(void *argument);
-void Zigbee_Task(void *argument);
+void SbusReceive_Task(void *argument);
+void MotorControl_Task(void *argument);
+void RobotManager_Task(void *argument);
+void TeachReceive_Task(void *argument);
+void MotorFeedback_Task(void *argument);
+void HostComm_Task(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -200,6 +202,16 @@ void MX_FREERTOS_Init(void) {
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of TeachTargetQueue */
+  TeachTargetQueueHandle = osMessageQueueNew (1, sizeof(TeachTarget_t), &TeachTargetQueue_attributes);
+
+  /* creation of RLCommandQueue */
+  RLCommandQueueHandle = osMessageQueueNew (1, sizeof(RLCommand_t), &RLCommandQueue_attributes);
+
+  /* creation of MotorFeedbackQueue */
+  MotorFeedbackQueueHandle = osMessageQueueNew (1, sizeof(MotorFeedback_t), &MotorFeedbackQueue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -208,26 +220,23 @@ void MX_FREERTOS_Init(void) {
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
-  /* creation of IMU_TempCtrl */
-  IMU_TempCtrlHandle = osThreadNew(IMU_TempCtrlTask, NULL, &IMU_TempCtrl_attributes);
+  /* creation of SbusReceive */
+  SbusReceiveHandle = osThreadNew(SbusReceive_Task, NULL, &SbusReceive_attributes);
 
-  /* creation of Remoter */
-  RemoterHandle = osThreadNew(Remoter_Task, NULL, &Remoter_attributes);
+  /* creation of MotorControl */
+  MotorControlHandle = osThreadNew(MotorControl_Task, NULL, &MotorControl_attributes);
 
-  /* creation of ArmControl */
-  ArmControlHandle = osThreadNew(ArmControl_Task, NULL, &ArmControl_attributes);
+  /* creation of RobotManager */
+  RobotManagerHandle = osThreadNew(RobotManager_Task, NULL, &RobotManager_attributes);
 
-  /* creation of ClawControl */
-  ClawControlHandle = osThreadNew(ClawControl_Task, NULL, &ClawControl_attributes);
+  /* creation of TeachReceive */
+  TeachReceiveHandle = osThreadNew(TeachReceive_Task, NULL, &TeachReceive_attributes);
 
-  /* creation of Switch */
-  SwitchHandle = osThreadNew(Switch_Task, NULL, &Switch_attributes);
+  /* creation of MotorFeedback */
+  MotorFeedbackHandle = osThreadNew(MotorFeedback_Task, NULL, &MotorFeedback_attributes);
 
-  /* creation of Demonstrator */
-  DemonstratorHandle = osThreadNew(Demonstrator_Task, NULL, &Demonstrator_attributes);
-
-  /* creation of Zigbee */
-  ZigbeeHandle = osThreadNew(Zigbee_Task, NULL, &Zigbee_attributes);
+  /* creation of HostComm */
+  HostCommHandle = osThreadNew(HostComm_Task, NULL, &HostComm_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -258,137 +267,118 @@ void StartDefaultTask(void *argument)
   /* USER CODE END StartDefaultTask */
 }
 
-/* USER CODE BEGIN Header_IMU_TempCtrlTask */
+/* USER CODE BEGIN Header_SbusReceive_Task */
 /**
-* @brief Function implementing the IMU_TempCtrl thread.
+* @brief Function implementing the SbusReceive thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_IMU_TempCtrlTask */
-__weak void IMU_TempCtrlTask(void *argument)
+/* USER CODE END Header_SbusReceive_Task */
+__weak void SbusReceive_Task(void *argument)
 {
-  /* USER CODE BEGIN IMU_TempCtrlTask */
+  /* USER CODE BEGIN SbusReceive_Task */
   UNUSED(argument);
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END IMU_TempCtrlTask */
+  /* USER CODE END SbusReceive_Task */
 }
 
-/* USER CODE BEGIN Header_Remoter_Task */
+/* USER CODE BEGIN Header_MotorControl_Task */
 /**
-* @brief Function implementing the Remoter thread.
+* @brief Function implementing the MotorControl thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_Remoter_Task */
-__weak void Remoter_Task(void *argument)
+/* USER CODE END Header_MotorControl_Task */
+__weak void MotorControl_Task(void *argument)
 {
-  /* USER CODE BEGIN Remoter_Task */
+  /* USER CODE BEGIN MotorControl_Task */
   UNUSED(argument);
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END Remoter_Task */
+  /* USER CODE END MotorControl_Task */
 }
 
-/* USER CODE BEGIN Header_ArmControl_Task */
+/* USER CODE BEGIN Header_RobotManager_Task */
 /**
-* @brief Function implementing the ArmControl thread.
+* @brief Function implementing the RobotManager thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_ArmControl_Task */
-__weak void ArmControl_Task(void *argument)
+/* USER CODE END Header_RobotManager_Task */
+__weak void RobotManager_Task(void *argument)
 {
-  /* USER CODE BEGIN ArmControl_Task */
+  /* USER CODE BEGIN RobotManager_Task */
   UNUSED(argument);
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END ArmControl_Task */
+  /* USER CODE END RobotManager_Task */
 }
 
-/* USER CODE BEGIN Header_ClawControl_Task */
+/* USER CODE BEGIN Header_TeachReceive_Task */
 /**
-* @brief Function implementing the ClawControl thread.
+* @brief Function implementing the TeachReceive thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_ClawControl_Task */
-__weak void ClawControl_Task(void *argument)
+/* USER CODE END Header_TeachReceive_Task */
+__weak void TeachReceive_Task(void *argument)
 {
-  /* USER CODE BEGIN ClawControl_Task */
+  /* USER CODE BEGIN TeachReceive_Task */
   UNUSED(argument);
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END ClawControl_Task */
+  /* USER CODE END TeachReceive_Task */
 }
 
-/* USER CODE BEGIN Header_Switch_Task */
+/* USER CODE BEGIN Header_MotorFeedback_Task */
 /**
-* @brief Function implementing the Switch thread.
+* @brief Function implementing the MotorFeedback thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_Switch_Task */
-__weak void Switch_Task(void *argument)
+/* USER CODE END Header_MotorFeedback_Task */
+__weak void MotorFeedback_Task(void *argument)
 {
-  /* USER CODE BEGIN Switch_Task */
+  /* USER CODE BEGIN MotorFeedback_Task */
   UNUSED(argument);
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END Switch_Task */
+  /* USER CODE END MotorFeedback_Task */
 }
 
-/* USER CODE BEGIN Header_Demonstrator_Task */
+/* USER CODE BEGIN Header_HostComm_Task */
 /**
-* @brief Function implementing the Demonstrator thread.
+* @brief Function implementing the HostComm thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_Demonstrator_Task */
-__weak void Demonstrator_Task(void *argument)
+/* USER CODE END Header_HostComm_Task */
+__weak void HostComm_Task(void *argument)
 {
-  /* USER CODE BEGIN Demonstrator_Task */
+  /* USER CODE BEGIN HostComm_Task */
   UNUSED(argument);
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END Demonstrator_Task */
-}
-
-/* USER CODE BEGIN Header_Zigbee_Task */
-/**
-* @brief Function implementing the Zigbee thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_Zigbee_Task */
-__weak void Zigbee_Task(void *argument)
-{
-  /* USER CODE BEGIN Zigbee_Task */
-  UNUSED(argument);
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END Zigbee_Task */
+  /* USER CODE END HostComm_Task */
 }
 
 /* Private application code --------------------------------------------------*/
