@@ -33,39 +33,62 @@ void can_bsp_init(void)
 **/
 void can_filter_init(void)
 {
-	FDCAN_FilterTypeDef fdcan1_filter;
+	/* 每个实例只分配一个标准滤波器，各自使用下标 0。 */
+	FDCAN_FilterTypeDef fdcan1_filter = {0};
 
 	fdcan1_filter.IdType = FDCAN_STANDARD_ID;			  // 标准ID
 	fdcan1_filter.FilterIndex = 0;						  // 滤波器索引
 	fdcan1_filter.FilterType = FDCAN_FILTER_RANGE;		  // 允许接收两个ID之间
 	fdcan1_filter.FilterConfig = FDCAN_FILTER_TO_RXFIFO0; // 过滤器0关联到FIFO0
 	fdcan1_filter.FilterID1 = 0x000;
-	fdcan1_filter.FilterID2 = 0xFFF;
-	HAL_FDCAN_ConfigFilter(&hfdcan1, &fdcan1_filter);
-	HAL_FDCAN_ConfigGlobalFilter(&hfdcan1, FDCAN_REJECT, FDCAN_REJECT, FDCAN_FILTER_REMOTE, FDCAN_FILTER_REMOTE);
+	fdcan1_filter.FilterID2 = 0x7FF;
+	if (HAL_FDCAN_ConfigFilter(&hfdcan1, &fdcan1_filter) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	/* 接收匹配的标准数据帧，拒绝未匹配帧和所有远程帧。 */
+	if (HAL_FDCAN_ConfigGlobalFilter(&hfdcan1, FDCAN_REJECT, FDCAN_REJECT,
+								   FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE) != HAL_OK)
+	{
+		Error_Handler();
+	}
 	HAL_FDCAN_ConfigFifoWatermark(&hfdcan1, FDCAN_CFG_RX_FIFO0, 1);
 
-	FDCAN_FilterTypeDef fdcan2_filter;
+	FDCAN_FilterTypeDef fdcan2_filter = {0};
 
 	fdcan2_filter.IdType = FDCAN_STANDARD_ID;			  // 标准ID
-	fdcan2_filter.FilterIndex = 14;						  // 滤波器索引
+	fdcan2_filter.FilterIndex = 0;						  // 滤波器索引
 	fdcan2_filter.FilterType = FDCAN_FILTER_RANGE;		  // 允许接收两个ID之间
 	fdcan2_filter.FilterConfig = FDCAN_FILTER_TO_RXFIFO0; // 过滤器0关联到FIFO0
 	fdcan2_filter.FilterID1 = 0x000;
-	fdcan2_filter.FilterID2 = 0xFFF;
-	HAL_FDCAN_ConfigFilter(&hfdcan2, &fdcan2_filter);
-	// HAL_FDCAN_ConfigGlobalFilter(&hfdcan2, FDCAN_REJECT, FDCAN_REJECT, FDCAN_FILTER_REMOTE, FDCAN_FILTER_REMOTE);
+	fdcan2_filter.FilterID2 = 0x7FF;
+	if (HAL_FDCAN_ConfigFilter(&hfdcan2, &fdcan2_filter) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	if (HAL_FDCAN_ConfigGlobalFilter(&hfdcan2, FDCAN_REJECT, FDCAN_REJECT,
+								   FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE) != HAL_OK)
+	{
+		Error_Handler();
+	}
 	HAL_FDCAN_ConfigFifoWatermark(&hfdcan2, FDCAN_CFG_RX_FIFO0, 1);
 
-	FDCAN_FilterTypeDef fdcan3_filter;
+	FDCAN_FilterTypeDef fdcan3_filter = {0};
 	fdcan3_filter.IdType = FDCAN_STANDARD_ID;			  // 标准ID
-	fdcan3_filter.FilterIndex = 18;						  // 滤波器索引
+	fdcan3_filter.FilterIndex = 0;						  // 滤波器索引
 	fdcan3_filter.FilterType = FDCAN_FILTER_RANGE;		  // 允许接收两个ID之间
 	fdcan3_filter.FilterConfig = FDCAN_FILTER_TO_RXFIFO0; // 过滤器0关联到FIFO0
 	fdcan3_filter.FilterID1 = 0x000;
-	fdcan3_filter.FilterID2 = 0xFFF;
-	HAL_FDCAN_ConfigFilter(&hfdcan3, &fdcan3_filter);
-	// HAL_FDCAN_ConfigGlobalFilter(&hfdcan3, FDCAN_REJECT, FDCAN_REJECT, FDCAN_FILTER_REMOTE, FDCAN_FILTER_REMOTE);
+	fdcan3_filter.FilterID2 = 0x7FF;
+	if (HAL_FDCAN_ConfigFilter(&hfdcan3, &fdcan3_filter) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	if (HAL_FDCAN_ConfigGlobalFilter(&hfdcan3, FDCAN_REJECT, FDCAN_REJECT,
+								   FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE) != HAL_OK)
+	{
+		Error_Handler();
+	}
 	HAL_FDCAN_ConfigFifoWatermark(&hfdcan3, FDCAN_CFG_RX_FIFO0, 1);
 }
 /**
