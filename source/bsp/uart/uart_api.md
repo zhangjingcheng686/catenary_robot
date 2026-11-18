@@ -1,196 +1,63 @@
-以下是格式化后的文档内容，使用了清晰的标题、列表和代码块标记，方便阅读和理解：
+# UART 接口说明
 
+本目录提供空闲事件接收、中断发送及接收钩子。接口见 [uart_api.h](uart_api.h)，中断和接收重启逻辑见 [uart_bsp.c](uart_bsp.c)。
 
-# UART 通讯代码文档
+## 当前串口分工
 
-## 概述
-本文档介绍了基于 STM32 的 UART 通讯代码，包括初始化、数据接收和发送等功能。代码主要分为两个文件：`uart_bsp.c` 和 `uart_api.c`。
+| 串口 | 用途 |
+| --- | --- |
+| UART5 | SBUS 遥控器 |
+| USART1 | Zigbee 示教器 |
+| USART10 | 预留 RDK X5 通信，业务待接入 |
 
-## 文件结构
+接收初始化当前使用 `HAL_UARTEx_ReceiveToIdle_IT()`，属于中断接收；CubeMX 配置 DMA 不表示这条接口已经使用 DMA。
 
-### `uart_bsp.c`
-包含 UART 的底层驱动回调函数：
-- `HAL_UARTEx_RxEventCallback`
-- `HAL_UART_ErrorCallback`
+## 数据与生命周期
 
-### `uart_api.c`
-提供 UART 的高级 API 接口，包括：
-- 初始化
-- 数据接收
-- 数据发送
+`uart_msg_t` 保存外设句柄、缓冲区地址与 `Len`，`uart_rx_t` 保存消息指针及接收统计。消息结构体和缓冲区在接收期间必须持续存在，可以使用文件静态变量。每个串口实例只注册一个接收对象。
 
-## 接口函数说明
+`Len` 在初始化时必须为缓冲区实际容量，通常传 `sizeof(buffer)`；接收回调会改为本次收到的长度，底层使用另外保存的容量重启接收。发送时，`Len` 表示待发送字节数。
 
-### 1. `uart_rx_cheak`
-**功能**：检查 `uart_rx_t` 结构体的有效性。  
-**参数**：  
-- `uart_rx_t *uart_rx_msg`：指向 `uart_rx_t` 结构体的指针。  
-**返回值**：  
-- `UART_OK`：检查通过。  
-- `UART_ERROR`：检查失败。  
+## 初始化示例
 
-**示例**：
-```c
-if (uart_rx_cheak(uart_rx_msg) == UART_ERROR) {
-    // 处理错误
-}
-```
-
-### 2. `uart_msg_cheak`
-**功能**：检查 `uart_msg_t` 结构体的有效性。  
-**参数**：  
-- `uart_msg_t *rx_msg`：指向 `uart_msg_t` 结构体的指针。  
-**返回值**：  
-- `UART_OK`：检查通过。  
-- `UART_ERROR`：检查失败。  
-
-**示例**：
-```c
-if (uart_msg_cheak(rx_msg) == UART_ERROR) {
-    // 处理错误
-}
-```
-
-### 3. `uart_reg_cheak`
-**功能**：检查 UART 实例是否已被注册。  
-**参数**：  
-- `uart_rx_t *uart_rx_msg`：指向 `uart_rx_t` 结构体的指针。  
-**返回值**：  
-- `UART_OK`：未注册。  
-- `UART_ERROR`：已注册。  
-
-**示例**：
-```c
-if (uart_reg_cheak(uart_rx_msg) == UART_ERROR) {
-    // 处理错误
-}
-```
-
-### 4. `uart_rx_init`
-**功能**：初始化 UART 接收。  
-**参数**：  
-- `uart_rx_t *uart_rx_msg`：指向 `uart_rx_t` 结构体的指针。  
-**返回值**：  
-- `UART_OK`：初始化成功。  
-- `UART_ERROR`：初始化失败。  
-
-**示例**：
-```c
-uart_rx_t uart5_rx_msg;
-// 初始化 uart5_rx_msg 结构体
-if (uart_rx_init(&uart5_rx_msg) == UART_ERROR) {
-    // 处理错误
-}
-```
-
-### 5. `uart_tx_send_IT`
-**功能**：通过中断发送数据。  
-**参数**：  
-- `uart_msg_t *uart_msg`：指向 `uart_msg_t` 结构体的指针。  
-**返回值**：  
-- `UART_OK`：发送成功。  
-- `UART_ERROR`：发送失败。  
-
-**示例**：
-```c
-uart_msg_t uart_msg;
-// 初始化 uart_msg 结构体
-if (uart_tx_send_IT(&uart_msg) == UART_ERROR) {
-    // 处理错误
-}
-```
-
-### 6. `uart_rx_hook_reg`
-**功能**：注册 UART 接收钩子函数。  
-**参数**：  
-- `uart_rx_t *uart_rx_msg`：指向 `uart_rx_t` 结构体的指针。  
-- `void (*hook)(uint8_t *pData, uint32_t size)`：钩子函数指针。  
-**返回值**：  
-- `UART_OK`：注册成功。  
-- `UART_ERROR`：注册失败。  
-
-**示例**：
-```c
-void my_uart5_rx_hook(uint8_t *pData, uint32_t size) {
-    // 处理接收到的数据
-}
-
-if (uart_rx_hook_reg(&uart5_rx_msg, my_uart5_rx_hook) == UART_ERROR) {
-    // 处理错误
-}
-```
-
-## 使用示例
-
-以下是一个完整的使用示例，展示了如何初始化 UART、注册钩子函数以及发送数据：
+下面展示预留 USART10 的接收方式，实际 HostComm 尚未接入；不要在同一个串口重复初始化。HAL 外设初始化后，在所属任务的初始化阶段调用一次。
 
 ```c
 #include "uart_api.h"
 #include "usart.h"
 
-// 定义 UART 接收消息结构体
-uart_rx_t uart5_rx_msg;
-uart_msg_t uart5_msg;
+static uint8_t rx_buffer[100];
+static uart_msg_t rx_message;
+static uart_rx_t rx_context;
 
-// 定义 UART 接收消息数组
-uint8_t uart5_rx_buffer[100];
-// 定义 UART 发送消息结构体
-uart_msg_t uart5_tx_msg;
-
-// 定义钩子函数
-void my_uart5_rx_hook(uint8_t *pData, uint32_t size) {
-    // 处理接收到的数据
-    printf("Received data: %s\n", pData);
+static void receive_hook(uint8_t *data, uint32_t size)
+{
+    /* 在中断中复制数据或发出通知，后续由任务解析。 */
+    (void)data;
+    (void)size;
 }
 
-int main(void) {
-    // 初始化 HAL 库
-    HAL_Init();
+static void init_example(void)
+{
+    rx_message.huart = &huart10;
+    rx_message.pBuffer = rx_buffer;
+    rx_message.Len = sizeof(rx_buffer);
+    rx_context.rx_msg = &rx_message;
 
-    // 初始化 UART5
-    uart5_msg.huart = &huart5;
-    uart5_msg.pBuffer = uart5_rx_buffer; // 分配缓冲区
-    uart5_msg.Len = 100;
-
-    uart5_rx_msg.rx_msg = &uart5_msg;
-    uart5_rx_msg.count = 0;
-    uart5_rx_msg.time = 0;
-
-    // 初始化 UART 接收
-    if (uart_rx_init(&uart5_rx_msg) == UART_ERROR) {
-        // 处理错误
+    /* 先注册业务钩子，再开启接收，避免启动间隙遗漏业务处理。 */
+    if (uart_rx_hook_reg(&rx_context, receive_hook) != UART_OK) {
+        Error_Handler();
     }
-
-    // 注册钩子函数
-    if (uart_rx_hook_reg(&uart5_rx_msg, my_uart5_rx_hook) == UART_ERROR) {
-        // 处理错误
-    }
-
-    // 初始化 UART5 发送消息
-    uart5_tx_msg.huart = &huart5;
-    uart5_tx_msg.pBuffer = (uint8_t *)"Hello UART5";
-    uart5_tx_msg.Len = strlen((char *)uart5_tx_msg.pBuffer);
-
-    // 发送数据
-    if (uart_tx_send_IT(&uart5_tx_msg) == UART_ERROR) {
-        // 处理错误
-    }
-
-    // 主循环
-    while (1) {
-        // 主程序逻辑
+    if (uart_rx_init(&rx_context) != UART_OK) {
+        Error_Handler();
     }
 }
 ```
 
-## 注意事项
+钩子在 UART 中断路径内执行，应尽快返回，不在其中延时或等待任务。按传入的 `size` 处理字节，接收数据不保证以字符串结束符结尾。
 
-1. **缓冲区管理**：  
-   - 确保分配的缓冲区足够大。  
-   - 在使用完毕后释放缓冲区。
+## 发送与返回值
 
-2. **错误处理**：  
-   - 在每个函数调用后检查返回值，确保操作成功。
+通过 `uart_tx_send_IT()` 发起中断发送。发送缓冲区在传输完成前必须保持有效，不能立即覆盖；接口返回不表示整帧已经发完。
 
-3. **钩子函数**：  
-   - 钩子函数应在初始化 UART 接收后注册，以确保接收到数据时能够正确处理。
+当前封装主要返回参数检查结果，部分 HAL 启动失败或忙状态尚未向上传递，调用时需要结合 HAL 状态与完成回调判断。

@@ -1,5 +1,7 @@
 # BMI088 传感器驱动说明
 
+接口见 [BMI088driver.h](inc/BMI088driver.h)，硬件适配见 [BMI088Middleware.c](BMI088Middleware.c)。驱动当前保留，下位机不再创建旧 IMU 处理任务。
+
 ## 概述
 BMI088 是一款6轴惯性测量单元(IMU)，包含3轴加速度计和3轴陀螺仪。本驱动支持通过SPI接口与BMI088通信。
 
@@ -7,7 +9,7 @@ BMI088 是一款6轴惯性测量单元(IMU)，包含3轴加速度计和3轴陀�
 - 使用SPI2接口 (hspi2)
 - 加速度计片选引脚: ACC_CS_Pin
 - 陀螺仪片选引脚: GYRO_CS_Pin
-- 需要TIM3用于延时(PWM模式)
+- TIM3 通道 4 用于加热 PWM，当前微秒延时实现使用 SysTick
 
 ## 初始化流程
 

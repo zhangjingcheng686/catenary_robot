@@ -1,5 +1,7 @@
 # 下位机代码问题记录
 
+文档目录与命名规则见 [文档索引](../documentation_index.md)。
+
 记录日期为 2026-11-16。本记录覆盖当前下位机任务、队列、电机驱动以及 CAN、串口收发路径。
 
 | 编号 | 优先级 | 问题 | 状态 |
@@ -17,7 +19,7 @@
 
 实际接收数组只有 25 字节，模块初始化将长度乘以 2，公共串口接口又乘以 2，最终按 100 字节接收。连续数据超过数组容量时可能覆盖相邻内存。
 
-位置涉及 [DBusSys.c](../source/module/Dbus/DBusSys.c) 和 [uart_api.c](../source/bsp/uart/uart_api.c)。
+位置涉及 [DBusSys.c](../../source/module/Dbus/DBusSys.c) 和 [uart_api.c](../../source/bsp/uart/uart_api.c)。
 
 修复将接收初始化的 `Len` 定义为实际缓冲区容量，所有调用点用 `sizeof()` 传入。SBUS 接收容量设为 25 字节，示教器接收容量设为 100 字节，重新接收使用初始化时保存的容量。
 
@@ -27,7 +29,7 @@
 
 `DBus_Refresh()` 原先在调用解析函数后，无条件置在线并刷新时间。头尾错误和失控帧可能使旧摇杆值继续被当作有效输入。
 
-位置在 [DBusSys.c](../source/module/Dbus/DBusSys.c)。
+位置在 [DBusSys.c](../../source/module/Dbus/DBusSys.c)。
 
 修复将解析结果分为正常、无效和失控三类。解析前检查实际长度、帧头和帧尾，使用状态字节的第 3 位判断失控，第 2 位表示丢帧。失控帧立即触发离线，带丢帧标志的帧作为无效帧丢弃。正常帧才更新通道、在线标志和最近有效接收时间，每轮执行现有的 1000 ms 超时判断。
 
@@ -39,7 +41,7 @@
 
 三个外设各配置一个标准滤波器，合法下标为 0。BSP 原来在 CAN2 使用 14、CAN3 使用 18，HAL 按该下标写入超出滤波器区域的 Message RAM。另外标准 ID 过滤上限原为 `0xFFF`，超过合法上限 `0x7FF`。
 
-位置涉及 [can_bsp.c](../source/bsp/can/can_bsp.c) 的 `can_filter_init()` 和 [fdcan.c](../Core/Src/fdcan.c) 的初始化配置。
+位置涉及 [can_bsp.c](../../source/bsp/can/can_bsp.c) 的 `can_filter_init()` 和 [fdcan.c](../../Core/Src/fdcan.c) 的初始化配置。
 
 2026-11-17 已修复。三个实例的滤波器下标统一为 0，标准 ID 范围设为 `0x000` 至 `0x7FF`，匹配的标准数据帧进入 FIFO0。三个实例均显式设置全局过滤，拒绝未匹配的标准帧、扩展帧及所有远程帧，避免依赖默认放行。滤波器结构体先清零，滤波器和全局过滤配置失败时调用 `Error_Handler()`。
 
@@ -51,7 +53,7 @@ Debug 增量编译、链接通过，仍有原有 LOAD 段 RWX 权限警告。尚
 
 管理、示教和拧螺丝任务会调用同一 CAN 发送路径。HAL 的 `HAL_FDCAN_AddMessageToTxFifoQ()` 在取得写入位置、复制帧和提交发送之间缺少任务间保护，抢占时可能重复使用同一位置，导致帧覆盖或丢失。
 
-位置涉及 [can_bsp.c](../source/bsp/can/can_bsp.c) 的发送函数，以及 [HAL FDCAN 实现](../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c)。
+位置涉及 [can_bsp.c](../../source/bsp/can/can_bsp.c) 的发送函数，以及 [HAL FDCAN 实现](../../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c)。
 
 已将初始化、使能和运行期电机指令集中到 `MotorControl_Task`。`RobotManager_Task` 只提交模式请求，示教、RL 和拧螺丝模块只生成目标，运行期由 `SendMotorCommands()` 统一发送。已检查当前应用代码，没有其他任务调用电机发送接口。
 
@@ -61,7 +63,7 @@ Debug 增量编译、链接通过，仍有原有 LOAD 段 RWX 权限警告。尚
 
 中断处理前 FIFO 若已有多帧，当前回调只取一帧。HAL 在回调之前已清除本次中断标志，剩余数据可能等待下一次消息到达，产生积压、反馈延迟或溢出。
 
-位置在 [can_bsp.c](../source/bsp/can/can_bsp.c) 的 `fdcan1_rx_callback()`、`fdcan2_rx_callback()` 和 `fdcan3_rx_callback()`。
+位置在 [can_bsp.c](../../source/bsp/can/can_bsp.c) 的 `fdcan1_rx_callback()`、`fdcan2_rx_callback()` 和 `fdcan3_rx_callback()`。
 
 后续需要依据 FIFO 的实际剩余数量继续读取，并验证突发多帧接收。
 
@@ -69,7 +71,7 @@ Debug 增量编译、链接通过，仍有原有 LOAD 段 RWX 权限警告。尚
 
 控制任务可能在取得目标并完成超时检查后被挂起。恢复时从原执行位置继续，会先使用本地旧目标，再于下一轮读取队列中的新目标。这次发送可能使用已经过期的目标。
 
-原位置涉及 [TeachControl.c](../source/task/TeachControl.c) 的控制循环和 [RobotManager.c](../source/task/RobotManager.c) 的模式切换。
+原位置涉及 [TeachControl.c](../../source/task/TeachControl.c) 的控制循环和 [RobotManager.c](../../source/task/RobotManager.c) 的模式切换。
 
 已取消外部挂起、恢复三个运动任务的方式，改为一个持续运行的 `MotorControl_Task`。每周期只采纳一次模式请求，执行中收到的请求在下一周期处理。切换时清空示教模块本地目标，重新进入示教后读取队列并检查接收时间，避免恢复到旧函数执行位置。
 
@@ -79,7 +81,7 @@ Debug 增量编译、链接通过，仍有原有 LOAD 段 RWX 权限警告。尚
 
 `fdcanx_send_data()` 会返回失败，但 `can_msg_send_classical()` 忽略返回值，最终仍返回 `CAN_OK`。FIFO 满等情况下，控制层无法发现帧入队失败，零速度指令也受影响。
 
-位置在 [can_api.c](../source/bsp/can/can_api.c) 的发送封装。
+位置在 [can_api.c](../../source/bsp/can/can_api.c) 的发送封装。
 
 后续需要逐层传递失败状态，并定义控制层如何处理失败的控制帧。
 
@@ -87,7 +89,7 @@ Debug 增量编译、链接通过，仍有原有 LOAD 段 RWX 权限警告。尚
 
 `Motor_DM_Refresh()` 分多次读取缓冲区字节，CAN 中断同时可能改写该缓冲区，使解析结果混合两帧数据。反馈队列保护已经打包的消息复制，原始接收与解析仍需完整性处理。
 
-位置涉及 [motor_DM.c](../source/module/motor/motor_DM/motor_DM.c) 的解析，以及 [MotorFeedback.c](../source/task/MotorFeedback.c) 的汇总。
+位置涉及 [motor_DM.c](../../source/module/motor/motor_DM/motor_DM.c) 的解析，以及 [MotorFeedback.c](../../source/task/MotorFeedback.c) 的汇总。
 
 后续可以结合完整帧副本或帧序号校验处理，并核对数据与接收时间的一致性。
 
