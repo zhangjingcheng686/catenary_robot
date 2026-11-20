@@ -14,6 +14,10 @@ HAL 外设初始化后，在系统启动阶段调用一次 `can_sys_init()`，�
 
 每个实例有一个标准滤波器，编号均为 0，允许标准数据帧 ID `0x000～0x7FF` 进入 FIFO0。扩展帧和远程帧被拒绝。
 
+CAN1、CAN2 已启用 `AutoRetransmission`，仲裁失败或传输错误时由硬件重试。设置同时保存在 `Core/Src/fdcan.c` 和 `RMtextH7.ioc`。2026-11-20 用户实机复测确认，左臂电机 2、右臂电机 2 和右夹爪原有的数百毫秒明显延迟消失，过程见 [问题记录第 9 项](../../../doc/reviews/code_review_issues.md#9-示教时三个电机延迟数百毫秒)。
+
+`TeachTargetQueue` 负责传递示教目标，FDCAN 硬件发送 FIFO 负责缓存待发送的 CAN 帧。`HAL_FDCAN_AddMessageToTxFifoQ()` 返回 `HAL_OK` 时，发送请求已经提交，实际传输仍需等待总线仲裁。自动重发在该硬件传输阶段起作用。
+
 ## 消息结构
 
 | 成员 | 用途 |
