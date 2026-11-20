@@ -41,4 +41,4 @@ if (remoter.online) {
 
 只有正常且未过期的帧更新通道、在线标志及最近有效时间。带丢帧标志的帧丢弃，失控帧立即置离线，连续 1000 ms 没有有效帧则离线。离线时写入模块既有的默认通道值。
 
-当前应用在离线时请求中间档，并将拧螺丝速度置零；详细模式行为见 [控制架构](../../../doc/architecture/motor_control_architecture.md)。
+当前应用在离线时请求中间档，并将拧螺丝力矩置零。详细模式行为见 [控制架构](../../../doc/architecture/motor_control_architecture.md)。

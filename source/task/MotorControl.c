@@ -52,7 +52,7 @@ static void Motors_InitAll(void)
         if (i == LEFT_CLAW_MOTOR_INDEX) {
             control_mode = MIT_MODE;
         } else if (i == LEFT_SCREW_MOTOR_INDEX) {
-            control_mode = SPD_MODE;
+            control_mode = MIT_MODE;
         }
         uint32_t can_id = left_arm_ids[i] | control_mode;
         uint32_t msg_id = 0x01 + i;
@@ -83,7 +83,8 @@ static void Motors_InitAll(void)
             MIT_CtrlMotorDM(Switch_Motors.left_arm_motors[i],
                             0.0f, 0.0f, KP_GAIN, KD_GAIN, 0.0f);
         } else if (i == LEFT_SCREW_MOTOR_INDEX) {
-            Speed_CtrlMotorDM(Switch_Motors.left_arm_motors[i], 0.0f);
+            MIT_CtrlMotorDM(Switch_Motors.left_arm_motors[i],
+                            0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
         } else {
             PosSpeed_CtrlMotorDM(Switch_Motors.left_arm_motors[i], raw_target_rad, velocity);
         }
@@ -95,7 +96,7 @@ static void Motors_InitAll(void)
         if (i == RIGHT_CLAW_MOTOR_INDEX) {
             control_mode = MIT_MODE;
         } else if (i == RIGHT_SCREW_MOTOR_INDEX) {
-            control_mode = SPD_MODE;
+            control_mode = MIT_MODE;
         }
         uint32_t can_id = right_arm_ids[i] | control_mode;
         uint32_t msg_id = 0x01 + i; 
@@ -128,7 +129,8 @@ static void Motors_InitAll(void)
             MIT_CtrlMotorDM(Switch_Motors.right_arm_motors[i],
                             0.0f, 0.0f, KP_GAIN, KD_GAIN, 0.0f);
         } else if (i == RIGHT_SCREW_MOTOR_INDEX) {
-            Speed_CtrlMotorDM(Switch_Motors.right_arm_motors[i], 0.0f);
+            MIT_CtrlMotorDM(Switch_Motors.right_arm_motors[i],
+                            0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
         } else {
             PosSpeed_CtrlMotorDM(Switch_Motors.right_arm_motors[i], raw_target_rad, velocity);
         }
@@ -137,7 +139,7 @@ static void Motors_InitAll(void)
 }
 
 
-/* 按九电机顺序建立初始姿态，电机模式和初始参数沿用原实现。 */
+/* 按九电机顺序建立初始目标，两个拧螺丝电机使用 MIT 零力矩。 */
 static void BuildInitialTargets(void)
 {
     for (int i = 0; i < TOTAL_MOTOR_COUNT; i++) {
@@ -151,7 +153,7 @@ static void BuildInitialTargets(void)
             command->target = (MotorTarget_t){.kp = KP_GAIN, .kd = KD_GAIN};
         } else if (i == LEFT_SCREW_MOTOR_INDEX ||
                    i == LEFT_ARM_MOTOR_COUNT + RIGHT_SCREW_MOTOR_INDEX) {
-            command->mode = MOTOR_COMMAND_SPEED;
+            command->mode = MOTOR_COMMAND_MIT;
             command->target = (MotorTarget_t){0};
         }
     }
@@ -249,6 +251,7 @@ static void RunControlCycle(void)
     if (cycle_mode != active_mode) {
         TeachControl_Reset();
         RLControl_Reset();
+        ScrewControl_ResetMonitoring();
         if (cycle_mode == ROBOT_MODE_IDLE) {
             BuildInitialTargets();
         } else {
